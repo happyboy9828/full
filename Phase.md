@@ -2,7 +2,11 @@
 
 Last updated: October 9, 2026 | Current: Phase 8 — Add Live Activity and Optimize
 
+<<<<<<< HEAD
 **Current Phase: Phase 8 — Add Live Activity and Optimize**
+=======
+**Current Phase: Phase 7 — Build the Dashboard UI**
+>>>>>>> e16a166025edd9e98d928564e8d1cf640896f67b
 
 ---
 
@@ -139,7 +143,11 @@ Since your public website has no login or registration, add authentication speci
 
 Completion Criteria: Only an authenticated administrator can see reports. — VERIFIED
 
+<<<<<<< HEAD
 Phase 7: Build the Dashboard UI (COMPLETE)
+=======
+Phase 7: Build the Dashboard UI
+>>>>>>> e16a166025edd9e98d928564e8d1cf640896f67b
 
 Create the overview, traffic sources, top pages, devices, events, and conversions views.
 

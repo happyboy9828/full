@@ -207,6 +207,7 @@ function MyTool() {
 
 ## Phase 7 — Build the Dashboard UI (COMPLETE)
 
+<<<<<<< HEAD
 ### Files Created
 - **API client**: `client/lib/analyticsApi.js` — authenticated fetch helpers for auth + reports
 - **Data hooks**: `client/lib/useReport.js` — `useReport` (loading/error/data) + `useIntervalReport` (auto-refresh for live/time-series)
@@ -230,3 +231,19 @@ function MyTool() {
 - Backend tests: 37/37 passing
 - ESLint: 0 errors on all new files
 - API response shapes validated against `backend/controllers/reportsController.js`
+=======
+**Current phase: Phase 7 — Build the Dashboard UI**
+
+- [ ] Build overview report view (page views, sessions, visitors, bounce rate, avg duration, pages/session)
+- [ ] Build traffic sources view (UTM source/medium/campaign breakdown with percentages)
+- [ ] Build top pages view (most visited paths with page view counts)
+- [ ] Build devices view (device type, browser, OS breakdown)
+- [ ] Build events view (event type counts, custom event breakdown)
+- [ ] Build live activity view (active sessions, recent events)
+- [ ] Add date-range picker (presets: today, 7d, 30d, custom)
+- [ ] Add loading, error, and empty states
+- [ ] Add CSV export for each report
+- [ ] Ensure responsive layout and pagination where needed
+- [ ] Use real backend data via authenticated fetch (cookie-based `requireAdmin` sessions)
+- [ ] Verify `next build` still passes
+>>>>>>> e16a166025edd9e98d928564e8d1cf640896f67b
