@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "vercel-next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/analytics/(.*)",
+      "status": 200,
+      "dest": "https://$VERCEL_BACKEND_URL/api/analytics/$1"
+    },
+    {
+      "src": "/api/auth/(.*)",
+      "status": 200,
+      "dest": "https://$VERCEL_BACKEND_URL/api/auth/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}

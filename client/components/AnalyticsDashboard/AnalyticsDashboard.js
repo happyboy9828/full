@@ -1,6 +1,5 @@
 "use client";
 
-<<<<<<< HEAD
 import { useEffect, useState, useMemo, useCallback } from "react";
 import DateRangePicker from "./DateRangePicker";
 import OverviewView from "./views/OverviewView";
@@ -19,33 +18,12 @@ const VIEWS = [
   { id: "events", label: "Events" },
   { id: "live", label: "Live Activity" },
 ];
-=======
-import { useEffect, useState } from "react";
-
-const API = process.env.NEXT_PUBLIC_TRACKING_API || "http://localhost:5000/api";
-
-async function authApi(path, { method = "GET", body } = {}) {
-  const headers = {};
-  if (body !== undefined) headers["Content-Type"] = "application/json";
-  const res = await fetch(API + "/auth" + path, {
-    method,
-    headers,
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-    credentials: "include",
-  });
-  let json = null;
-  const text = await res.text();
-  try { json = JSON.parse(text); } catch { /* keep null */ }
-  return { status: res.status, json };
-}
->>>>>>> e16a166025edd9e98d928564e8d1cf640896f67b
 
 export default function AnalyticsDashboard() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [authenticated, setAuthenticated] = useState(null);
   const [loading, setLoading] = useState(false);
-<<<<<<< HEAD
   const [activeView, setActiveView] = useState("overview");
   const [dateRange, setDateRange] = useState({ preset: "30d", startDate: "", endDate: "" });
 
@@ -55,32 +33,21 @@ export default function AnalyticsDashboard() {
       endDate: dateRange.endDate,
     };
   }, [dateRange]);
-=======
->>>>>>> e16a166025edd9e98d928564e8d1cf640896f67b
 
   useEffect(() => {
     let cancelled = false;
     async function check() {
       try {
-<<<<<<< HEAD
         const r = await checkAuth();
         if (!cancelled) setAuthenticated(r.authenticated);
-=======
-        const r = await authApi("/me");
-        if (!cancelled) setAuthenticated(r.json?.authenticated === true);
->>>>>>> e16a166025edd9e98d928564e8d1cf640896f67b
       } catch {
         if (!cancelled) setAuthenticated(false);
       }
     }
     check();
-<<<<<<< HEAD
     return () => {
       cancelled = true;
     };
-=======
-    return () => { cancelled = true; };
->>>>>>> e16a166025edd9e98d928564e8d1cf640896f67b
   }, []);
 
   async function handleSubmit(e) {
@@ -88,11 +55,7 @@ export default function AnalyticsDashboard() {
     setError("");
     setLoading(true);
     try {
-<<<<<<< HEAD
       const r = await login(password);
-=======
-      const r = await authApi("/login", { method: "POST", body: { password } });
->>>>>>> e16a166025edd9e98d928564e8d1cf640896f67b
       if (r.status === 200 && r.json?.success) {
         setAuthenticated(true);
         setPassword("");
@@ -108,7 +71,6 @@ export default function AnalyticsDashboard() {
 
   async function handleLogout() {
     try {
-<<<<<<< HEAD
       await logout();
     } catch {
       /* ignore */
@@ -136,13 +98,6 @@ export default function AnalyticsDashboard() {
     }
   }, [activeView, reportParams]);
 
-=======
-      await authApi("/logout", { method: "POST" });
-    } catch { /* ignore */ }
-    setAuthenticated(false);
-  }
-
->>>>>>> e16a166025edd9e98d928564e8d1cf640896f67b
   if (authenticated === null) {
     return (
       <div className="tool-card">
@@ -154,11 +109,7 @@ export default function AnalyticsDashboard() {
   if (!authenticated) {
     return (
       <div className="tool-card" style={{ maxWidth: 420 }}>
-<<<<<<< HEAD
         <h2 style={{ margin: "0 0 14px" }}>Sign in to Analytics</h2>
-=======
-        <h2 style={{ margin: "0 0 14px" }}>Sign in</h2>
->>>>>>> e16a166025edd9e98d928564e8d1cf640896f67b
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           <input
             type="password"
@@ -179,7 +130,6 @@ export default function AnalyticsDashboard() {
   }
 
   return (
-<<<<<<< HEAD
     <div style={{ display: "flex", flexDirection: "column", gap: "var(--tool-gap)" }}>
       <div className="tool-card">
         <div className="tool-row" style={{ padding: "10px 0" }}>
@@ -228,23 +178,3 @@ export default function AnalyticsDashboard() {
     </div>
   );
 }
-=======
-    <div>
-      <div className="tool-card" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-        <div>
-          <p style={{ margin: 0, fontWeight: 600 }}>You are signed in</p>
-          <p style={{ margin: "4px 0 0", color: "var(--tool-muted)", fontSize: 13 }}>Session is active. Reports are available via the API.</p>
-        </div>
-        <button type="button" className="tool-btn tool-btn-ghost" onClick={handleLogout}>
-          Logout
-        </button>
-      </div>
-      <div className="tool-card">
-        <p className="tool-muted" style={{ margin: 0 }}>
-          Dashboard views (Phase 7) will render data from the protected reporting endpoints.
-        </p>
-      </div>
-    </div>
-  );
-}
->>>>>>> e16a166025edd9e98d928564e8d1cf640896f67b

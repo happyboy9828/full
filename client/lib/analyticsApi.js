@@ -1,7 +1,7 @@
 "use client";
 
 const API_BASE =
-  process.env.NEXT_PUBLIC_TRACKING_API || "http://localhost:5000/api";
+  process.env.NEXT_PUBLIC_TRACKING_API || "/api";
 
 const REPORT_BASE = `${API_BASE}/analytics/reports`;
 
