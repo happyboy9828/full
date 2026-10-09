@@ -1,0 +1,288 @@
+/* Compress PDF Styles — uses global.css design tokens */
+.compress-pdf-container {
+  max-width: var(--tool-width);
+  margin: 0 auto;
+  padding: var(--tool-pad-top) var(--tool-pad-x) var(--tool-pad-bottom);
+  font-family: var(--tool-font);
+  color: var(--tool-text);
+  background: transparent;
+}
+
+.compress-pdf-header {
+  text-align: center;
+  margin-bottom: var(--tool-gap);
+}
+
+.compress-pdf-header h1 {
+  font-size: var(--tool-h1);
+  font-weight: 800;
+  margin: 0 0 8px 0;
+  color: var(--tool-text);
+  letter-spacing: -0.02em;
+}
+
+.compress-pdf-header p {
+  color: var(--tool-muted);
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.compress-pdf-layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: var(--tool-gap);
+  align-items: start;
+}
+
+/* Card Wrappers */
+.card {
+  background: var(--tool-surface);
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius);
+  padding: var(--tool-card-pad);
+  box-shadow: var(--tool-shadow);
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+.card:hover {
+  box-shadow: var(--tool-shadow);
+  border-color: var(--tool-accent);
+}
+
+/* Drop Zone Area */
+.drop-zone {
+  border: 2px dashed var(--tool-border);
+  border-radius: var(--tool-radius);
+  padding: 32px;
+  text-align: center;
+  background: var(--tool-surface-2);
+  margin-bottom: var(--tool-col-gap);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.drop-zone.drag-over {
+  border-color: var(--tool-accent);
+  background: var(--tool-tint);
+}
+
+.drop-zone-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+
+.browse-label {
+  color: var(--tool-accent-text);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Preset Cards */
+.preset-card h3,
+.summary-card h3 {
+  font-size: var(--tool-h2);
+  font-weight: 700;
+  margin: 0 0 14px 0;
+  color: var(--tool-text);
+  border-bottom: 1px solid var(--tool-border);
+  padding-bottom: 8px;
+}
+
+.preset-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.preset-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+  border: 2px solid var(--tool-border);
+  border-radius: var(--tool-radius-sm);
+  cursor: pointer;
+  background: var(--tool-surface);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.preset-option:hover {
+  border-color: var(--tool-accent);
+  background: var(--tool-tint);
+}
+
+.preset-option.selected {
+  border-color: var(--tool-accent);
+  background: color-mix(in srgb, var(--tool-accent) 8%, transparent);
+}
+
+.preset-option input[type="radio"] {
+  margin-top: 3px;
+  accent-color: var(--tool-accent);
+}
+
+.preset-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.preset-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--tool-text);
+}
+
+.preset-desc {
+  font-size: 12px;
+  color: var(--tool-muted);
+  margin-top: 2px;
+}
+
+/* Summary Card Details */
+.summary-details p,
+.estimate-box p {
+  margin: 8px 0;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  color: var(--tool-text);
+}
+
+.summary-details strong,
+.estimate-box strong {
+  color: var(--tool-text);
+}
+
+.estimate-box {
+  background: var(--tool-surface-2);
+  padding: 12px;
+  border-radius: var(--tool-radius-sm);
+  margin-top: 8px;
+  border: 1px solid var(--tool-border);
+}
+
+.savings-tag {
+  color: #16a34a;
+  font-weight: 700;
+}
+
+.safeguard-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 16px;
+  padding: 10px;
+  background: var(--tool-surface-2);
+  border-left: 3px solid var(--tool-accent);
+  border-radius: var(--tool-radius-sm);
+}
+
+.safeguard-notice p {
+  margin: 0;
+  font-size: 12px;
+  color: var(--tool-muted);
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--tool-border);
+  margin: 16px 0;
+}
+
+/* Action Buttons */
+.btn-primary,
+.btn-success {
+  border: none;
+  border-radius: var(--tool-radius);
+  padding: 12px 16px;
+  font-weight: 700;
+  font-size: 15px;
+  font-family: var(--tool-font);
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-primary {
+  background: var(--tool-accent);
+  color: var(--tool-on-accent);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--tool-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--tool-accent) 35%, transparent);
+}
+
+.btn-primary:disabled {
+  background: var(--tool-border);
+  color: var(--tool-muted);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-success {
+  background: #16a34a;
+  color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+  background: #15803d;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px color-mix(in srgb, #16a34a 35%, transparent);
+}
+
+.btn-success:disabled {
+  background: var(--tool-border);
+  color: var(--tool-muted);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Progress Indicator */
+.progress-wrapper {
+  margin-top: 14px;
+}
+
+.progress-wrapper.hidden {
+  display: none;
+}
+
+.progress-container {
+  width: 100%;
+  height: 8px;
+  background: var(--tool-border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--tool-accent);
+  width: 0%;
+  transition: width 0.3s ease;
+  border-radius: 4px;
+}
+
+.progress-text {
+  font-size: 12px;
+  color: var(--tool-muted);
+  display: block;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .compress-pdf-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .compress-pdf-container {
+    padding: 24px 16px 40px;
+  }
+}

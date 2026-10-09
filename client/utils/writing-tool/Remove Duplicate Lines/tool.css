@@ -1,0 +1,169 @@
+/* Layout & Container Styling */
+.rdl-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tool-gap);
+  font-family: var(--tool-font), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--tool-text);
+  max-width: var(--tool-width);
+  margin: 0 auto;
+  padding: var(--tool-pad-x);
+  box-sizing: border-box;
+}
+
+.rdl-header {
+  border-bottom: 1px solid var(--tool-border);
+  padding-bottom: var(--tool-col-gap);
+}
+
+.rdl-header h1 {
+  margin: 0 0 0.5rem 0;
+  font-size: var(--tool-h1);
+  color: var(--tool-text);
+}
+
+.rdl-header p {
+  margin: 0;
+  color: var(--tool-muted);
+  font-size: 1rem;
+}
+
+.rdl-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--tool-gap);
+}
+
+@media (max-width: 768px) {
+  .rdl-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.rdl-card {
+  background: var(--tool-on-accent);
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius);
+  padding: var(--tool-card-pad);
+  display: flex;
+  flex-direction: column;
+  gap: var(--tool-col-gap);
+  box-shadow: var(--tool-shadow);
+}
+
+.rdl-card h2 {
+  margin: 0;
+  font-size: var(--tool-h2);
+  color: var(--tool-text);
+}
+
+.rdl-textarea {
+  width: 100%;
+  height: 220px;
+  padding: 0.75rem;
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius-sm);
+  font-family: var(--tool-mono), ui-monospace, monospace;
+  font-size: 0.9rem;
+  resize: vertical;
+  box-sizing: border-box;
+  background-color: var(--tool-surface-2);
+  color: var(--tool-text);
+}
+
+.rdl-textarea:focus {
+  outline: none;
+  border-color: var(--tool-accent);
+  background-color: var(--tool-on-accent);
+}
+
+/* Options & Rules */
+.rdl-rules-title {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  color: var(--tool-text);
+}
+
+.rdl-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rdl-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  user-select: none;
+  color: var(--tool-text);
+}
+
+/* Statistics Box */
+.rdl-stats {
+  background: var(--tool-surface);
+  border-radius: var(--tool-radius-sm);
+  padding: 0.85rem 1rem;
+  font-size: 0.9rem;
+  color: var(--tool-text);
+}
+
+.rdl-stats div {
+  margin-bottom: 0.35rem;
+}
+
+.rdl-stats div:last-child {
+  margin-bottom: 0;
+}
+
+/* Alerts / Badges */
+.rdl-alert {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--tool-radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.rdl-alert-info {
+  background-color: var(--tool-tint);
+  color: var(--tool-accent-text);
+  border: 1px solid var(--tool-border);
+}
+
+/* Buttons */
+.rdl-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.rdl-btn {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: var(--tool-radius-sm);
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.rdl-btn-primary {
+  background-color: var(--tool-accent);
+  color: var(--tool-on-accent);
+}
+
+.rdl-btn-primary:hover {
+  background-color: var(--tool-accent-hover);
+}
+
+.rdl-btn-secondary {
+  background-color: var(--tool-surface-2);
+  color: var(--tool-text);
+  border: 1px solid var(--tool-border);
+}
+
+.rdl-btn-secondary:hover {
+  background-color: var(--tool-surface);
+}
