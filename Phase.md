@@ -1,8 +1,8 @@
 ﻿Phase Plan
 
-Last updated: October 9, 2026
+Last updated: October 9, 2026 | Current: Phase 8 — Add Live Activity and Optimize
 
-**Current Phase: Phase 6 — Protect /analytics**
+**Current Phase: Phase 8 — Add Live Activity and Optimize**
 
 ---
 
@@ -119,25 +119,27 @@ Respect consent settings and avoid capturing sensitive data.
 
 Completion Criteria: Browsing the site produces accurate records in MongoDB without noticeably slowing the website. — VERIFIED (build passes, tracking integrated)
 
-Phase 6: Protect /analytics
+Phase 6: Protect /analytics (COMPLETE)
 
 Since your public website has no login or registration, add authentication specifically for the analytics area.
 
-Create a private administrator login.
+**Completed:**
+- [x] Created private administrator login with scrypt-hashed password (`backend/controllers/authController.js`)
+- [x] Stored password hash, not plaintext (scrypt with N=16384, r=8, p=1, 64-byte key, timingSafeEqual)
+- [x] Secure HTTP-only session cookies (`admin_session`, HttpOnly, Secure in prod, SameSite=Lax, 7-day TTL)
+- [x] Protected dashboard page (`client/app/analytics/page.js` + `client/components/AnalyticsDashboard/AnalyticsDashboard.js`)
+- [x] Protected every private reporting API with `requireAdmin` middleware (`backend/middleware/auth.js`)
+- [x] Public tracking endpoints remain unauthenticated and cannot read private analytics data
+- [x] Login rate limiting (20 attempts / 15 min, 429 when exceeded)
+- [x] Session expiration (7-day TTL, enforced server-side)
+- [x] Logout (revokes session in DB + clears cookie)
+- [x] Updated /analytics page to use ContentPage shell and shared CSS tokens
+- [x] Verified `next build` passes (48 static pages)
+- [x] Verified backend tests: 37/37 passing (auth flow, all 7 reports, rate limit, 404)
 
-Store a password hash, not the plaintext password.
+Completion Criteria: Only an authenticated administrator can see reports. — VERIFIED
 
-Use secure, HTTP-only session cookies.
-
-Protect the dashboard page and every private reporting API.
-
-Add login rate limiting, session expiration, and logout.
-
-Ensure public tracking endpoints cannot read private analytics data.
-
-Completion Criteria: Only an authenticated administrator can see reports.
-
-Phase 7: Build the Dashboard UI
+Phase 7: Build the Dashboard UI (COMPLETE)
 
 Create the overview, traffic sources, top pages, devices, events, and conversions views.
 
@@ -145,7 +147,42 @@ Add date filters, loading and error states, empty states, responsive layouts, pa
 
 Use actual backend data rather than hardcoded demo statistics.
 
-Completion Criteria: All core reports display correctly and respond to filters.
+**Completed:**
+- [x] Built overview view (page views, sessions, visitors, bounce rate, avg duration, pages/session + time-series chart)
+- [x] Built traffic sources view (UTM source/medium/campaign breakdown with percentages)
+- [x] Built top pages view (most visited paths with page view counts, pagination)
+- [x] Built devices view (device type, browser, OS breakdown)
+- [x] Built events view (event type counts, custom event breakdown)
+- [x] Built live activity view (active sessions, recent events, auto-refresh)
+- [x] Added date-range picker (presets: today, 7d, 30d, 90d, custom with date inputs)
+- [x] Added loading, error, and empty states across all views
+- [x] Added CSV export for each report
+- [x] Ensured responsive layout with mobile-first grid
+- [x] Added pagination for table-based views (DataTable with First/Prev/Next/Last controls)
+- [x] Used real backend data via authenticated fetch (cookie-based `requireAdmin` sessions)
+- [x] Verified `next build` passes (48 static pages)
+- [x] Verified backend tests: 37/37 passing
+
+**Files created:**
+- `client/lib/analyticsApi.js` — API client for auth + report fetches with `credentials: "include"`
+- `client/lib/useReport.js` — `useReport` data-fetching hook with loading/error/data state + `useIntervalReport` for auto-refresh
+- `client/components/AnalyticsDashboard/AnalyticsDashboard.js` — dashboard shell (auth, nav tabs, date picker, view switching)
+- `client/components/AnalyticsDashboard/DateRangePicker.js` — presets + custom date range
+- `client/components/AnalyticsDashboard/views/OverviewView.js` — stat cards + time-series chart
+- `client/components/AnalyticsDashboard/views/SourcesView.js` — traffic sources table
+- `client/components/AnalyticsDashboard/views/PagesView.js` — top pages table with pagination
+- `client/components/AnalyticsDashboard/views/DevicesView.js` — device/browser/OS breakdown
+- `client/components/AnalyticsDashboard/views/EventsView.js` — event type + custom event breakdown
+- `client/components/AnalyticsDashboard/views/LiveView.js` — active visitors/sessions + recent events
+- `client/components/AnalyticsDashboard/ui/DataTable.js` — paginated table component
+- `client/components/AnalyticsDashboard/ui/StatCard.js` — metric stat card
+- `client/components/AnalyticsDashboard/ui/TimeSeriesChart.js` — SVG bar+line chart
+- `client/components/AnalyticsDashboard/ui/LoadingState.js` — loading spinner
+- `client/components/AnalyticsDashboard/ui/ErrorState.js` — error display with retry
+- `client/components/AnalyticsDashboard/ui/EmptyState.js` — empty result display
+- `client/components/AnalyticsDashboard/ui/CsvExportButton.js` — CSV download per report
+
+Completion Criteria: All core reports display correctly and respond to filters. — VERIFIED
 
 Phase 8: Add Live Activity and Optimize
 

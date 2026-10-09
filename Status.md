@@ -48,12 +48,22 @@ Last updated: 2026-10-09
 - Multiple tool pages import `downloadBlob` from it → **`next build` FAILED**
 - **FIXED**: `downloadBlob` export restored in `client/utils/shared/download.js`
 
-### /analytics Route Status
-- **Already exists** at `client/app/analytics/page.js`
-- Currently a password-protected stub (`"use client"`, hardcoded password "admin123", inline styles)
-- **NOW REGISTERED** in `lib/pages.js` PAGE_META, so it appears in nav, footer, sitemap, and homepage
-- Does not use shared `ContentPage` component or CSS tokens (Phase 6/7)
-- Does not export `metadata` (Phase 6/7)
+### /analytics Route Status (Phase 6 COMPLETE)
+- **Now a proper server component** at `client/app/analytics/page.js` using `ContentPage` shell + shared CSS tokens
+- Exports `metadata` via `toolMetadata("/analytics")` for SEO
+- **Login form**: client-side `AnalyticsDashboard.js` component (`client/components/AnalyticsDashboard/AnalyticsDashboard.js`)
+  - Calls `POST /api/auth/login` with `credentials: "include"` (reads/writes `admin_session` cookie)
+  - `GET /api/auth/me` on mount to restore existing session
+  - `POST /api/auth/logout` on sign-out
+  - Uses shared `.tool-input`, `.tool-btn`, `.tool-btn-primary`, `.tool-btn-ghost`, `.tool-card`, `.tool-alert` classes
+- **All private reporting APIs protected** by `requireAdmin` middleware (`backend/middleware/auth.js`):
+  - `GET /api/analytics/reports/{overview,sources,pages,devices,events,live,time-series}` → 401 without valid session
+  - Public ingestion endpoints (`/api/analytics/...`) remain unauthenticated and cannot read private data
+- **Auth rate limiting**: 20 attempts / 15 min on `/api/auth/login` (429 when exceeded)
+- **Session expiration**: 7-day TTL (`ADMIN_SESSION_TTL_DAYS`), enforced server-side; expired/revoked tokens rejected
+- **Logout**: revokes session in DB + clears cookie
+- **Build verified**: `next build` passes (48 static pages)
+- **Backend tests verified**: 37/37 passing (auth, reports, rate limit, 404)
 
 ### Key Files
 - Layout: `client/app/layout.js`
@@ -195,14 +205,28 @@ function MyTool() {
 - **Privacy verified in DB**: raw IP never stored (ipHash only), `token`/`email` query params stripped from URLs, sensitive keys removed from customData
 - **Login**: `POST /api/auth/login` with `{"password":"admin123"}` (dev default from ADMIN_PASSWORD env) → sets `admin_session` cookie (HttpOnly, Secure in production, SameSite=Lax, 7-day TTL)
 
-## Next Steps
+## Phase 7 — Build the Dashboard UI (COMPLETE)
 
-**Current phase: Phase 6 — Protect /analytics**
+### Files Created
+- **API client**: `client/lib/analyticsApi.js` — authenticated fetch helpers for auth + reports
+- **Data hooks**: `client/lib/useReport.js` — `useReport` (loading/error/data) + `useIntervalReport` (auto-refresh for live/time-series)
+- **Main shell**: `client/components/AnalyticsDashboard/AnalyticsDashboard.js` — auth check, login form, nav tabs, date range picker, view switching
+- **DateRangePicker**: `client/components/AnalyticsDashboard/DateRangePicker.js` — presets (today/7d/30d/90d/custom) with date inputs
+- **Views**: `views/OverviewView.js`, `views/SourcesView.js`, `views/PagesView.js`, `views/DevicesView.js`, `views/EventsView.js`, `views/LiveView.js`
+- **Shared UI**: `ui/DataTable.js` (pagination), `ui/StatCard.js`, `ui/TimeSeriesChart.js`, `ui/LoadingState.js`, `ui/ErrorState.js`, `ui/EmptyState.js`, `ui/CsvExportButton.js`
 
-- [ ] Add authentication to /analytics page (login form, session cookie, logout)
-- [ ] Protect dashboard page and all private reporting APIs with requireAdmin middleware
-- [ ] Ensure public tracking endpoints cannot read private analytics data
-- [ ] Add login rate limiting, session expiration, and logout
-- [ ] Update /analytics page to use ContentPage shell and shared CSS tokens
-- [ ] Verify `next build` still passes
-- [ ] Verify backend starts and connects to MongoDB (done — `npm start` in backend/)
+### Implementation Details
+- All 6 report views fetch real data from `/api/analytics/reports/{name}` with `credentials: "include"` for cookie-based auth
+- Date range picker (presets + custom dates) flows as `params` to every view; changing the range triggers refetch
+- Overview shows stat cards (pageViews, sessions, visitors, bounce rate, avg duration, pages/session, returning visitors, total events) + an SVG time-series chart
+- Sources, Pages, Events, and Devices views use `DataTable` with client-side pagination (First/Prev/Next/Last)
+- Live view auto-refreshes every 15s via `useIntervalReport`
+- Each report includes CSV export via `CsvExportButton`
+- Loading, error (with retry), and empty states implemented across all views
+- Responsive layout using shared `tool-card`, `tool-grid`, `tool-row`, `tool-btn` CSS classes from `globals.css`/`tool.css`
+
+### Verification
+- `next build` passes (48 static pages)
+- Backend tests: 37/37 passing
+- ESLint: 0 errors on all new files
+- API response shapes validated against `backend/controllers/reportsController.js`

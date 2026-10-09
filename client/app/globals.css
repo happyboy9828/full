@@ -961,13 +961,9 @@ details[open] .faq-q::after {
 }
 
 .core-tool-link {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
   text-decoration: none;
   color: inherit;
-  padding: 24px;
-  gap: 20px;
+  padding: 24px 24px 0;
 }
 
 .core-tool-header {

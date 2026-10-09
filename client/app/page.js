@@ -342,20 +342,20 @@ export default function Home() {
                     <p className="core-tool-desc">{category.description}</p>
                   </div>
                 </div>
-                <ul className="core-tool-list" role="list">
-                  {category.tools.map((tool) => (
-                    <li key={tool.href} className="core-tool-item">
-                      <Link href={tool.href} className="core-tool-sub-link">
-                        {tool.title}
-                        <span className="core-tool-arrow" aria-hidden="true">→</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-                <div className="core-tool-cta">
-                  <span>View all {category.tools.length} tools</span>
-                  <span className="core-tool-cta-arrow" aria-hidden="true">→</span>
-                </div>
+              </Link>
+              <ul className="core-tool-list" role="list">
+                {category.tools.map((tool) => (
+                  <li key={tool.href} className="core-tool-item">
+                    <Link href={tool.href} className="core-tool-sub-link">
+                      {tool.title}
+                      <span className="core-tool-arrow" aria-hidden="true">→</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <Link href={category.href} className="core-tool-cta">
+                <span>View all {category.tools.length} tools</span>
+                <span className="core-tool-cta-arrow" aria-hidden="true">→</span>
               </Link>
             </article>
           ))}
