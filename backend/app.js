@@ -23,6 +23,13 @@ export function createApp() {
   app.use("/", router);
 
   app.use((req, res) => {
+    logger.warn("route_not_found", {
+      method: req.method,
+      path: req.path,
+      originalUrl: req.originalUrl,
+      baseUrl: req.baseUrl,
+      ip: req.ip,
+    });
     res.status(404).json({
       success: false,
       error: "Not found",

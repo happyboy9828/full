@@ -3,6 +3,11 @@
 const API_BASE =
   process.env.NEXT_PUBLIC_TRACKING_API || "/api";
 
+// Debug: Log the API_BASE being used
+if (typeof window !== "undefined") {
+  console.log("[analyticsApi] API_BASE:", API_BASE);
+}
+
 const REPORT_BASE = `${API_BASE}/analytics/reports`;
 
 async function request(url, { method = "GET", body } = {}) {
