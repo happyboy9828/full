@@ -2,7 +2,7 @@
 
 Last updated: October 9, 2026
 
-**Current Phase: Phase 6 — Protect /analytics**
+**Current Phase: Phase 7 — Build the Dashboard UI**
 
 ---
 
@@ -119,23 +119,25 @@ Respect consent settings and avoid capturing sensitive data.
 
 Completion Criteria: Browsing the site produces accurate records in MongoDB without noticeably slowing the website. — VERIFIED (build passes, tracking integrated)
 
-Phase 6: Protect /analytics
+Phase 6: Protect /analytics (COMPLETE)
 
 Since your public website has no login or registration, add authentication specifically for the analytics area.
 
-Create a private administrator login.
+**Completed:**
+- [x] Created private administrator login with scrypt-hashed password (`backend/controllers/authController.js`)
+- [x] Stored password hash, not plaintext (scrypt with N=16384, r=8, p=1, 64-byte key, timingSafeEqual)
+- [x] Secure HTTP-only session cookies (`admin_session`, HttpOnly, Secure in prod, SameSite=Lax, 7-day TTL)
+- [x] Protected dashboard page (`client/app/analytics/page.js` + `client/components/AnalyticsDashboard/AnalyticsDashboard.js`)
+- [x] Protected every private reporting API with `requireAdmin` middleware (`backend/middleware/auth.js`)
+- [x] Public tracking endpoints remain unauthenticated and cannot read private analytics data
+- [x] Login rate limiting (20 attempts / 15 min, 429 when exceeded)
+- [x] Session expiration (7-day TTL, enforced server-side)
+- [x] Logout (revokes session in DB + clears cookie)
+- [x] Updated /analytics page to use ContentPage shell and shared CSS tokens
+- [x] Verified `next build` passes (48 static pages)
+- [x] Verified backend tests: 37/37 passing (auth flow, all 7 reports, rate limit, 404)
 
-Store a password hash, not the plaintext password.
-
-Use secure, HTTP-only session cookies.
-
-Protect the dashboard page and every private reporting API.
-
-Add login rate limiting, session expiration, and logout.
-
-Ensure public tracking endpoints cannot read private analytics data.
-
-Completion Criteria: Only an authenticated administrator can see reports.
+Completion Criteria: Only an authenticated administrator can see reports. — VERIFIED
 
 Phase 7: Build the Dashboard UI
 

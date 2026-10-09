@@ -48,12 +48,22 @@ Last updated: 2026-10-09
 - Multiple tool pages import `downloadBlob` from it → **`next build` FAILED**
 - **FIXED**: `downloadBlob` export restored in `client/utils/shared/download.js`
 
-### /analytics Route Status
-- **Already exists** at `client/app/analytics/page.js`
-- Currently a password-protected stub (`"use client"`, hardcoded password "admin123", inline styles)
-- **NOW REGISTERED** in `lib/pages.js` PAGE_META, so it appears in nav, footer, sitemap, and homepage
-- Does not use shared `ContentPage` component or CSS tokens (Phase 6/7)
-- Does not export `metadata` (Phase 6/7)
+### /analytics Route Status (Phase 6 COMPLETE)
+- **Now a proper server component** at `client/app/analytics/page.js` using `ContentPage` shell + shared CSS tokens
+- Exports `metadata` via `toolMetadata("/analytics")` for SEO
+- **Login form**: client-side `AnalyticsDashboard.js` component (`client/components/AnalyticsDashboard/AnalyticsDashboard.js`)
+  - Calls `POST /api/auth/login` with `credentials: "include"` (reads/writes `admin_session` cookie)
+  - `GET /api/auth/me` on mount to restore existing session
+  - `POST /api/auth/logout` on sign-out
+  - Uses shared `.tool-input`, `.tool-btn`, `.tool-btn-primary`, `.tool-btn-ghost`, `.tool-card`, `.tool-alert` classes
+- **All private reporting APIs protected** by `requireAdmin` middleware (`backend/middleware/auth.js`):
+  - `GET /api/analytics/reports/{overview,sources,pages,devices,events,live,time-series}` → 401 without valid session
+  - Public ingestion endpoints (`/api/analytics/...`) remain unauthenticated and cannot read private data
+- **Auth rate limiting**: 20 attempts / 15 min on `/api/auth/login` (429 when exceeded)
+- **Session expiration**: 7-day TTL (`ADMIN_SESSION_TTL_DAYS`), enforced server-side; expired/revoked tokens rejected
+- **Logout**: revokes session in DB + clears cookie
+- **Build verified**: `next build` passes (48 static pages)
+- **Backend tests verified**: 37/37 passing (auth, reports, rate limit, 404)
 
 ### Key Files
 - Layout: `client/app/layout.js`
@@ -197,12 +207,17 @@ function MyTool() {
 
 ## Next Steps
 
-**Current phase: Phase 6 — Protect /analytics**
+**Current phase: Phase 7 — Build the Dashboard UI**
 
-- [ ] Add authentication to /analytics page (login form, session cookie, logout)
-- [ ] Protect dashboard page and all private reporting APIs with requireAdmin middleware
-- [ ] Ensure public tracking endpoints cannot read private analytics data
-- [ ] Add login rate limiting, session expiration, and logout
-- [ ] Update /analytics page to use ContentPage shell and shared CSS tokens
+- [ ] Build overview report view (page views, sessions, visitors, bounce rate, avg duration, pages/session)
+- [ ] Build traffic sources view (UTM source/medium/campaign breakdown with percentages)
+- [ ] Build top pages view (most visited paths with page view counts)
+- [ ] Build devices view (device type, browser, OS breakdown)
+- [ ] Build events view (event type counts, custom event breakdown)
+- [ ] Build live activity view (active sessions, recent events)
+- [ ] Add date-range picker (presets: today, 7d, 30d, custom)
+- [ ] Add loading, error, and empty states
+- [ ] Add CSV export for each report
+- [ ] Ensure responsive layout and pagination where needed
+- [ ] Use real backend data via authenticated fetch (cookie-based `requireAdmin` sessions)
 - [ ] Verify `next build` still passes
-- [ ] Verify backend starts and connects to MongoDB (done — `npm start` in backend/)
