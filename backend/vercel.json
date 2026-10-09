@@ -3,18 +3,13 @@
   "builds": [
     {
       "src": "api.js",
-      "use": "vercel-node-builder",
+      "use": "@vercel/node",
       "config": {
-        "includeFiles": ["**"],
-        "maxLambdaSize": "50mb"
+        "includeFiles": ["**/*"]
       }
     }
   ],
   "routes": [
-    { "src": "/api/analytics/(.*)", "dest": "/api" },
-    { "src": "/api/auth/(.*)", "dest": "/api" },
-    { "src": "/health", "dest": "/api" },
-    { "src": "/status", "dest": "/api" },
-    { "src": "/(.*)", "dest": "/api" }
+    { "src": "/(.*)", "dest": "/api.js" }
   ]
 }
