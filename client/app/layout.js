@@ -3,6 +3,7 @@ import Navbar from "./../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
 import { getPages } from "../lib/pages";
 import Multitag from "../components/ads/Multitag/Multitag";
+import ClientProviders from "../components/ClientProviders/ClientProviders";
 import "./globals.css";
 import "./tool.css";
 
@@ -45,37 +46,39 @@ export default function RootLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        <Navbar pages={pages} />
+        <ClientProviders>
+          <Navbar pages={pages} />
 
-        <div className="mx-auto w-full max-w-[var(--tool-width)] flex-1 px-6 xl:max-w-[1400px]">
-          <main className="flex min-w-0 flex-col">{children}</main>
-        </div>
+          <div className="mx-auto w-full max-w-[var(--tool-width)] flex-1 px-6 xl:max-w-[1400px]">
+            <main className="flex min-w-0 flex-col">{children}</main>
+          </div>
 
-        <Footer />
+          <Footer />
 
-        {/* Multitag manages InPagePush (corner banner) and Vignette (page transition) */}
-        <Multitag
-          slot="multitag"
-          label="Advertisement"
-          advertiser="PixelForge Pro"
-          title="Batch convert images without the upload"
-          description="Run every format in one browser-only queue."
-          cta="Try it free"
-          href="/"
-          // InPagePush config
-          inPagePushEnabled={true}
-          inPagePushPosition="bottom-right"
-          inPagePushDelayMs={4000}
-          inPagePushAutoHideMs={14000}
-          // Vignette config
-          vignetteEnabled={true}
-          vignetteDelayMs={0}
-          vignetteAutoHideMs={8000}
-          vignetteMinSessionTimeMs={30000}
-          // Session
-          oncePerSession={true}
-          sessionKey="ads:multitag"
-        />
+          {/* Multitag manages InPagePush (corner banner) and Vignette (page transition) */}
+          <Multitag
+            slot="multitag"
+            label="Advertisement"
+            advertiser="PixelForge Pro"
+            title="Batch convert images without the upload"
+            description="Run every format in one browser-only queue."
+            cta="Try it free"
+            href="/"
+            // InPagePush config
+            inPagePushEnabled={true}
+            inPagePushPosition="bottom-right"
+            inPagePushDelayMs={4000}
+            inPagePushAutoHideMs={14000}
+            // Vignette config
+            vignetteEnabled={true}
+            vignetteDelayMs={0}
+            vignetteAutoHideMs={8000}
+            vignetteMinSessionTimeMs={30000}
+            // Session
+            oncePerSession={true}
+            sessionKey="ads:multitag"
+          />
+        </ClientProviders>
       </body>
     </html>
   );

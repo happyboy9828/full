@@ -7,6 +7,10 @@ const APP_DIR = path.join(process.cwd(), "app");
 // Canonical copy for each tool. Adding a route under app/ without an entry here
 // still shows up in the nav, but with a title derived from its folder name.
 const PAGE_META = {
+  "/analytics": {
+    title: "Analytics Dashboard",
+    description: "View website analytics and visitor insights.",
+  },
   "/BGRemove": {
     title: "Remove BG",
     description: "Remove an image background automatically, then refine it with erase and restore brushes.",

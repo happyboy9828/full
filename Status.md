@@ -43,17 +43,17 @@ Last updated: 2026-10-09
   - `backend/models/index.js` — exports all models
 - All indexes and validation per DESIGN.md (no duplicate index warnings)
 
-### Pre-existing Build Issue (NOT YET FIXED)
-- `client/utils/shared/download.js` is 100% commented out (no exports)
-- Multiple tool pages import `downloadBlob` from it â†’ **`next build` FAILS**
-- This is a pre-existing broken state, unrelated to analytics work
+### Pre-existing Build Issue (FIXED)
+- `client/utils/shared/download.js` was 100% commented out (no exports)
+- Multiple tool pages import `downloadBlob` from it → **`next build` FAILED**
+- **FIXED**: `downloadBlob` export restored in `client/utils/shared/download.js`
 
 ### /analytics Route Status
 - **Already exists** at `client/app/analytics/page.js`
 - Currently a password-protected stub (`"use client"`, hardcoded password "admin123", inline styles)
-- **NOT registered** in `lib/pages.js` PAGE_META, so it does not appear in nav, footer, sitemap, or homepage
-- Does not use shared `ContentPage` component or CSS tokens
-- Does not export `metadata`
+- **NOW REGISTERED** in `lib/pages.js` PAGE_META, so it appears in nav, footer, sitemap, and homepage
+- Does not use shared `ContentPage` component or CSS tokens (Phase 6/7)
+- Does not export `metadata` (Phase 6/7)
 
 ### Key Files
 - Layout: `client/app/layout.js`
@@ -141,7 +141,28 @@ function MyTool() {
 
 ---
 
-## Phase 2 — API Design & Data Model (COMPLETE)
+## Phase 5 — Build the Tracking Client (COMPLETE)
+
+- **Tracking client library**: `client/lib/tracking.js` — lightweight client with:
+  - Pseudonymous visitor/session ID generation (UUID v4, persisted in localStorage)
+  - Pageview tracking on initial load and App Router navigation (via `usePathname`)
+  - UTM parameter capture (utm_source, utm_medium, utm_campaign, utm_term, utm_content)
+  - Click tracking on interactive elements (links, buttons, inputs)
+  - Outbound link detection and tracking
+  - Custom event API (`trackCustom`)
+  - Engagement heartbeats (30s interval, scroll depth tracking, visibility change handling)
+  - Session management (30-min timeout, auto-restart)
+  - Deduplication and retry logic (3 retries with exponential backoff)
+  - Failed request queueing (localStorage, flushed on reconnect)
+  - Consent handling (opt-in/opt-out via custom event, respects denial)
+  - Privacy: URL sanitization (strips sensitive params), element data sanitization, customData PII scrubbing
+  - sendBeacon for reliable unload/heartbeat delivery
+- **TrackingProvider**: `client/components/TrackingProvider/TrackingProvider.js` — consent management via custom event
+- **ClientProviders**: `client/components/ClientProviders/ClientProviders.js` — wraps app with TrackingProvider without breaking server components
+- **Root layout integration**: `client/app/layout.js` updated to use ClientProviders
+- **Page metadata**: `/analytics` added to PAGE_META in `client/lib/pages.js`
+- **Build verification**: `next build` passes (48 static pages generated)
+- **Pre-existing fix**: `client/utils/shared/download.js` downloadBlob export restored
 
 - API contract documented in `DESIGN.md` (367 lines)
 - MongoDB schemas defined for 5 collections: sites, sessions, events, adminSessions, dailyStats
@@ -176,11 +197,12 @@ function MyTool() {
 
 ## Next Steps
 
-**Current phase: Phase 5 — Build the Tracking Client**
+**Current phase: Phase 6 — Protect /analytics**
 
-- [ ] Build lightweight tracking client in Next.js (page loads, App Router navigation, visitor/session IDs, UTM capture, clicks, outbound links, custom events, engagement heartbeats, dedupe, retry, consent)
-- [ ] Fix pre-existing build break (client/utils/shared/download.js imports) — required for `next build`
-- [ ] Implement /analytics page with ContentPage shell (Phase 6/7)
-- [ ] Register /analytics in page metadata system
-- [ ] Verify `next build` passes
+- [ ] Add authentication to /analytics page (login form, session cookie, logout)
+- [ ] Protect dashboard page and all private reporting APIs with requireAdmin middleware
+- [ ] Ensure public tracking endpoints cannot read private analytics data
+- [ ] Add login rate limiting, session expiration, and logout
+- [ ] Update /analytics page to use ContentPage shell and shared CSS tokens
+- [ ] Verify `next build` still passes
 - [ ] Verify backend starts and connects to MongoDB (done — `npm start` in backend/)
