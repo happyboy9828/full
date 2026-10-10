@@ -315,54 +315,9 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Section 2: Core Tool Categories — 2-column on desktop, 1 on mobile */}
-      <section
-        id="core-tools"
-        className="core-tools-section"
-        aria-labelledby="core-tools-heading"
-      >
-        <div className="tools-header">
-          <h2 id="core-tools-heading" className="tools-title">
-            Core Tool Suites
-          </h2>
-          <p className="tools-subtitle">
-            The two most powerful tool families for document workflows.
-            All processing happens locally — no uploads, no limits.
-          </p>
-        </div>
+      
 
-        <div className="core-tools-grid" role="list">
-          {FEATURED_CATEGORIES.map((category) => (
-            <article key={category.name} className="core-tool-card" role="listitem">
-              <Link href={category.href} className="core-tool-link">
-                <div className="core-tool-header">
-                  <span className="core-tool-icon" aria-hidden="true">{category.icon}</span>
-                  <div>
-                    <h3 className="core-tool-title">{category.name}</h3>
-                    <p className="core-tool-desc">{category.description}</p>
-                  </div>
-                </div>
-              </Link>
-              <ul className="core-tool-list" role="list">
-                {category.tools.map((tool) => (
-                  <li key={tool.href} className="core-tool-item">
-                    <Link href={tool.href} className="core-tool-sub-link">
-                      {tool.title}
-                      <span className="core-tool-arrow" aria-hidden="true">→</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-              <Link href={category.href} className="core-tool-cta">
-                <span>View all {category.tools.length} tools</span>
-                <span className="core-tool-cta-arrow" aria-hidden="true">→</span>
-              </Link>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      {/* Section 3: Most Popular Tools — directly below the hero */}
+      {/* Section 2: Most Popular Tools — directly below the hero */}
       <section
         id="tools"
         className="popular-section"
@@ -393,7 +348,7 @@ export default function Home() {
         </ul>
       </section>
 
-      {/* Section 4: Why Choose DocFix? — feature/benefit highlights */}
+      {/* Section 3: Why Choose DocFix? — feature/benefit highlights */}
       <section
         id="why"
         className="why-section"
@@ -438,7 +393,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 5: Complete Directory / All Tools */}
+      {/* Section 4: Complete Directory / All Tools */}
       <section
         id="all-tools"
         className="directory-section"
@@ -476,28 +431,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 6: Final CTA & Trust Footer */}
-      <section
-        id="cta"
-        className="cta-section"
-        aria-labelledby="cta-heading"
-      >
-        <div className="cta-box">
-          <h2 id="cta-heading" className="cta-title">
-            Ready to process your files securely?
-          </h2>
-          <p className="cta-subtitle">
-            No uploads. No sign-up. No limits on basic tasks.
-          </p>
-          <Link
-            href="/img/ImgCompresser"
-            className="cta-btn"
-            aria-label="Get started with a free tool"
-          >
-            Get Started Now — It's Free
-          </Link>
-        </div>
-      </section>
+     
     </div>
   );
 }
