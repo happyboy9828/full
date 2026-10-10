@@ -2,7 +2,7 @@
  * TXT <-> Word Converter Utility Module
  */
 
-import { triggerDownloadProgress } from '@/components/ads/DownloadProgressPopup/DownloadProgressTrigger';
+import { triggerDownloadProgress as trigger } from '@/components/ads/DownloadProgressPopup/DownloadProgressTrigger';
 
 export function initTxtWordConverter(container) {
   if (!container) return;

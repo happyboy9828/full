@@ -460,7 +460,7 @@ export function initExcelPdfConverter(container) {
     if (!state.generatedBlob) return;
     const url = URL.createObjectURL(state.generatedBlob);
     
-    trigger({
+    triggerDownloadProgress({
       countdownMs: 5000,
       durationMs: 3000,
       title: state.mode === 'excelToPdf' 

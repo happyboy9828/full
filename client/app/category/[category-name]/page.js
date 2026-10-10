@@ -1,20 +1,19 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import ContentPage from "./../../../components/ContentPage/ContentPage";
-import { getCategories } from "./../../../lib/pages";
+import { getCategoryBySlug, getAllCategorySlugs } from "./../../../lib/pages";
 
 export async function generateStaticParams() {
-  const categories = getCategories();
-  return categories.map((category) => ({
-    categoryName: category.name.toLowerCase().replace(/\s+/g, '-'),
+  const slugs = getAllCategorySlugs();
+  return slugs.map((slug) => ({
+    'category-name': slug,
   }));
 }
 
-export function generateMetadata({ params }) {
-  const categoryName = decodeURIComponent(params.categoryName);
-  const category = getCategories().find(
-    (c) => c.name.toLowerCase().replace(/\s+/g, '-') === categoryName
-  );
+export async function generateMetadata({ params }) {
+  const resolvedParams = await params;
+  const categoryName = decodeURIComponent(resolvedParams['category-name']);
+  const category = getCategoryBySlug(categoryName);
   
   if (!category) {
     return { title: "Category Not Found" };
@@ -22,17 +21,14 @@ export function generateMetadata({ params }) {
 
   return {
     title: `${category.name} - All Tools`,
-    description: `Explore all ${category.tools.length} ${category.name.toLowerCase()} tools. ${getCategoryDescription(category.name)}`,
+    description: `Explore all ${category.toolCount} ${category.name.toLowerCase()} tools. ${category.description}`,
   };
 }
 
-export default function CategoryPage({ params }) {
-  const categoryName = decodeURIComponent(params.categoryName);
-  const categories = getCategories();
-  
-  const category = categories.find(
-    (c) => c.name.toLowerCase().replace(/\s+/g, '-') === categoryName
-  );
+export default async function CategoryPage({ params }) {
+  const resolvedParams = await params;
+  const categoryName = decodeURIComponent(resolvedParams['category-name']);
+  const category = getCategoryBySlug(categoryName);
 
   if (!category) {
     notFound();
@@ -41,7 +37,7 @@ export default function CategoryPage({ params }) {
   return (
     <ContentPage
       title={category.name}
-      description={`${category.tools.length} tools for ${category.name.toLowerCase()}. ${getCategoryDescription(category.name)}`}
+      description={`${category.toolCount} tools for ${category.name.toLowerCase()}. ${category.description}`}
       eyebrow="Category"
     >
       <div className="tools-grid">
@@ -58,15 +54,4 @@ export default function CategoryPage({ params }) {
       </div>
     </ContentPage>
   );
-}
-
-function getCategoryDescription(name) {
-  const descriptions = {
-    "Image Tools": "Convert, compress, resize, and edit images entirely in your browser.",
-    "PDF Tools": "Split, merge, compress, convert, and rotate PDFs with zero uploads.",
-    "MS Office Tools": "Convert between Word, Excel, PowerPoint, PDF, HTML, CSV and TXT formats.",
-    "Dev Tools": "Minify code, generate passwords, create QR codes, and scan barcodes.",
-    "Text Tools": "Convert case, generate Lorem Ipsum, write paragraphs, sort and count text.",
-  };
-  return descriptions[name] || "A collection of useful browser-based utilities.";
 }

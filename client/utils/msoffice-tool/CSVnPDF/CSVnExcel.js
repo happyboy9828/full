@@ -435,7 +435,7 @@ export function initCSVExcelTool(containerElement) {
       const fileBlob = new Blob([blob], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       const url = URL.createObjectURL(fileBlob);
       
-      trigger({
+      triggerDownloadProgress({
         countdownMs: 5000,
         durationMs: 3000,
         title: 'Preparing your Excel workbook',
@@ -468,7 +468,7 @@ export function initCSVExcelTool(containerElement) {
       const url = URL.createObjectURL(blob);
       const outName = state.fileName ? state.fileName.replace(/\.[^/.]+$/, "") + ".csv" : "converted_data.csv";
 
-      trigger({
+      triggerDownloadProgress({
         countdownMs: 5000,
         durationMs: 3000,
         title: 'Preparing your CSV file',

@@ -1,205 +1,12 @@
 import Link from "next/link";
+import { getCategories } from "../lib/pages";
 
-const ALL_TOOL_CATEGORIES = [
-  {
-    name: "Image & Format Tools",
-    tools: [
-      {
-        title: "JPG to PNG",
-        description: "Convert JPG images to lossless PNG with optional 8-bit indexed colour and white edge removal.",
-        href: "/img/JpgToPng",
-      },
-      {
-        title: "PNG to JPG",
-        description: "Convert PNG graphics to JPG, filling transparent areas with white, black or a custom hex colour.",
-        href: "/img/PngToJpg",
-      },
-      {
-        title: "WebP to PNG",
-        description: "Convert WebP images to PNG in batches, preserving transparency or replacing it with a solid colour.",
-        href: "/img/WebpToPng",
-      },
-      {
-        title: "Image to Base64",
-        description: "Encode an image as a data URL, HTML tag, CSS background or raw Base64 string.",
-        href: "/img/ImgToBase64",
-      },
-    ],
-  },
-  {
-    name: "Optimization & Editing",
-    tools: [
-      {
-        title: "Compress Image",
-        description: "Shrink image file sizes with a quality slider, a target size limit and batch ZIP download.",
-        href: "/img/ImgCompresser",
-      },
-      {
-        title: "Remove BG",
-        description: "Remove an image background automatically, then refine it with erase and restore brushes.",
-        href: "/img/BGRemove",
-      },
-      {
-        title: "Image Resizer",
-        description: "Resize photos to exact pixel dimensions or crop them to an aspect ratio, with unit, DPI and format control.",
-        href: "/img/ImageResizer",
-      },
-      {
-        title: "Watermark",
-        description: "Protect your images with custom text or image watermarks.",
-        href: "/img/Watermark",
-      },
-      {
-        title: "Favicon Generator",
-        description: "Build favicon.ico, PWA icons and a web manifest from one image, with a ready-made head snippet.",
-        href: "/img/FavIcon",
-      },
-    ],
-  },
-  {
-    name: "PDF Tools",
-    tools: [
-      {
-        title: "Split PDF",
-        description: "Split PDF files by pages, ranges, or bookmarks. Extract specific pages into new PDF documents.",
-        href: "/pdf-tools/SplitPDF",
-      },
-      {
-        title: "Merge PDF",
-        description: "Combine multiple PDF files into one document. Reorder, rotate, and merge pages with ease.",
-        href: "/pdf-tools/MergePDFFiles",
-      },
-      {
-        title: "Compress PDF",
-        description: "Reduce PDF file size while maintaining quality. Optimize images and remove redundant data.",
-        href: "/pdf-tools/CompressPDF",
-      },
-      {
-        title: "PDF to JPG",
-        description: "Convert PDF pages to high-quality JPG images. Batch convert with customizable DPI and quality.",
-        href: "/pdf-tools/PDFtoJPG",
-      },
-      {
-        title: "Rotate PDF",
-        description: "Rotate PDF pages by 90, 180, or 270 degrees. Rotate individual pages or the entire document.",
-        href: "/pdf-tools/RotatePDF",
-      },
-      {
-        title: "JPG to PDF",
-        description: "Convert JPG images to PDF documents. Combine multiple images into a single PDF file.",
-        href: "/pdf-tools/JPGtoPDF",
-      },
-    ],
-  },
-  {
-    name: "MS Office Tools",
-    tools: [
-      {
-        title: "Word to PDF / PDF to Word",
-        description: "Convert Word documents to PDF and PDF files to editable Word documents. Preserve formatting and layout.",
-        href: "/msoffice-tool/WordnPDF",
-      },
-      {
-        title: "TXT to Word / Word to TXT",
-        description: "Convert plain text files to Word documents and Word documents to plain text. Batch conversion supported.",
-        href: "/msoffice-tool/TXTnWord",
-      },
-      {
-        title: "Excel to PDF / PDF to Excel",
-        description: "Convert Excel spreadsheets to PDF and PDF tables to editable Excel files. Preserve data and formatting.",
-        href: "/msoffice-tool/ExcelnPDF",
-      },
-      {
-        title: "PowerPoint to PDF / PDF to PowerPoint",
-        description: "Convert PowerPoint presentations to PDF and PDF files to editable PowerPoint slides.",
-        href: "/msoffice-tool/PPTnPDF",
-      },
-      {
-        title: "HTML to Word / Word to HTML",
-        description: "Convert HTML files to Word documents and Word documents to clean HTML. Preserve styling and structure.",
-        href: "/msoffice-tool/HTMLnDOC",
-      },
-      {
-        title: "CSV to Excel / Excel to CSV",
-        description: "Convert CSV files to Excel spreadsheets and Excel files to CSV format. Handle large datasets efficiently.",
-        href: "/msoffice-tool/CSVnPDF",
-      },
-    ],
-  },
-  {
-    name: "Dev Tools",
-    tools: [
-      {
-        title: "CSS Minifier",
-        description: "Compress CSS by stripping comments, whitespace and redundant code, with options for colour and shorthand conversion.",
-        href: "/dev-tools/CSSMinifier",
-      },
-      {
-        title: "HTML Minifier",
-        description: "Minify HTML markup by removing comments, collapsing whitespace and optimising inline CSS and JavaScript.",
-        href: "/dev-tools/HTMLMinifier",
-      },
-      {
-        title: "Strong Password Generator",
-        description: "Generate cryptographically secure random passwords and memorable passphrases with a live strength meter.",
-        href: "/dev-tools/PasswordGenerator",
-      },
-      {
-        title: "QR Code Generator",
-        description: "Create custom high-resolution QR codes with logos, colour gradients and multiple export formats (PNG, SVG, EPS).",
-        href: "/dev-tools/QRCodeGenerator",
-      },
-      {
-        title: "QR Code Scanner",
-        description: "Scan QR codes from your camera or uploaded images, with a scan history and smart payload actions.",
-        href: "/dev-tools/QRCodeScanner",
-      },
-    ],
-  },
-  {
-    name: "Text Tools",
-    tools: [
-      {
-        title: "Case Converter",
-        description: "Convert text between uppercase, lowercase, title case, sentence case, camelCase, snake_case, and more.",
-        href: "/writing-tool/CaseConverter",
-      },
-      {
-        title: "Lorem Ipsum Generator",
-        description: "Generate placeholder text for designs and layouts. Customize paragraphs, words, and characters.",
-        href: "/writing-tool/LoremIpsum",
-      },
-      {
-        title: "Paragraph Writer",
-        description: "AI-powered paragraph generation. Create coherent paragraphs on any topic with customizable length and tone.",
-        href: "/writing-tool/ParagraphWriter",
-      },
-      {
-        title: "Remove Duplicate Lines",
-        description: "Remove duplicate lines from text while preserving order. Supports case-sensitive and case-insensitive modes.",
-        href: "/writing-tool/RemoveDuplicateLines",
-      },
-      {
-        title: "Sort Text",
-        description: "Sort lines of text alphabetically, numerically, by length, or reverse order. Remove duplicates option included.",
-        href: "/writing-tool/SortText",
-      },
-      {
-        title: "Word Counter",
-        description: "Count words, characters, sentences, paragraphs, and reading time. Real-time stats as you type.",
-        href: "/writing-tool/WordCounter",
-      },
-    ],
-  },
-];
-
-// Featured categories for the 2-column homepage layout
 const FEATURED_CATEGORIES = [
   {
     name: "PDF Tools",
     icon: "📄",
     description: "Split, merge, compress, convert, and rotate PDFs entirely in your browser.",
-    href: "/tools#pdf-tools",
+    href: "/category/pdf-tools",
     tools: [
       { title: "Split PDF", href: "/pdf-tools/SplitPDF" },
       { title: "Merge PDF", href: "/pdf-tools/MergePDFFiles" },
@@ -213,7 +20,7 @@ const FEATURED_CATEGORIES = [
     name: "MS Office Tools",
     icon: "📊",
     description: "Convert between Word, Excel, PowerPoint, PDF, HTML, CSV and TXT formats.",
-    href: "/tools#ms-office-tools",
+    href: "/category/ms-office-tools",
     tools: [
       { title: "Word ↔ PDF", href: "/msoffice-tool/WordnPDF" },
       { title: "TXT ↔ Word", href: "/msoffice-tool/TXTnWord" },
@@ -264,6 +71,9 @@ const FEATURED_TOOLS = [
 ];
 
 export default function Home() {
+  const categories = getCategories();
+  const totalTools = categories.reduce((sum, c) => sum + c.toolCount, 0);
+
   return (
     <div className="home-shell">
       {/* Section 1: Hero */}
@@ -291,7 +101,7 @@ export default function Home() {
             Compress an Image Free →
           </Link>
           <Link
-            href="#tools"
+            href="/tools"
             className="btn btn-secondary"
             aria-label="Explore all available tools"
           >
@@ -316,7 +126,6 @@ export default function Home() {
       </header>
 
       
-
       {/* Section 2: Most Popular Tools — directly below the hero */}
       <section
         id="tools"
@@ -393,7 +202,52 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 4: Complete Directory / All Tools */}
+      {/* Section 4: Core Tool Categories (2-column featured) */}
+      <section
+        id="core-tools"
+        className="core-tools-section"
+        aria-labelledby="core-tools-heading"
+      >
+        <div className="tools-header">
+          <h2 id="core-tools-heading" className="tools-title">
+            Core Tool Suites
+          </h2>
+          <p className="tools-subtitle">
+            Our two most comprehensive tool collections for document and image workflows.
+          </p>
+        </div>
+
+        <ul className="core-tools-grid" role="list">
+          {FEATURED_CATEGORIES.map((category) => (
+            <li key={category.name} className="core-tool-card">
+              <div className="core-tool-link">
+                <div className="core-tool-header">
+                  <span className="core-tool-icon" aria-hidden="true">{category.icon}</span>
+                  <div>
+                    <h3 className="core-tool-title">{category.name}</h3>
+                    <p className="core-tool-desc">{category.description}</p>
+                  </div>
+                </div>
+                <ul className="core-tool-list" role="list">
+                  {category.tools.map((tool) => (
+                    <li key={tool.href} className="core-tool-item">
+                      <Link href={tool.href} className="core-tool-sub-link">
+                        <span>{tool.title}</span>
+                        <span className="core-tool-arrow" aria-hidden="true">→</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+                <Link href={category.href} className="core-tool-cta">
+                  View All {category.name} <span className="core-tool-cta-arrow" aria-hidden="true">→</span>
+                </Link>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* Section 5: Complete Directory / All Tools */}
       <section
         id="all-tools"
         className="directory-section"
@@ -404,16 +258,16 @@ export default function Home() {
             Explore the Full Toolkit
           </h2>
           <p className="directory-subtitle">
-            All {ALL_TOOL_CATEGORIES.reduce((n, c) => n + c.tools.length, 0)} browser-only utilities, organized by what you need.
+            All {totalTools} browser-only utilities, organized by what you need.
           </p>
         </div>
 
         <div className="directory-accordion">
-          {ALL_TOOL_CATEGORIES.map((category) => (
-            <details key={category.name} className="directory-category">
+          {categories.map((category) => (
+            <details key={category.slug} className="directory-category">
               <summary className="directory-category-head">
                 <span className="directory-category-name">{category.name}</span>
-                <span className="directory-category-count">{category.tools.length} tools</span>
+                <span className="directory-category-count">{category.toolCount} tools</span>
                 <span className="directory-chevron" aria-hidden="true">▾</span>
               </summary>
               <ul className="directory-tools-list" role="list">

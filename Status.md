@@ -2,6 +2,31 @@
 
 Last updated: 2026-10-10
 
+## MS Office & Tabular Document Conversion CDN Integration (COMPLETE)
+
+### Added CDN Scripts to `client/app/layout.js`
+All 13 CDN libraries for Microsoft Office and tabular document conversion tools have been integrated into the Next.js App Router layout using `next/script` components with `strategy="lazyOnload"` for optimal performance.
+
+| Category | Library | CDN URL | Purpose |
+|----------|---------|---------|---------|
+| **Word (.docx)** | mammoth.js | `https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js` | Reads & converts .docx to HTML/Text |
+| | docx.js | `https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js` | Creates & formats .docx files client-side |
+| | html-docx-js | `https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.min.js` | Parses HTML/DOM into .docx format |
+| **Excel (.xlsx, .csv)** | SheetJS / xlsx | `https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js` | Full Excel & CSV parsing/generation engine |
+| **PowerPoint (.pptx)** | PPTXGenJS | `https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js` | Generates .pptx presentations with text, tables, shapes, images |
+| **PDF Generation** | pdf-lib | `https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js` | PDF generation, page extraction, splitting, merging, rotation |
+| | jsPDF | `https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js` | Generates tabular PDF reports from spreadsheets |
+| | jsPDF AutoTable | `https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js` | Table plugin for jsPDF |
+| **PDF Rendering** | PDF.js | `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js` | Renders PDF pages to Canvas for thumbnails/previews, extracts text |
+| | PDF.js Worker | `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js` | Worker configuration for PDF.js |
+| **Utilities** | FileSaver.js | `https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js` | Cross-browser file downloads |
+| | JSZip | `https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js` | Bundles multiple pages/images into downloadable .zip files |
+
+### Verification
+- All 13 CDN URLs verified with HTTP 200 status
+- Next.js build passes (53 static pages including category pages)
+- ESLint: 0 errors on modified layout.js
+
 ## MS Office Tool CSS Import & Styling Fix (COMPLETE)
 
 ### Problem

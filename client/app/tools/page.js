@@ -1,35 +1,39 @@
-import ContentPage from "./../../components/ContentPage/ContentPage";
-import { getPages } from "./../../lib/pages";
+import Link from "next/link";
+import { getCategories } from "./../../lib/pages";
 
 export const metadata = {
   title: "All Tools",
   description:
-    "Browse every DocFix image tool in one place. Resize, compress, convert, watermark and more — all in your browser.",
+    "Browse every DocFix tool in one place. Image, PDF, Office, Dev, and Text tools — all in your browser.",
 };
 
 export default function ToolsPage() {
-  const pages = getPages();
+  const categories = getCategories();
 
   return (
-    <ContentPage
-      title="All Tools"
-      description={`${pages.length} browser-only image utilities. No uploads, no install, no sign-up.`}
-      eyebrow="Tools"
-    >
-      <ul className="tools-grid">
-        {pages.map((page) => (
-          <li key={page.href}>
-            <a href={page.href} className="tool-link-card">
-              <span className="tool-link-title">
-                {page.title}
-                <span aria-hidden="true">&rarr;</span>
+    <div className="tools-section">
+      <header className="tools-header">
+        <h1 className="tools-title">All Tools</h1>
+        <p className="tools-subtitle">
+          {categories.reduce((sum, c) => sum + c.toolCount, 0)} browser-only utilities across {categories.length} categories. No uploads, no install, no sign-up.
+        </p>
+      </header>
+
+      <ul className="category-grid" role="list">
+        {categories.map((category) => (
+          <li key={category.slug} className="category-card-item">
+            <Link href={`/category/${category.slug}`} className="category-card">
+              <span className="category-card-icon" aria-hidden="true">{category.icon}</span>
+              <h2 className="category-card-title">{category.name}</h2>
+              <p className="category-card-count">{category.toolCount} tools</p>
+              <p className="category-card-desc">{category.description}</p>
+              <span className="category-card-cta">
+                Explore <span aria-hidden="true">→</span>
               </span>
-              <span className="tool-link-desc">{page.description}</span>
-              <span className="tool-link-href">{page.href}</span>
-            </a>
+            </Link>
           </li>
         ))}
       </ul>
-    </ContentPage>
+    </div>
   );
 }

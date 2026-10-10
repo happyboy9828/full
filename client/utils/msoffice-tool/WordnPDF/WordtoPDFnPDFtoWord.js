@@ -369,10 +369,10 @@ export function initWordPdfConverter(container) {
     if (!state.convertedBlob) return;
     const url = URL.createObjectURL(state.convertedBlob);
     
-    trigger({
+    triggerDownloadProgress({
       countdownMs: 5000,
       durationMs: 3000,
-      title: state.mode === 'wordToPdf' 
+      title: state.mode === 'wordToPdf'
         ? 'Preparing your PDF document'
         : 'Preparing your Word document',
       description: state.mode === 'wordToPdf'

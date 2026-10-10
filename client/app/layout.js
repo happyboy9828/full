@@ -1,4 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import Navbar from "./../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
 import { getPages } from "../lib/pages";
@@ -45,6 +46,73 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        {/* Word (.docx) Libraries */}
+        <Script
+          src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"
+          strategy="lazyOnload"
+        />
+        <Script
+          src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.min.js"
+          strategy="lazyOnload"
+        />
+        <Script
+          src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.min.js"
+          strategy="lazyOnload"
+        />
+
+        {/* Excel (.xlsx, .csv) Library */}
+        <Script
+          src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"
+          strategy="lazyOnload"
+        />
+
+        {/* PowerPoint (.pptx) Library */}
+        <Script
+          src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"
+          strategy="lazyOnload"
+        />
+
+        {/* PDF Generation & Rendering Libraries */}
+        <Script
+          src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"
+          strategy="lazyOnload"
+        />
+        <Script
+          src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+          strategy="lazyOnload"
+        />
+        <Script
+          src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"
+          strategy="lazyOnload"
+        />
+        <Script
+          src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
+          strategy="lazyOnload"
+        />
+        <Script
+          id="pdfjs-worker-config"
+          strategy="lazyOnload"
+          dangerouslySetInnerHTML={{
+            __html: `
+              if (typeof window !== 'undefined' && window.pdfjsLib) {
+                window.pdfjsLib.GlobalWorkerOptions.workerSrc = 
+                  'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+              }
+            `,
+          }}
+        />
+
+        {/* Utilities */}
+        <Script
+          src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"
+          strategy="lazyOnload"
+        />
+        <Script
+          src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+          strategy="lazyOnload"
+        />
+      </head>
       <body className="flex min-h-full flex-col">
         <ClientProviders>
           <Navbar pages={pages} />

@@ -1,6 +1,6 @@
 // src/utility/tool.js
 
-import { useDownloadProgress } from '@/components/ads/DownloadProgressPopup/DownloadProgressPopup';
+import { triggerDownloadProgress } from '@/components/ads/DownloadProgressPopup/DownloadProgressTrigger';
 
 let currentMode = 'ppt2pdf';
 let uploadedFile = null;
@@ -358,9 +358,8 @@ async function processConversion() {
 
 function downloadFile() {
   if (!convertedBlobUrl) return;
-  const { trigger } = useDownloadProgress();
-  
-  trigger({
+
+  triggerDownloadProgress({
     countdownMs: 5000,
     durationMs: 3000,
     title: 'Preparing your converted file',

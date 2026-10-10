@@ -198,6 +198,23 @@ Add periodic session heartbeats, inactivity detection, recent-visitor reports, e
 
 Completion Criteria: Recent activity updates reliably and reports remain responsive as data grows.
 
+**Phase 8.5: MS Office & Tabular Document Conversion CDN Integration (COMPLETE)**
+
+Integrated all 13 CDN libraries for Microsoft Office (Word, Excel, PowerPoint) and tabular document conversion tools (CSV, HTML, PDF) into the Next.js App Router layout.
+
+**Completed:**
+- [x] Added mammoth.js, docx.js, html-docx-js for Word (.docx) processing
+- [x] Added SheetJS (xlsx) for Excel (.xlsx, .csv) processing
+- [x] Added PPTXGenJS for PowerPoint (.pptx) generation
+- [x] Added pdf-lib, jsPDF, jsPDF AutoTable for PDF generation
+- [x] Added PDF.js with worker config for PDF rendering/previews
+- [x] Added FileSaver.js for cross-browser downloads
+- [x] Added JSZip for bundling files into .zip archives
+- [x] All 13 CDN URLs verified active (HTTP 200)
+- [x] Used `next/script` with `strategy="lazyOnload"` for optimal loading
+- [x] Verified `next build` passes (53 static pages)
+- [x] ESLint: 0 errors on layout.js
+
 Phase 8.5: MS Office Tool CSS Import & Styling Fix (COMPLETE)
 
 Fixed broken CSS/JS imports in all 6 MS Office tool `page.js` files under `client/utils/msoffice-tool/`. Each file was importing from a non-existent `../utility/` directory; corrected to import each tool's own JS implementation and CSS file. Additionally, added missing CSS imports to all 6 `app/msoffice-tool/*/page.js` app router pages (previously had no CSS imports at all, so tool styles were never loaded). Standardized all 6 CSS files for 2-column desktop / 1-column mobile layout at 768px breakpoint, with consistent card boxing (borders, shadows, rounded corners) and proper spacing using shared CSS variables. Fixed PPTnPDF which had an inverted grid layout (1-col desktop, 2-col at 850px).
