@@ -1,9 +1,0 @@
-/* Multitag - Wrapper for multiple ad formats. Minimal styles as children bring their own. */
-
-.ad-multitag,
-.ad-multitag *,
-.ad-multitag *::before,
-.ad-multitag *::after { box-sizing: border-box; }
-
-/* Ensure child ads don't interfere with each other */
-.ad-multitag > * { isolation: isolate; }

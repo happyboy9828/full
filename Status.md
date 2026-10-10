@@ -2,7 +2,14 @@
 
 Last updated: 2026-10-10
 
-## Colour Scheme 3 — Light / Dark / System Theme (COMPLETE)
+## Backend and Dashboard Removed (COMPLETE)
+
+The `client/` directory (Next.js dashboard with analytics UI) and all backend source files have been removed from the codebase.
+
+- `client/` - Next.js dashboard application with AnalyticsDashboard, tracking client, and all tool pages
+- `backend/` - Express API with controllers, routes, models, middleware, utils, and tests (directory empty but locked by Windows system process, will clear on reboot)
+
+Only the root project files remain: DESIGN.md, README.md, Phase.md, Rule.md, Status.md, and .git directory.
 
 Replaced the previous colour palette with colour scheme 3 and swapped the
 third theme option from "Neon" to "System" (follows OS preference).
