@@ -18,15 +18,8 @@
 .qrs [hidden] { display: none !important; }
 
 [data-theme="dark"] .qrs {
-  --qrs-accent: #3b82f6;
-  --qrs-accent-hover: #60a5fa;
-  --qrs-ok: #4ade80;
-  --qrs-err: #f87171;
-}
-
-[data-theme="neon"] .qrs {
-  --qrs-accent: #22d3ee;
-  --qrs-accent-hover: #67e8f9;
+  --qrs-accent: #818cf8;
+  --qrs-accent-hover: #4f46e5;
   --qrs-ok: #4ade80;
   --qrs-err: #f87171;
 }

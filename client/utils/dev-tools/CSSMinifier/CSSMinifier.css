@@ -26,20 +26,10 @@
   line-height: 1.5;
 }
 
-[data-theme="dark"] .cssmin,
-[data-theme="neon"] .cssmin {
+[data-theme="dark"] .cssmin {
   --cm-ok: #4ade80;
   --cm-err: #f87171;
   --cm-err-bg: rgba(248, 113, 113, 0.18);
-  --cm-err-soft: #2a1517;
-  --cm-err-border: #5b2226;
-  --cm-err-text: #fca5a5;
-}
-
-[data-theme="neon"] .cssmin {
-  --cm-ok: #4ade80;
-  --cm-err: #f87171;
-  --cm-err-bg: rgba(248, 113, 113, 0.22);
   --cm-err-soft: #2a1517;
   --cm-err-border: #5b2226;
   --cm-err-text: #fca5a5;

@@ -1,8 +1,11 @@
 @import "tailwindcss";
 
+/* Base tokens = LIGHT palette (colour scheme 3). This :root block is the
+   default for the "System" option when the OS is in light mode, and is
+   also the fallback before any data-theme attribute is applied. */
 :root {
-  --background: #F1F5F9;
-  --foreground: #0F172A;
+  --background: #F5F6FA;
+  --foreground: #1E1B2E;
 
   /* Every tool stylesheet reads these, so all seven tools share one container
      width, one font and one monospace face instead of hard-coding their own. */
@@ -12,15 +15,16 @@
 
   /* Shared surface tokens. Tools only map their own prefixed variables onto
      these, which is what keeps the routes looking like one app. */
-  --tool-surface: #E2E8F0;
-  --tool-surface-2: #F1F5F9;
-  --tool-border: #CBD5E1;
-  --tool-text: #0F172A;
-  --tool-muted: #475569;
-  --tool-accent: #4F46E5;
-  --tool-accent-hover: #4338CA;
-  --tool-accent-text: #4F46E5;
+  --tool-surface: #FFFFFF;
+  --tool-surface-2: #F5F6FA;
+  --tool-border: #E2E8F0;
+  --tool-text: #1E1B2E;
+  --tool-muted: #6B7280;
+  --tool-accent: #5E5CE6;
+  --tool-accent-hover: #4834D4;
+  --tool-accent-text: #5E5CE6;
   --tool-on-accent: #FFFFFF;
+  --tool-highlight: #FF6B6B;
   --tool-tint: color-mix(in srgb, var(--foreground) 6%, transparent);
   --tool-tint-strong: color-mix(in srgb, var(--foreground) 12%, transparent);
   --tool-shadow: 0 10px 30px color-mix(in srgb, var(--foreground) 18%, transparent);
@@ -44,9 +48,9 @@
   --nav-text: var(--foreground);
   --nav-border: var(--tool-border);
   --nav-hover: var(--tool-tint);
-  --nav-limit-bg: color-mix(in srgb, #ef4444 14%, transparent);
+  --nav-limit-bg: color-mix(in srgb, var(--tool-highlight) 14%, transparent);
   --nav-limit-text: #b91c1c;
-   --overlay-bg: color-mix(in srgb, var(--foreground) 55%, transparent);
+  --overlay-bg: color-mix(in srgb, var(--foreground) 55%, transparent);
   --font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
   /* Pro button gradient — warm gold conveys a premium tier without
@@ -66,43 +70,45 @@
 /* System default: follow the OS preference when no explicit choice is set. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0F172A;
-    --foreground: #EEF2F6;
+    --background: #0B0F19;
+    --foreground: #F3F4F6;
     --tool-surface: #1E293B;
-    --tool-surface-2: #1E293B;
+    --tool-surface-2: #0B0F19;
     --tool-border: #334155;
-    --tool-text: #EEF2F6;
-    --tool-muted: #94A3B8;
-    --tool-accent: #3B82F6;
-    --tool-accent-hover: #60A5FA;
-    --tool-accent-text: #3B82F6;
-    --tool-on-accent: #0F172A;
+    --tool-text: #F3F4F6;
+    --tool-muted: #9CA3AF;
+    --tool-accent: #818CF8;
+    --tool-accent-hover: #4F46E5;
+    --tool-accent-text: #818CF8;
+    --tool-on-accent: #1E1B2E;
+    --tool-highlight: #F87171;
 
     --nav-bg: color-mix(in srgb, var(--background) 94%, transparent);
     --nav-text: var(--foreground);
     --nav-border: var(--tool-border);
     --nav-hover: var(--tool-tint);
-    --nav-limit-bg: color-mix(in srgb, #f87171 18%, transparent);
+    --nav-limit-bg: color-mix(in srgb, var(--tool-highlight) 18%, transparent);
     --nav-limit-text: #fca5a5;
     --overlay-bg: color-mix(in srgb, var(--foreground) 60%, transparent);
   }
 }
 
 /* Explicit Light: wins over the media query regardless of OS setting.
-   The Non-White Cool Professional Palette — anti-glare slate surfaces with
-   deep charcoal text and trustworthy indigo accents. */
+   Colour scheme 3 light — soft off-white canvas, white cards, indigo
+   primary (#5E5CE6) and coral highlight (#FF6B6B). */
 :root[data-theme="light"] {
-  --background: #F1F5F9;
-  --foreground: #0F172A;
-  --tool-surface: #E2E8F0;
-  --tool-surface-2: #F1F5F9;
-  --tool-border: #CBD5E1;
-  --tool-text: #0F172A;
-  --tool-muted: #475569;
-  --tool-accent: #4F46E5;
-  --tool-accent-hover: #4338CA;
-  --tool-accent-text: #4F46E5;
+  --background: #F5F6FA;
+  --foreground: #1E1B2E;
+  --tool-surface: #FFFFFF;
+  --tool-surface-2: #F5F6FA;
+  --tool-border: #E2E8F0;
+  --tool-text: #1E1B2E;
+  --tool-muted: #6B7280;
+  --tool-accent: #5E5CE6;
+  --tool-accent-hover: #4834D4;
+  --tool-accent-text: #5E5CE6;
   --tool-on-accent: #FFFFFF;
+  --tool-highlight: #FF6B6B;
   --tool-tint: color-mix(in srgb, var(--foreground) 6%, transparent);
   --tool-tint-strong: color-mix(in srgb, var(--foreground) 12%, transparent);
   --tool-shadow: 0 10px 30px color-mix(in srgb, var(--foreground) 18%, transparent);
@@ -110,49 +116,24 @@
 
 /* Explicit Dark: wins over the media query regardless of OS setting. */
 :root[data-theme="dark"] {
-  --background: #0F172A;
-  --foreground: #EEF2F6;
+  --background: #0B0F19;
+  --foreground: #F3F4F6;
   --tool-surface: #1E293B;
-  --tool-surface-2: #1E293B;
+  --tool-surface-2: #0B0F19;
   --tool-border: #334155;
-  --tool-text: #EEF2F6;
-  --tool-muted: #94A3B8;
-  --tool-accent: #3B82F6;
-  --tool-accent-hover: #60A5FA;
-  --tool-accent-text: #3B82F6;
-  --tool-on-accent: #0F172A;
+  --tool-text: #F3F4F6;
+  --tool-muted: #9CA3AF;
+  --tool-accent: #818CF8;
+  --tool-accent-hover: #4F46E5;
+  --tool-accent-text: #818CF8;
+  --tool-on-accent: #1E1B2E;
+  --tool-highlight: #F87171;
 
   --nav-bg: color-mix(in srgb, var(--background) 94%, transparent);
   --nav-text: var(--foreground);
   --nav-border: var(--tool-border);
   --nav-hover: var(--tool-tint);
-  --nav-limit-bg: color-mix(in srgb, #f87171 18%, transparent);
-  --nav-limit-text: #fca5a5;
-  --overlay-bg: color-mix(in srgb, var(--foreground) 60%, transparent);
-}
-
-/* Neon: high-contrast dark with electric accent for a distinct look. */
-:root[data-theme="neon"] {
-  --background: #0A0E17;
-  --foreground: #E2E8F0;
-  --tool-surface: #111827;
-  --tool-surface-2: #0F172A;
-  --tool-border: #1E293B;
-  --tool-text: #E2E8F0;
-  --tool-muted: #94A3B8;
-  --tool-accent: #22D3EE;
-  --tool-accent-hover: #67E8F9;
-  --tool-accent-text: #22D3EE;
-  --tool-on-accent: #0A0E17;
-  --tool-tint: color-mix(in srgb, var(--foreground) 8%, transparent);
-  --tool-tint-strong: color-mix(in srgb, var(--foreground) 16%, transparent);
-  --tool-shadow: 0 10px 30px color-mix(in srgb, var(--foreground) 25%, transparent);
-
-  --nav-bg: color-mix(in srgb, var(--background) 94%, transparent);
-  --nav-text: var(--foreground);
-  --nav-border: var(--tool-border);
-  --nav-hover: var(--tool-tint);
-  --nav-limit-bg: color-mix(in srgb, #f87171 18%, transparent);
+  --nav-limit-bg: color-mix(in srgb, var(--tool-highlight) 18%, transparent);
   --nav-limit-text: #fca5a5;
   --overlay-bg: color-mix(in srgb, var(--foreground) 60%, transparent);
 }

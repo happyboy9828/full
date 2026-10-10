@@ -2,6 +2,51 @@
 
 Last updated: 2026-10-10
 
+## Colour Scheme 3 — Light / Dark / System Theme (COMPLETE)
+
+Replaced the previous colour palette with colour scheme 3 and swapped the
+third theme option from "Neon" to "System" (follows OS preference).
+
+### New Palette (`client/app/globals.css`)
+
+| Role / Element | Light Mode Hex | Dark Mode Hex |
+|---|---|---|
+| Primary Accent | #5E5CE6 | #818CF8 |
+| Active / Hover State | #4834D4 | #4F46E5 |
+| Highlight Accent | #FF6B6B | #F87171 |
+| Main Background | #F5F6FA | #0B0F19 |
+| Card Surface | #FFFFFF | #1E293B |
+| Border / Divider | #E2E8F0 | #334155 |
+| Primary Text | #1E1B2E | #F3F4F6 |
+| Secondary Text | #6B7280 | #9CA3AF |
+
+### Changes Made
+- Rewrote `:root` base tokens to colour scheme 3 (light defaults)
+- Rewrote `@media (prefers-color-scheme: dark)` block with dark palette
+- Rewrote `:root[data-theme="light"]` and `:root[data-theme="dark"]` blocks
+- Removed the old `:root[data-theme="neon"]` block entirely
+- Added `--tool-highlight` token for alerts/progress/notification badges
+- Updated dev-tool CSS (`QRCodeScanner`, `CSSMinifier`, `QRCodeGenerator`,
+  `PasswordGenerator`, `HTMLMinifier`) to drop `[data-theme="neon"]` rules
+  and use the new accent values for `[data-theme="dark"]`
+- Updated `client/components/Navbar/Navbar.js`:
+  - Third option changed from Neon to System (`💻`)
+  - Added `getEffectiveTheme()` helper that resolves `system` via
+    `window.matchMedia('(prefers-color-scheme: dark)')`
+  - Initial state defaults to `system` (was `light`)
+  - Added a `change` listener so the UI follows the OS when System is selected
+- Updated comments in `globals.css` and `Navbar.css`
+- Updated `client/README.md` theme section and the Download Progress
+  Popup "Theme-aware" note
+
+### Verification
+- `next build` passes (54 static pages)
+- No `[data-theme="neon"]` selectors remain anywhere in the client codebase
+- All theme tokens still resolve through CSS variables; no hard-coded
+  palette colours were introduced in component stylesheets
+
+---
+
 ## MS Office & Tabular Document Conversion CDN Integration (COMPLETE)
 
 ### Added CDN Scripts to `client/app/layout.js`
@@ -75,7 +120,7 @@ Standardized all 6 MS Office tool CSS files for consistent layout, boxing, and s
 ### Project Overview
 - **Name**: DocFix â€” browser-only image/document tools
 - **Stack**: Next.js 16.3.8 (App Router) + React 19.2.8 + Tailwind CSS v4 (client) | Express 5 + Mongoose 9 + MongoDB Atlas (backend)
-- **Root layout**: `client/app/layout.js` â€” shared Navbar, Footer, ad units (Multitag, DownloadProgressPopup), Geist fonts, theme system (light/dark/neon)
+- **Root layout**: `client/app/layout.js` â€” shared Navbar, Footer, ad units (Multitag, DownloadProgressPopup), Geist fonts, theme system (light/dark/system)
 
 ### Routing Model
 - Filesystem-based Next.js App Router under `client/app/`

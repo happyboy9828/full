@@ -105,11 +105,11 @@ ads/              ad units (banner, popup, push notification, etc.)
 
 ## Themes
 
-The site supports three themes via CSS custom properties on `:root`:
+The site supports three colour schemes via CSS custom properties on `:root`:
 
-- **Light** — Cool slate surfaces with deep charcoal text and indigo accents
-- **Dark** — Deep navy background with light slate text and blue accents
-- **Neon** — High-contrast dark with electric cyan accents
+- **Light** — Soft off-white canvas, white cards, indigo primary (#5E5CE6) and coral highlight (#FF6B6B)
+- **Dark** — Deep navy background, slate surface cards, lavender accent (#818CF8) and rose highlight (#F87171)
+- **System** — Follows the OS `prefers-color-scheme` preference, switching between Light and Dark automatically
 
 Theme preference is persisted in `localStorage` and applied with the `data-theme` attribute on `<html>`.
 
@@ -173,7 +173,7 @@ function MyTool() {
 - Progress animation (configurable via `durationMs`) simulates 0→100%
 - Auto-closes after completion (configurable via `autoCloseMs`)
 - Accessible with ARIA live regions for countdown announcements
-- Theme-aware uses CSS variables (light/dark/neon)
+- Theme-aware uses CSS variables (light/dark/system)
 
 ---
 

@@ -16,7 +16,7 @@ export default function Navbar() {
   const [pricingOpen, setPricingOpen] = useState(false);
   */
 
-  const [selectedTheme, setSelectedTheme] = useState('light');
+  const [selectedTheme, setSelectedTheme] = useState('system');
   const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
   const themeDropdownRef = useRef(null);
   /* Commented out: Premium download limit hook
@@ -26,17 +26,38 @@ export default function Navbar() {
   const themeOptions = [
     { value: 'light', label: 'Light', icon: '☀️' },
     { value: 'dark', label: 'Dark', icon: '🌙' },
-    { value: 'neon', label: 'Neon', icon: '⚡' },
+    { value: 'system', label: 'System', icon: '💻' },
   ];
 
+  // Resolve the effective theme: 'system' follows the OS preference,
+  // otherwise it is the explicit choice.
+  const getEffectiveTheme = (theme) => {
+    if (theme === 'system') {
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    return theme;
+  };
+
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || document.documentElement.getAttribute('data-theme') || 'light';
+    const savedTheme = localStorage.getItem('theme') || 'system';
     setSelectedTheme(savedTheme);
-    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.documentElement.setAttribute('data-theme', getEffectiveTheme(savedTheme));
   }, []);
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', selectedTheme);
+    document.documentElement.setAttribute('data-theme', getEffectiveTheme(selectedTheme));
+  }, [selectedTheme]);
+
+  // When the user picks "System", re-apply on OS changes so the UI
+  // follows the host preference without reopening the dropdown.
+  useEffect(() => {
+    if (selectedTheme !== 'system') return;
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const handler = (e) => {
+      document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+    };
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
   }, [selectedTheme]);
 
   useEffect(() => {
@@ -63,7 +84,7 @@ export default function Navbar() {
 
   const handleThemeChange = (theme) => {
     setSelectedTheme(theme);
-    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.setAttribute('data-theme', getEffectiveTheme(theme));
     localStorage.setItem('theme', theme);
     setThemeDropdownOpen(false);
   };
@@ -85,7 +106,7 @@ export default function Navbar() {
   };
   */
 
-  const currentTheme = themeOptions.find((t) => t.value === selectedTheme) || themeOptions[0];
+  const currentTheme = themeOptions.find((t) => t.value === selectedTheme) || themeOptions[2];
 
   const categories = STATIC_CATEGORIES;
 

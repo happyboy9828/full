@@ -21,21 +21,12 @@
 }
 
 [data-theme="dark"] .qrt {
-  --qrt-accent: #22d3ee;
-  --qrt-accent-hover: #67e8f9;
-  --qrt-accent-ink: #042f3a;
+  --qrt-accent: #818cf8;
+  --qrt-accent-hover: #4f46e5;
+  --qrt-accent-ink: #1e1b2e;
   --qrt-good: #7ee2a8;
   --qrt-warn: #fbbf24;
   --qrt-bad: #ff9b9b;
-}
-
-[data-theme="neon"] .qrt {
-  --qrt-accent: #22d3ee;
-  --qrt-accent-hover: #67e8f9;
-  --qrt-accent-ink: #0a0e17;
-  --qrt-good: #4ade80;
-  --qrt-warn: #fbbf24;
-  --qrt-bad: #f87171;
 }
 
 .qrt *,

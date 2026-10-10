@@ -1,5 +1,5 @@
 /* Navbar.css — all colours are sourced from the shared tokens in
-   app/globals.css so the navbar tracks the active theme (light/dark/neon).
+   app/globals.css so the navbar tracks the active theme (light/dark/system).
    The --nav-aliases exist only so this file can keep its own names; every
    one of them is mapped onto a global token, never a hard-coded colour. */
 

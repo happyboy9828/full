@@ -1,12 +1,8 @@
 ﻿Phase Plan
 
-Last updated: October 9, 2026 | Current: Phase 8 — Add Live Activity and Optimize
+Last updated: October 10, 2026 | Current: Phase 10 — Test, Deploy, and Maintain
 
-<<<<<<< HEAD
 **Current Phase: Phase 10 — Test, Deploy, and Maintain**
-=======
-**Current Phase: Phase 8 — Add Live Activity and Optimize**
->>>>>>> e16a166025edd9e98d928564e8d1cf640896f67b
 
 ---
 
@@ -143,11 +139,7 @@ Since your public website has no login or registration, add authentication speci
 
 Completion Criteria: Only an authenticated administrator can see reports. — VERIFIED
 
-<<<<<<< HEAD
 Phase 7: Build the Dashboard UI (COMPLETE)
-=======
-Phase 7: Build the Dashboard UI
->>>>>>> e16a166025edd9e98d928564e8d1cf640896f67b
 
 Create the overview, traffic sources, top pages, devices, events, and conversions views.
 
@@ -257,3 +249,40 @@ Deploy Next.js to Vercel and the Express API to a compatible host.
 Configure environment variables, HTTPS, CORS, backups, and monitoring.
 
 Completion Criteria: The production system works reliably from visitor activity to dashboard reports, with a documented recovery process.
+
+---
+
+## Phase 11: Colour Scheme 3 — Light / Dark / System (COMPLETE)
+
+Replaced the previous colour palette with colour scheme 3 and swapped the
+third theme option from "Neon" to "System" (follows OS preference).
+
+**Completed:**
+- [x] Rewrote `:root` base tokens in `client/app/globals.css` to colour scheme 3:
+  - Light: background `#F5F6FA`, foreground `#1E1B2E`, surface `#FFFFFF`,
+    accent `#5E5CE6`, accent-hover `#4834D4`, highlight `#FF6B6B`,
+    muted `#6B7280`, border `#E2E8F0`
+  - Dark: background `#0B0F19`, foreground `#F3F4F6`, surface `#1E293B`,
+    accent `#818CF8`, accent-hover `#4F46E5`, highlight `#F87171`,
+    muted `#9CA3AF`, border `#334155`
+- [x] Removed the old `:root[data-theme="neon"]` block entirely
+- [x] Added a `--tool-highlight` token (replaces the hard-coded alert colour)
+- [x] Updated dev-tool CSS (`QRCodeScanner`, `CSSMinifier`, `QRCodeGenerator`,
+  `PasswordGenerator`, `HTMLMinifier`) to drop `[data-theme="neon"]` rules
+  and use the new accent values for `[data-theme="dark"]`
+- [x] Updated `client/components/Navbar/Navbar.js`:
+  - Third option changed from Neon to System (`💻`)
+  - Added `getEffectiveTheme()` helper that resolves `system` via
+    `window.matchMedia('(prefers-color-scheme: dark)')`
+  - Initial state defaults to `system` (was `light`)
+  - Added a `change` listener so the UI follows the OS when System is selected
+- [x] Updated comments in `globals.css` and `Navbar.css` to describe the new
+  colour scheme instead of the old neon theme
+- [x] Updated `client/README.md` theme section and the Download Progress
+  Popup "Theme-aware" note (`light/dark/neon` → `light/dark/system`)
+
+### Verification
+- `next build` passes (54 static pages)
+- No `[data-theme="neon"]` selectors remain anywhere in the client codebase
+- All theme tokens still resolve through CSS variables; no hard-coded
+  palette colours were introduced in component stylesheets
