@@ -8,6 +8,11 @@ import PagesView from "./views/PagesView";
 import DevicesView from "./views/DevicesView";
 import EventsView from "./views/EventsView";
 import LiveView from "./views/LiveView";
+import FunnelsView from "./views/FunnelsView";
+import RetentionView from "./views/RetentionView";
+import HeatmapView from "./views/HeatmapView";
+import SessionReplayView from "./views/SessionReplayView";
+import ReturningVisitorsView from "./views/ReturningVisitorsView";
 import { checkAuth, login, logout } from "@/lib/analyticsApi";
 
 const VIEWS = [
@@ -17,6 +22,11 @@ const VIEWS = [
   { id: "devices", label: "Devices" },
   { id: "events", label: "Events" },
   { id: "live", label: "Live Activity" },
+  { id: "funnel", label: "Funnels" },
+  { id: "retention", label: "Retention" },
+  { id: "heatmap", label: "Heatmaps" },
+  { id: "session-replay", label: "Session Replay" },
+  { id: "returning-visitors", label: "Returning Visitors" },
 ];
 
 export default function AnalyticsDashboard() {
@@ -93,6 +103,16 @@ export default function AnalyticsDashboard() {
         return <EventsView {...commonProps} />;
       case "live":
         return <LiveView {...commonProps} />;
+      case "funnel":
+        return <FunnelsView {...commonProps} />;
+      case "retention":
+        return <RetentionView {...commonProps} />;
+      case "heatmap":
+        return <HeatmapView {...commonProps} />;
+      case "session-replay":
+        return <SessionReplayView {...commonProps} />;
+      case "returning-visitors":
+        return <ReturningVisitorsView {...commonProps} />;
       default:
         return <OverviewView {...commonProps} />;
     }

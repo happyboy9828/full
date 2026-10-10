@@ -356,3 +356,55 @@ Added compound indexes for query performance:
 - ESLint: 0 errors on all modified/new files
 - Responsive grid: 1 column mobile, 2+ columns desktop
 - Consistent styling with existing design system (CSS variables, themes)
+
+## Phase 9 — Add Advanced Analytics (COMPLETE)
+
+### Backend API Endpoints Added
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/analytics/reports/funnel` | GET | Funnel conversion analysis with configurable steps (2-10 paths), conversion rates, drop-off % |
+| `/api/analytics/reports/retention` | GET | Cohort-based retention matrix (daily/weekly granularity, configurable periods up to 52) |
+| `/api/analytics/reports/heatmap` | GET | Click heatmap per page path — element-level click counts and percentages |
+| `/api/analytics/reports/session-replay` | GET | Full event timeline for a session with automatic PII redaction |
+| `/api/analytics/reports/returning-visitors` | GET | Visitors with 2+ visits, visit counts, first/last visit, device/browser/OS, referrer, UTM |
+
+### Privacy & Security (Session Replay)
+- **Automatic PII redaction**: All sensitive fields in `element` and `customData` objects are sanitized before returning
+- **Redacted fields**: password, token, secret, api_key, apikey, auth, session, credit, card, ssn, email, phone, address (case-insensitive substring match)
+- **URLs excluded**: Raw URLs never returned in session replay; only path, title, referrer domain
+- **Element data sanitized**: tagName, id, className, text, href preserved; sensitive attributes redacted
+- **Custom data sanitized**: Nested objects recursively scanned and redacted
+
+### Backend Implementation (`backend/controllers/reportsController.js`)
+- **Funnel**: Aggregates pageview events by session, computes visitors per step requiring sequential step completion
+- **Retention**: Cohorts by first visit date, tracks return visits per period (day/week), returns matrix with rates
+- **Heatmap**: Groups click events by element signature (tag+id+class+text), returns top 100 elements by click count
+- **Session Replay**: Fetches all events for a sessionId, applies sanitization, returns session metadata + event timeline
+- **Returning Visitors**: Aggregates sessions by visitorId, filters visitCount > 1, joins latest session details
+
+### Validation Updates (`backend/middleware/validate.js`)
+- Added `week` granularity support for retention reports
+- Added `cohortSize` (1-90) and `maxPeriods` (1-52) validation parameters
+- All new endpoints protected by `requireAdmin` middleware and `parseReportRange` validation
+
+### Frontend Dashboard Views Created
+| View | File | Features |
+|------|------|----------|
+| FunnelsView | `client/components/AnalyticsDashboard/views/FunnelsView.js` | Configurable step input, conversion rate, drop-off %, CSV export |
+| RetentionView | `client/components/AnalyticsDashboard/views/RetentionView.js` | Daily/weekly toggle, max periods, color-coded retention matrix, CSV export |
+| HeatmapView | `client/components/AnalyticsDashboard/views/HeatmapView.js` | Path input, element breakdown with tag/id/class/text/href, CSV export |
+| SessionReplayView | `client/components/AnalyticsDashboard/views/SessionReplayView.js` | Session ID input, event type filter, color-coded event types, raw JSON toggle, CSV export |
+| ReturningVisitorsView | `client/components/AnalyticsDashboard/views/ReturningVisitorsView.js` | Paginated table with visit counts, dates, device/browser/OS/country/referrer/UTM, CSV export |
+
+### Dashboard Integration
+- Updated `AnalyticsDashboard.js` VIEWS array with 5 new tabs
+- Added imports for all 5 new view components
+- Extended `renderView` switch statement with new cases
+- All new views respect date range picker, domain filter, and use shared UI components (DataTable, LoadingState, ErrorState, EmptyState, CsvExportButton)
+
+### Verification
+- `next build`: Compiled successfully, **54 static pages** prerendered
+- All backend JavaScript files pass syntax check (`node --check` on controllers/reportsController.js, routes/reports.js, middleware/validate.js)
+- ESLint: 0 errors on all new and modified files
+- No duplicate index warnings in MongoDB models

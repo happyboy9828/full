@@ -155,7 +155,8 @@ export function parseReportRange(query) {
   let granularity = "day";
   if (query.granularity != null) {
     if (query.granularity === "hour") granularity = "hour";
-    else if (query.granularity !== "day") errors.push("granularity must be 'day' or 'hour'");
+    else if (query.granularity === "week") granularity = "week";
+    else if (query.granularity !== "day") errors.push("granularity must be 'day', 'week', or 'hour'");
   }
   if (errors.length === 0 && granularity === "hour" && end.getTime() - start.getTime() > 7 * 24 * 60 * 60 * 1000) {
     errors.push("Hourly granularity cannot exceed 7 days");
@@ -169,6 +170,24 @@ export function parseReportRange(query) {
       limit = parsed;
     }
   }
+  let cohortSize = 7;
+  if (query.cohortSize != null) {
+    const parsed = Number(query.cohortSize);
+    if (Number.isNaN(parsed) || parsed < 1 || parsed > 90) {
+      errors.push("cohortSize must be a number between 1 and 90");
+    } else {
+      cohortSize = parsed;
+    }
+  }
+  let maxPeriods = 12;
+  if (query.maxPeriods != null) {
+    const parsed = Number(query.maxPeriods);
+    if (Number.isNaN(parsed) || parsed < 1 || parsed > 52) {
+      errors.push("maxPeriods must be a number between 1 and 52");
+    } else {
+      maxPeriods = parsed;
+    }
+  }
   return {
     errors,
     start,
@@ -176,5 +195,7 @@ export function parseReportRange(query) {
     domain: typeof query.domain === "string" && query.domain.trim() ? query.domain.trim() : null,
     granularity,
     limit,
+    cohortSize,
+    maxPeriods,
   };
 }

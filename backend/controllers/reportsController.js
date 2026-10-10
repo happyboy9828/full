@@ -385,3 +385,319 @@ export async function recentVisitors(req, res) {
     res.status(500).json({ success: false, error: "Failed to build recent visitors report" });
   }
 }
+
+export async function funnel(req, res) {
+  try {
+    const { start, end, domain } = req.range;
+    const stepPaths = (req.query.steps || "").split(",").map((s) => s.trim()).filter(Boolean);
+    if (stepPaths.length < 2 || stepPaths.length > 10) {
+      return res.status(400).json({ success: false, error: "steps parameter required (2-10 comma-separated paths)" });
+    }
+
+    const ev = eventMatch({ start, end, domain });
+    const se = sessionMatch({ start, end, domain });
+
+    const sessionsWithPageviews = await Event.aggregate([
+      { $match: { ...ev, eventType: "pageview", path: { $in: stepPaths } } },
+      { $group: { _id: "$sessionId", paths: { $push: "$path" }, timestamps: { $push: "$timestamp" } } },
+      { $project: { sessionId: "$_id", paths: 1, timestamps: 1, _id: 0 } },
+    ]);
+
+    const sessionPathSets = new Map();
+    for (const s of sessionsWithPageviews) {
+      const uniquePaths = [...new Set(s.paths)];
+      sessionPathSets.set(s.sessionId, uniquePaths);
+    }
+
+    const funnelData = stepPaths.map((path, index) => {
+      const visitors = new Set();
+      for (const [sessionId, paths] of sessionPathSets.entries()) {
+        const pathIndex = paths.indexOf(path);
+        if (pathIndex !== -1) {
+          let hasPrevious = true;
+          for (let i = 0; i < index; i++) {
+            if (!paths.includes(stepPaths[i])) {
+              hasPrevious = false;
+              break;
+            }
+          }
+          if (hasPrevious) {
+            visitors.add(sessionId);
+          }
+        }
+      }
+      return { step: index + 1, path, visitors: visitors.size };
+    });
+
+    const totalSessions = await Session.countDocuments(se);
+    const conversionRate = funnelData[0]?.visitors > 0
+      ? round((funnelData[funnelData.length - 1].visitors / funnelData[0].visitors) * 100, 1)
+      : 0;
+
+    res.json({
+      success: true,
+      data: {
+        steps: funnelData,
+        totalSessions,
+        conversionRate,
+      },
+      period: { startDate: start.toISOString(), endDate: end.toISOString() },
+    });
+  } catch (error) {
+    logger.error("report_funnel_failed", { error: error.message });
+    res.status(500).json({ success: false, error: "Failed to build funnel report" });
+  }
+}
+
+export async function retention(req, res) {
+  try {
+    const { start, end, domain, granularity = "day" } = req.range;
+    const cohortSize = Number(req.query.cohortSize) || 7;
+    const maxPeriods = Number(req.query.maxPeriods) || 12;
+
+    const se = sessionMatch({ start, end, domain });
+    const sessions = await Session.find(se).select("visitorId startedAt").lean();
+
+    const visitorFirstVisit = new Map();
+    for (const s of sessions) {
+      const dateKey = s.startedAt.toISOString().split("T")[0];
+      if (!visitorFirstVisit.has(s.visitorId) || new Date(dateKey) < new Date(visitorFirstVisit.get(s.visitorId))) {
+        visitorFirstVisit.set(s.visitorId, dateKey);
+      }
+    }
+
+    const cohorts = new Map();
+    for (const [visitorId, firstDate] of visitorFirstVisit.entries()) {
+      const cohortKey = firstDate;
+      if (!cohorts.has(cohortKey)) cohorts.set(cohortKey, new Set());
+      cohorts.get(cohortKey).add(visitorId);
+    }
+
+    const sessionByVisitor = new Map();
+    for (const s of sessions) {
+      if (!sessionByVisitor.has(s.visitorId)) sessionByVisitor.set(s.visitorId, []);
+      sessionByVisitor.get(s.visitorId).push(s.startedAt);
+    }
+
+    const retentionData = [];
+    const sortedCohorts = [...cohorts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+
+    for (const [cohortDate, visitors] of sortedCohorts) {
+      const cohortStart = new Date(cohortDate);
+      const row = { cohort: cohortDate, size: visitors.size, retention: [] };
+
+      for (let period = 0; period < maxPeriods; period++) {
+        let periodStart, periodEnd;
+        if (granularity === "week") {
+          periodStart = new Date(cohortStart.getTime() + period * 7 * 24 * 60 * 60 * 1000);
+          periodEnd = new Date(periodStart.getTime() + 7 * 24 * 60 * 60 * 1000);
+        } else {
+          periodStart = new Date(cohortStart.getTime() + period * 24 * 60 * 60 * 1000);
+          periodEnd = new Date(periodStart.getTime() + 24 * 60 * 60 * 1000);
+        }
+
+        if (periodStart > end) {
+          row.retention.push(null);
+          continue;
+        }
+
+        let retained = 0;
+        for (const visitorId of visitors) {
+          const visits = sessionByVisitor.get(visitorId) || [];
+          const hasVisit = visits.some((v) => v >= periodStart && v < periodEnd);
+          if (hasVisit) retained++;
+        }
+
+        row.retention.push({
+          period,
+          retained,
+          rate: visitors.size > 0 ? round((retained / visitors.size) * 100, 1) : 0,
+        });
+      }
+
+      retentionData.push(row);
+    }
+
+    res.json({
+      success: true,
+      data: retentionData,
+      granularity,
+      period: { startDate: start.toISOString(), endDate: end.toISOString() },
+    });
+  } catch (error) {
+    logger.error("report_retention_failed", { error: error.message });
+    res.status(500).json({ success: false, error: "Failed to build retention report" });
+  }
+}
+
+export async function heatmap(req, res) {
+  try {
+    const { start, end, domain } = req.range;
+    const path = req.query.path;
+    if (!path) {
+      return res.status(400).json({ success: false, error: "path query parameter is required" });
+    }
+
+    const ev = eventMatch({ start, end, domain });
+    const clickEvents = await Event.find({
+      ...ev,
+      eventType: "click",
+      path: path,
+      "element.tagName": { $in: ["a", "button", "input", "select", "textarea", "div", "span", "img"] },
+    }).select("element timestamp scrollDepth -_id").lean();
+
+    const clickMap = new Map();
+    for (const e of clickEvents) {
+      const el = e.element;
+      if (!el) continue;
+      const key = `${el.tagName}|${el.id || ""}|${el.className || ""}|${el.text || ""}`.substring(0, 200);
+      const entry = clickMap.get(key) || { count: 0, tagName: el.tagName, id: el.id, className: el.className, text: el.text, href: el.href };
+      entry.count++;
+      clickMap.set(key, entry);
+    }
+
+    const totalClicks = clickEvents.length;
+    const data = [...clickMap.entries()]
+      .map(([key, val]) => ({
+        element: { tagName: val.tagName, id: val.id, className: val.className, text: val.text, href: val.href },
+        clicks: val.count,
+        percentage: totalClicks > 0 ? round((val.count / totalClicks) * 100, 1) : 0,
+      }))
+      .sort((a, b) => b.clicks - a.clicks)
+      .slice(0, 100);
+
+    res.json({
+      success: true,
+      data: { path, totalClicks, elements: data },
+      period: { startDate: start.toISOString(), endDate: end.toISOString() },
+    });
+  } catch (error) {
+    logger.error("report_heatmap_failed", { error: error.message });
+    res.status(500).json({ success: false, error: "Failed to build heatmap report" });
+  }
+}
+
+export async function sessionReplay(req, res) {
+  try {
+    const { start, end, domain } = req.range;
+    const sessionId = req.query.sessionId;
+    if (!sessionId) {
+      return res.status(400).json({ success: false, error: "sessionId query parameter is required" });
+    }
+
+    const session = await Session.findOne({ sessionId, ...(domain ? { domain } : {}) }).lean();
+    if (!session) {
+      return res.status(404).json({ success: false, error: "Session not found" });
+    }
+
+    const ev = eventMatch({ start, end, domain });
+    const events = await Event.find({ ...ev, sessionId }).sort({ timestamp: 1 }).select(
+      "eventType path title element customName customData duration scrollDepth timestamp referrer -_id"
+    ).lean();
+
+    const sensitiveFields = ["password", "token", "secret", "api_key", "apikey", "auth", "session", "credit", "card", "ssn", "email", "phone", "address"];
+    function sanitize(obj) {
+      if (!obj || typeof obj !== "object") return obj;
+      if (Array.isArray(obj)) return obj.map(sanitize);
+      const sanitized = {};
+      for (const [key, value] of Object.entries(obj)) {
+        const lowerKey = key.toLowerCase();
+        const isSensitive = sensitiveFields.some((f) => lowerKey.includes(f));
+        if (isSensitive) {
+          sanitized[key] = "[REDACTED]";
+        } else if (value && typeof value === "object") {
+          sanitized[key] = sanitize(value);
+        } else {
+          sanitized[key] = value;
+        }
+      }
+      return sanitized;
+    }
+
+    const sanitizedEvents = events.map((e) => ({
+      ...e,
+      url: undefined,
+      element: e.element ? sanitize(e.element) : undefined,
+      customData: e.customData ? sanitize(e.customData) : undefined,
+    }));
+
+    res.json({
+      success: true,
+      data: {
+        session: {
+          sessionId: session.sessionId,
+          visitorId: session.visitorId,
+          domain: session.domain,
+          startedAt: session.startedAt,
+          endedAt: session.endedAt,
+          duration: session.duration,
+          isActive: session.isActive,
+          entryPage: session.entryPage,
+          exitPage: session.exitPage,
+          referrer: session.referrer,
+          referrerDomain: session.referrerDomain,
+          utmSource: session.utmSource,
+          utmMedium: session.utmMedium,
+          utmCampaign: session.utmCampaign,
+          deviceType: session.deviceType,
+          browser: session.browser,
+          os: session.os,
+          screenWidth: session.screenWidth,
+          screenHeight: session.screenHeight,
+          language: session.language,
+          country: session.country,
+        },
+        events: sanitizedEvents,
+      },
+      period: { startDate: start.toISOString(), endDate: end.toISOString() },
+    });
+  } catch (error) {
+    logger.error("report_session_replay_failed", { error: error.message });
+    res.status(500).json({ success: false, error: "Failed to build session replay" });
+  }
+}
+
+export async function returningVisitors(req, res) {
+  try {
+    const { start, end, domain, limit = 50 } = req.range;
+    const se = sessionMatch({ start, end, domain });
+
+    const visitorCounts = await Session.aggregate([
+      { $match: se },
+      { $group: { _id: "$visitorId", visitCount: { $sum: 1 }, lastVisit: { $max: "$startedAt" }, firstVisit: { $min: "$startedAt" } } },
+      { $match: { visitCount: { $gt: 1 } } },
+      { $sort: { visitCount: -1, lastVisit: -1 } },
+      { $limit: Math.min(Number(limit), 200) },
+    ]);
+
+    const visitorIds = visitorCounts.map((v) => v._id);
+    const sessionsDetail = await Session.find({ visitorId: { $in: visitorIds }, ...(domain ? { domain } : {}) })
+      .select("visitorId deviceType browser os country referrerDomain utmSource startedAt")
+      .lean();
+
+    const detailMap = new Map();
+    for (const s of sessionsDetail) {
+      if (!detailMap.has(s.visitorId)) detailMap.set(s.visitorId, s);
+    }
+
+    res.json({
+      success: true,
+      data: visitorCounts.map((v) => ({
+        visitorId: v._id,
+        visitCount: v.visitCount,
+        firstVisit: v.firstVisit,
+        lastVisit: v.lastVisit,
+        deviceType: detailMap.get(v._id)?.deviceType,
+        browser: detailMap.get(v._id)?.browser,
+        os: detailMap.get(v._id)?.os,
+        country: detailMap.get(v._id)?.country,
+        referrerDomain: detailMap.get(v._id)?.referrerDomain,
+        utmSource: detailMap.get(v._id)?.utmSource,
+      })),
+      period: { startDate: start.toISOString(), endDate: end.toISOString() },
+    });
+  } catch (error) {
+    logger.error("report_returning_visitors_failed", { error: error.message });
+    res.status(500).json({ success: false, error: "Failed to build returning visitors report" });
+  }
+}
