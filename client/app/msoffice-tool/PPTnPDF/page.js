@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { renderPptPdfTool } from '../../../utils/tools';
+import '../../../utils/msoffice-tool/PPTnPDF/PPTnPDF.css';
 
 export default function ToolPage() {
   const containerRef = useRef(null);

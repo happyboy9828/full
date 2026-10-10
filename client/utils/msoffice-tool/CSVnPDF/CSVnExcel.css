@@ -318,7 +318,7 @@
   padding: 30px 0;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 768px) {
   .app-grid {
     grid-template-columns: 1fr;
   }

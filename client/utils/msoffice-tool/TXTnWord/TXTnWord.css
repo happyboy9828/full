@@ -37,7 +37,7 @@
   align-items: start;
 }
 
-@media (max-width: 868px) {
+@media (max-width: 768px) {
   .converter-grid {
     grid-template-columns: 1fr;
   }
@@ -283,7 +283,7 @@
   box-shadow: none;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .txt-word-app {
     padding: 24px 16px 40px;
   }

@@ -824,7 +824,93 @@ details[open] .faq-q::after {
   margin-right: auto;
 }
 
-/* ---------- Tools Grid (Homepage) ---------- */
+/* ---------- Category Grid (Tools Page) ---------- */
+.category-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  background: var(--tool-surface);
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.15s, border-color 0.15s, transform 0.15s;
+  height: 100%;
+}
+
+.category-card:hover,
+.category-card:focus-visible {
+  border-color: var(--tool-accent);
+  box-shadow: var(--tool-shadow);
+  transform: translateY(-4px);
+  outline: none;
+}
+
+.category-card-icon {
+  font-size: 36px;
+  line-height: 1;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--tool-surface-2);
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius-sm);
+}
+
+.category-card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--tool-text);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.category-card-count {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--tool-accent-text);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.category-card-desc {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--tool-muted);
+  margin: 0;
+  flex: 1;
+}
+
+.category-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--tool-accent-text);
+  transition: transform 0.15s;
+}
+
+.category-card:hover .category-card-cta span[aria-hidden="true"],
+.category-card:focus-visible .category-card-cta span[aria-hidden="true"] {
+  transform: translateX(4px);
+}
+
+/* ---------- Tools Grid (Homepage & Category Pages) ---------- */
 .tools-grid {
   list-style: none;
   margin: 0;

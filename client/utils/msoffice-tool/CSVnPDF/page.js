@@ -1,6 +1,6 @@
 // src/pages/toolPage.js
-import { initCSVExcelTool } from '../utility/tool.js';
-import '../utility/tool.css';
+import { initCSVExcelTool } from './CSVnExcel.js';
+import './CSVnExcel.css';
 
 export function renderToolPage(containerElement) {
   // Initialize tool inside given DOM node

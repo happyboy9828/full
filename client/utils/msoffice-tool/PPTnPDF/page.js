@@ -1,6 +1,6 @@
 // src/pages/toolPage.js
-import { renderPptPdfTool } from '../utility/tool.js';
-import '../utility/tool.css';
+import { renderPptPdfTool } from './PPTnPDF.js';
+import './PPTnPDF.css';
 
 export function initToolPage() {
   const root = document.getElementById('root') || document.body;

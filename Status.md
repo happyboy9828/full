@@ -1,6 +1,49 @@
 ﻿# Status.md
 
-Last updated: 2026-10-09
+Last updated: 2026-10-10
+
+## MS Office Tool CSS Import & Styling Fix (COMPLETE)
+
+### Problem
+All 6 MS Office tool `page.js` files under `client/utils/msoffice-tool/` imported CSS and JS from a non-existent `../utility/` path. Additionally, the `app/msoffice-tool/*/page.js` app router pages did not import any CSS at all, so tool styles were never loaded in the browser.
+
+### Fix — Broken Imports (part 1)
+Updated all 6 `utils/msoffice-tool/*/page.js` files to import from their local tool JS and CSS files:
+
+| Tool | Old (broken) | New (correct) |
+|------|-------------|---------------|
+| WordnPDF | `../utility/tool`, `../utility/tool.css` | `../WordtoPDFnPDFtoWord.js`, `../WordtoPDFnPDFtoWord.css` |
+| ExcelnPDF | `../utility/tool`, `../utility/tool.css` | `./EccelnPDF.js`, `./ExcelnPDF.css` |
+| CSVnPDF | `../utility/tool.js`, `../utility/tool.css` | `./CSVnExcel.js`, `./CSVnExcel.css` |
+| TXTnWord | `../utility/tool`, `../utility/tool.css` | `./TXTnWord.js`, `./TXTnWord.css` |
+| HTMLnDOC | `../utility/tool`, `../utility/tool.css` | `./HTMLnDOC.js`, `./HTMLnDOC.css` |
+| PPTnPDF | `../utility/tool.js`, `../utility/tool.css` | `./PPTnPDF.js`, `./PPTnPDF.css` |
+
+### Fix — Missing CSS Imports in App Router (part 2)
+Added CSS imports to all 6 `app/msoffice-tool/*/page.js` files, matching the pattern used by `app/pdf-tools/*/page.js`:
+
+| App Router Page | CSS Import Added |
+|-----------------|------|
+| `app/msoffice-tool/WordnPDF/page.js` | `../../../utils/msoffice-tool/WordnPDF/WordtoPDFnPDFtoWord.css` |
+| `app/msoffice-tool/ExcelnPDF/page.js` | `../../../utils/msoffice-tool/ExcelnPDF/ExcelnPDF.css` |
+| `app/msoffice-tool/CSVnPDF/page.js` | `../../../utils/msoffice-tool/CSVnPDF/CSVnExcel.css` |
+| `app/msoffice-tool/TXTnWord/page.js` | `../../../utils/msoffice-tool/TXTnWord/TXTnWord.css` |
+| `app/msoffice-tool/HTMLnDOC/page.js` | `../../../utils/msoffice-tool/HTMLnDOC/HTMLnDOC.css` |
+| `app/msoffice-tool/PPTnPDF/page.js` | `../../../utils/msoffice-tool/PPTnPDF/PPTnPDF.css` |
+
+### Fix — CSS Styling Standardization (part 3)
+Standardized all 6 MS Office tool CSS files for consistent layout, boxing, and spacing:
+
+- **2-column desktop / 1-column mobile**: All tools now use `grid-template-columns: 1fr 1fr` on desktop and `1fr` on mobile at the standardized 768px breakpoint (matching `app/tool.css` convention)
+- **PPTnPDF grid fix**: Was inverted (1-col desktop, 2-col at 850px). Now correctly 2-col desktop / 1-col mobile at 768px
+- **Breakpoint standardization**: CSVnPDF (800px→768px), TXTnWord (868px→768px), PPTnPDF mobile padding (640px→768px)
+- **Card boxing**: All cards use shared CSS variables (`--tool-surface`, `--tool-border`, `--tool-radius`, `--tool-shadow`, `--tool-card-pad`) for consistent borders, backgrounds, rounded corners, and drop shadows
+- **Proper spacing**: `margin-bottom: var(--tool-col-gap)` on cards, `gap: var(--tool-gap)` on grids, `box-sizing: border-box` on all containers and cards
+- **Mobile padding**: All tools use `padding: 24px 16px 40px` at the 768px mobile breakpoint
+
+### Verification
+- ESLint: 0 errors on all modified files
+- `next build`: Compiled successfully, 48/48 static pages prerendered (including all 6 `/msoffice-tool/*` routes)
 
 ## Phase 1 â€” Project Inspection (COMPLETE)
 
@@ -207,7 +250,6 @@ function MyTool() {
 
 ## Phase 7 — Build the Dashboard UI (COMPLETE)
 
-<<<<<<< HEAD
 ### Files Created
 - **API client**: `client/lib/analyticsApi.js` — authenticated fetch helpers for auth + reports
 - **Data hooks**: `client/lib/useReport.js` — `useReport` (loading/error/data) + `useIntervalReport` (auto-refresh for live/time-series)
@@ -231,19 +273,29 @@ function MyTool() {
 - Backend tests: 37/37 passing
 - ESLint: 0 errors on all new files
 - API response shapes validated against `backend/controllers/reportsController.js`
-=======
-**Current phase: Phase 7 — Build the Dashboard UI**
 
-- [ ] Build overview report view (page views, sessions, visitors, bounce rate, avg duration, pages/session)
-- [ ] Build traffic sources view (UTM source/medium/campaign breakdown with percentages)
-- [ ] Build top pages view (most visited paths with page view counts)
-- [ ] Build devices view (device type, browser, OS breakdown)
-- [ ] Build events view (event type counts, custom event breakdown)
-- [ ] Build live activity view (active sessions, recent events)
-- [ ] Add date-range picker (presets: today, 7d, 30d, custom)
-- [ ] Add loading, error, and empty states
-- [ ] Add CSV export for each report
-- [ ] Ensure responsive layout and pagination where needed
-- [ ] Use real backend data via authenticated fetch (cookie-based `requireAdmin` sessions)
-- [ ] Verify `next build` still passes
->>>>>>> e16a166025edd9e98d928564e8d1cf640896f67b
+## Tool Discovery Navigation Feature (COMPLETE)
+
+### Implementation
+- **`/tools` page** (`client/app/tools/page.js`): Updated to display all 5 tool categories as clickable cards in a responsive grid
+  - Each card shows category icon, name, tool count, description, and "Explore →" CTA
+  - Uses `getCategories()` from `client/lib/pages.js` for dynamic category data
+  - Styled with `.category-grid` and `.category-card` CSS classes in `globals.css`
+- **`/category/[category-name]` dynamic route** (`client/app/category/[category-name]/page.js`): Renders complete tool list for selected category
+  - Static generation via `generateStaticParams()` — 5 pages prerendered at build time
+  - Dynamic metadata via `generateMetadata()` for SEO
+  - Uses same `.tools-grid` and `.tool-link-card` components as homepage
+  - 404 handling via `notFound()` for invalid category names
+
+### Categories Supported
+1. **Image Tools** (9 tools) — Convert, compress, resize, edit images
+2. **PDF Tools** (6 tools) — Split, merge, compress, convert, rotate PDFs
+3. **MS Office Tools** (6 tools) — Word, Excel, PowerPoint, PDF, HTML, CSV, TXT conversion
+4. **Dev Tools** (5 tools) — Minify code, generate passwords, QR codes
+5. **Text Tools** (6 tools) — Case conversion, Lorem Ipsum, paragraph writer, sort, word counter
+
+### Verification
+- `next build` passes (48 static pages + 5 SSG category pages = 53 total)
+- ESLint: 0 errors on all modified/new files
+- Responsive grid: 1 column mobile, 2+ columns desktop
+- Consistent styling with existing design system (CSS variables, themes)

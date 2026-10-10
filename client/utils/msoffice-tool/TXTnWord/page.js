@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { initTxtWordConverter } from '../utility/tool';
-import '../utility/tool.css';
+import { initTxtWordConverter } from './TXTnWord.js';
+import './TXTnWord.css';
 
 export default function ToolPage() {
   const containerRef = useRef(null);

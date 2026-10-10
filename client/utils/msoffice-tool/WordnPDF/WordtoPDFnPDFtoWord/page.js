@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { initWordPdfConverter } from '../utility/tool';
-import '../utility/tool.css';
+import { initWordPdfConverter } from '../WordtoPDFnPDFtoWord.js';
+import '../WordtoPDFnPDFtoWord.css';
 
 export default function ToolPage() {
   const containerRef = useRef(null);

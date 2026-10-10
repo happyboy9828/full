@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { initExcelPdfConverter } from '../utility/tool';
-import '../utility/tool.css';
+import { initExcelPdfConverter } from './EccelnPDF.js';
+import './ExcelnPDF.css';
 
 export default function ToolPage() {
   const containerRef = useRef(null);

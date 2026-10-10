@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { initTxtWordConverter } from '../../../utils/tools';
+import '../../../utils/msoffice-tool/TXTnWord/TXTnWord.css';
 
 export default function ToolPage() {
   const containerRef = useRef(null);

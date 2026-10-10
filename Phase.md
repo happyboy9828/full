@@ -198,6 +198,10 @@ Add periodic session heartbeats, inactivity detection, recent-visitor reports, e
 
 Completion Criteria: Recent activity updates reliably and reports remain responsive as data grows.
 
+Phase 8.5: MS Office Tool CSS Import & Styling Fix (COMPLETE)
+
+Fixed broken CSS/JS imports in all 6 MS Office tool `page.js` files under `client/utils/msoffice-tool/`. Each file was importing from a non-existent `../utility/` directory; corrected to import each tool's own JS implementation and CSS file. Additionally, added missing CSS imports to all 6 `app/msoffice-tool/*/page.js` app router pages (previously had no CSS imports at all, so tool styles were never loaded). Standardized all 6 CSS files for 2-column desktop / 1-column mobile layout at 768px breakpoint, with consistent card boxing (borders, shadows, rounded corners) and proper spacing using shared CSS variables. Fixed PPTnPDF which had an inverted grid layout (1-col desktop, 2-col at 850px).
+
 Phase 9: Add Advanced Analytics
 
 Introduce funnels, returning-visitor reports, retention, heatmaps, and session replay.

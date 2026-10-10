@@ -31,13 +31,13 @@
 
 .ppt-pdf-grid {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: var(--tool-gap);
 }
 
-@media (min-width: 850px) {
+@media (max-width: 768px) {
   .ppt-pdf-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
   }
 }
 
@@ -51,6 +51,7 @@
   flex-direction: column;
   gap: 20px;
   transition: box-shadow 0.15s, border-color 0.15s;
+  margin-bottom: var(--tool-col-gap);
   box-sizing: border-box;
 }
 
@@ -332,7 +333,7 @@
   box-shadow: none;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .ppt-pdf-container {
     padding: 24px 16px 40px;
   }
