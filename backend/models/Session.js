@@ -46,6 +46,8 @@ sessionSchema.index({ lastActivityAt: -1 });
 sessionSchema.index({ domain: 1, startedAt: -1 });
 sessionSchema.index({ isActive: 1 });
 sessionSchema.index({ domain: 1, visitorId: 1 });
+sessionSchema.index({ domain: 1, lastActivityAt: -1 });
+sessionSchema.index({ visitorId: 1, startedAt: -1 });
 
 export const Session = mongoose.model("Session", sessionSchema);
 export default Session;

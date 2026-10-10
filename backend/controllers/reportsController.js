@@ -335,3 +335,53 @@ export async function timeSeries(req, res) {
     res.status(500).json({ success: false, error: "Failed to build time-series report" });
   }
 }
+
+export async function recentVisitors(req, res) {
+  try {
+    const { start, end, domain, limit = 50 } = req.range;
+    const se = sessionMatch({ start, end, domain });
+
+    const rows = await Session.aggregate([
+      { $match: se },
+      {
+        $sort: { startedAt: -1 },
+      },
+      {
+        $group: {
+          _id: "$visitorId",
+          lastVisit: { $first: "$startedAt" },
+          visitCount: { $sum: 1 },
+          domain: { $first: "$domain" },
+          deviceType: { $first: "$deviceType" },
+          browser: { $first: "$browser" },
+          os: { $first: "$os" },
+          country: { $first: "$country" },
+          referrerDomain: { $first: "$referrerDomain" },
+          utmSource: { $first: "$utmSource" },
+        },
+      },
+      { $sort: { lastVisit: -1 } },
+      { $limit: Math.min(Number(limit), 200) },
+    ]);
+
+    res.json({
+      success: true,
+      data: rows.map((row) => ({
+        visitorId: row._id,
+        lastVisit: row.lastVisit,
+        visitCount: row.visitCount,
+        domain: row.domain,
+        deviceType: row.deviceType,
+        browser: row.browser,
+        os: row.os,
+        country: row.country,
+        referrerDomain: row.referrerDomain,
+        utmSource: row.utmSource,
+      })),
+      period: { startDate: start.toISOString(), endDate: end.toISOString() },
+    });
+  } catch (error) {
+    logger.error("report_recent_visitors_failed", { error: error.message });
+    res.status(500).json({ success: false, error: "Failed to build recent visitors report" });
+  }
+}

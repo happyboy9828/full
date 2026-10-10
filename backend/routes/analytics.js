@@ -1,5 +1,5 @@
 import express from "express";
-import { trackEvent, trackPageview, startSession, heartbeat, endSession } from "../controllers/analyticsController.js";
+import { trackEvent, trackPageview, startSession, heartbeat, endSession, markStaleSessionsInactive } from "../controllers/analyticsController.js";
 import { createRateLimiter } from "../middleware/rateLimit.js";
 import config from "../config/env.js";
 
@@ -16,5 +16,6 @@ router.post("/pageview", trackLimiter, trackPageview);
 router.post("/sessions/start", trackLimiter, startSession);
 router.post("/sessions/heartbeat", trackLimiter, heartbeat);
 router.post("/sessions/end", trackLimiter, endSession);
+router.post("/sessions/mark-stale-inactive", trackLimiter, markStaleSessionsInactive);
 
 export default router;

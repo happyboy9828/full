@@ -299,7 +299,39 @@ function MyTool() {
 - ESLint: 0 errors on all new files
 - API response shapes validated against `backend/controllers/reportsController.js`
 
-## Tool Discovery Navigation Feature (COMPLETE)
+## Phase 8 — Add Live Activity and Optimize (COMPLETE)
+
+### Server-Side Session Inactivity Detection
+Added `POST /api/analytics/sessions/mark-stale-inactive` endpoint in `backend/controllers/analyticsController.js` and `backend/routes/analytics.js`:
+- Marks sessions as inactive when `lastActivityAt` is older than configurable timeout (default 30 minutes)
+- Updates `isActive: false`, sets `endedAt`, and increments `duration` based on time since last activity
+- Rate-limited via existing track limiter
+- Useful for cron jobs or manual cleanup of stale sessions
+
+### Recent Visitors Report
+Added `GET /api/analytics/reports/recent-visitors` endpoint in `backend/controllers/reportsController.js` and `backend/routes/reports.js`:
+- Returns unique visitors with last visit time, visit count, device type, browser, OS, country, referrer domain, UTM source
+- Supports date range filters (`startDate`, `endDate`), domain filter, and `limit` parameter (1-200, default 50)
+- Uses optimized aggregation pipeline with `$group` by `visitorId` and `$sort` by `lastVisit` descending
+
+### DailyStats Precomputation
+Created `backend/controllers/dailyStatsController.js` and `backend/routes/dailyStats.js`:
+- `POST /api/analytics/daily-stats/compute` — Computes daily aggregates per domain for a given date (defaults to yesterday):
+  - Page views, unique visitors, sessions, bounce rate, avg session duration
+  - Top pages (path, title, count), referrers, devices, countries
+  - Upserts into `DailyStats` collection (unique index on `domain+date`)
+- `GET /api/analytics/daily-stats` — Retrieves precomputed stats with date range and domain filters
+- Protected by `requireAdmin` middleware
+
+### Database Index Optimization
+Added compound indexes for query performance:
+- **Session model** (`backend/models/Session.js`): `domain+lastActivityAt` (stale session queries), `visitorId+startedAt` (recent visitors)
+- **Event model** (`backend/models/Event.js`): `domain+eventType+timestamp` (time-series, event type filtering)
+
+### Verification
+- `next build`: Compiled successfully, 54 static pages prerendered
+- All backend JavaScript files pass syntax check (`node --check`)
+- ESLint: 0 errors on modified files
 
 ### Implementation
 - **`/tools` page** (`client/app/tools/page.js`): Updated to display all 5 tool categories as clickable cards in a responsive grid

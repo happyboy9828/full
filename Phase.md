@@ -3,9 +3,9 @@
 Last updated: October 9, 2026 | Current: Phase 8 — Add Live Activity and Optimize
 
 <<<<<<< HEAD
-**Current Phase: Phase 8 — Add Live Activity and Optimize**
+**Current Phase: Phase 9 — Add Advanced Analytics**
 =======
-**Current Phase: Phase 7 — Build the Dashboard UI**
+**Current Phase: Phase 8 — Add Live Activity and Optimize**
 >>>>>>> e16a166025edd9e98d928564e8d1cf640896f67b
 
 ---
@@ -192,11 +192,19 @@ Use actual backend data rather than hardcoded demo statistics.
 
 Completion Criteria: All core reports display correctly and respond to filters. — VERIFIED
 
-Phase 8: Add Live Activity and Optimize
+Phase 8: Add Live Activity and Optimize (COMPLETE)
 
 Add periodic session heartbeats, inactivity detection, recent-visitor reports, efficient database indexes, and cached or precomputed summaries when needed.
 
 Completion Criteria: Recent activity updates reliably and reports remain responsive as data grows.
+
+**Completed:**
+- [x] Server-side session inactivity detection — `POST /api/analytics/sessions/mark-stale-inactive` endpoint marks stale sessions as inactive based on `lastActivityAt` (configurable timeout, default 30 min)
+- [x] Recent visitors report — `GET /api/analytics/reports/recent-visitors` returns unique visitors with last visit time, visit count, device/browser/OS, referrer, UTM source (supports date range, domain filter, limit up to 200)
+- [x] DailyStats precomputation — `POST /api/analytics/daily-stats/compute` aggregates daily stats per domain (page views, unique visitors, sessions, bounce rate, avg duration, top pages, referrers, devices, countries); `GET /api/analytics/daily-stats` retrieves precomputed stats
+- [x] Database index optimization — Added compound indexes on Session (`domain+lastActivityAt`, `visitorId+startedAt`) and Event (`domain+eventType+timestamp`) for faster recent-visitor and time-series queries
+- [x] Verified `next build` passes (54 static pages)
+- [x] Verified backend code syntax (no errors)
 
 **Phase 8.5: MS Office & Tabular Document Conversion CDN Integration (COMPLETE)**
 

@@ -1,5 +1,5 @@
 import express from "express";
-import { overview, sources, pages, devices, eventsReport, live, timeSeries } from "../controllers/reportsController.js";
+import { overview, sources, pages, devices, eventsReport, live, timeSeries, recentVisitors } from "../controllers/reportsController.js";
 import { requireAdmin } from "../middleware/auth.js";
 import { parseReportRange } from "../middleware/validate.js";
 
@@ -25,5 +25,6 @@ router.get("/devices", withRange(devices));
 router.get("/events", withRange(eventsReport));
 router.get("/live", withRange(live));
 router.get("/time-series", withRange(timeSeries));
+router.get("/recent-visitors", withRange(recentVisitors));
 
 export default router;

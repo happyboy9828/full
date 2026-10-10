@@ -35,6 +35,7 @@ eventSchema.index({ sessionId: 1, timestamp: -1 });
 eventSchema.index({ visitorId: 1, timestamp: -1 });
 eventSchema.index({ eventType: 1, timestamp: -1 });
 eventSchema.index({ domain: 1, timestamp: -1 });
+eventSchema.index({ domain: 1, eventType: 1, timestamp: -1 });
 
 export const Event = mongoose.model("Event", eventSchema);
 export default Event;

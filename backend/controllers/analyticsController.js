@@ -232,3 +232,41 @@ export async function endSession(req, res) {
     res.status(500).json({ success: false, error: "Failed to end session" });
   }
 }
+
+export async function markStaleSessionsInactive(req, res) {
+  try {
+    const { timeoutMinutes = 30 } = req.body || {};
+    const cutoff = new Date(Date.now() - timeoutMinutes * 60 * 1000);
+
+    const result = await Session.updateMany(
+      {
+        isActive: true,
+        lastActivityAt: { $lt: cutoff },
+      },
+      {
+        $set: { isActive: false, endedAt: new Date() },
+        $inc: {
+          duration: {
+            $divide: [{ $subtract: [new Date(), "$lastActivityAt"] }, 1000],
+          },
+        },
+      }
+    );
+
+    logger.info("stale_sessions_marked_inactive", {
+      matchedCount: result.matchedCount,
+      modifiedCount: result.modifiedCount,
+      timeoutMinutes,
+    });
+
+    res.json({
+      success: true,
+      matchedCount: result.matchedCount,
+      modifiedCount: result.modifiedCount,
+      cutoff: cutoff.toISOString(),
+    });
+  } catch (error) {
+    logger.error("mark_stale_sessions_failed", { error: error.message });
+    res.status(500).json({ success: false, error: "Failed to mark stale sessions inactive" });
+  }
+}

@@ -160,11 +160,21 @@ export function parseReportRange(query) {
   if (errors.length === 0 && granularity === "hour" && end.getTime() - start.getTime() > 7 * 24 * 60 * 60 * 1000) {
     errors.push("Hourly granularity cannot exceed 7 days");
   }
+  let limit = 50;
+  if (query.limit != null) {
+    const parsed = Number(query.limit);
+    if (Number.isNaN(parsed) || parsed < 1 || parsed > 200) {
+      errors.push("limit must be a number between 1 and 200");
+    } else {
+      limit = parsed;
+    }
+  }
   return {
     errors,
     start,
     end,
     domain: typeof query.domain === "string" && query.domain.trim() ? query.domain.trim() : null,
     granularity,
+    limit,
   };
 }
