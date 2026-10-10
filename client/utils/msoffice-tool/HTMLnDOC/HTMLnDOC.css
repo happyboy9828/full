@@ -1,0 +1,317 @@
+/* HTML to DOCX Converter Styles — uses global.css design tokens */
+.html-docx-app {
+  font-family: var(--tool-font);
+  color: var(--tool-text);
+  max-width: var(--tool-width);
+  margin: 0 auto;
+  padding: var(--tool-pad-top) var(--tool-pad-x) var(--tool-pad-bottom);
+  background: transparent;
+  box-sizing: border-box;
+}
+
+.app-header {
+  margin-bottom: var(--tool-gap);
+  text-align: left;
+}
+
+.app-header h1 {
+  font-size: var(--tool-h1);
+  font-weight: 800;
+  color: var(--tool-text);
+  margin: 0 0 8px 0;
+  letter-spacing: -0.02em;
+}
+
+.app-header p {
+  color: var(--tool-muted);
+  font-size: 15px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.app-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--tool-gap);
+  align-items: start;
+}
+
+.card {
+  background: var(--tool-surface);
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius);
+  padding: var(--tool-card-pad);
+  margin-bottom: var(--tool-col-gap);
+  box-shadow: var(--tool-shadow);
+  transition: box-shadow 0.15s, border-color 0.15s;
+  box-sizing: border-box;
+}
+
+.card:hover {
+  box-shadow: var(--tool-shadow);
+  border-color: var(--tool-accent);
+}
+
+.card h3 {
+  font-size: var(--tool-h2);
+  font-weight: 700;
+  margin: 0 0 14px;
+  color: var(--tool-text);
+  border-bottom: 1px solid var(--tool-border);
+  padding-bottom: 8px;
+}
+
+.radio-toggle-group {
+  display: flex;
+  gap: 12px;
+}
+
+.radio-label {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 2px solid var(--tool-border);
+  border-radius: var(--tool-radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--tool-text);
+  background: var(--tool-surface);
+  transition: all 0.15s ease;
+}
+
+.radio-label.active {
+  border-color: var(--tool-accent);
+  background: color-mix(in srgb, var(--tool-accent) 8%, transparent);
+  color: var(--tool-accent-text);
+}
+
+.radio-label input {
+  display: none;
+}
+
+.code-editor {
+  width: 100%;
+  height: 220px;
+  font-family: var(--tool-mono);
+  font-size: 13px;
+  padding: 12px;
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius-sm);
+  resize: vertical;
+  box-sizing: border-box;
+  background: var(--tool-surface-2);
+  color: var(--tool-text);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.code-editor:focus {
+  outline: none;
+  border-color: var(--tool-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--tool-accent) 20%, transparent);
+}
+
+.text-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius-sm);
+  font-size: 14px;
+  font-family: var(--tool-font);
+  background: var(--tool-surface);
+  color: var(--tool-text);
+  box-sizing: border-box;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: var(--tool-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--tool-accent) 20%, transparent);
+}
+
+.editor-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+
+.form-group {
+  flex: 1;
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: var(--tool-text);
+}
+
+.select-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius-sm);
+  background: var(--tool-surface);
+  color: var(--tool-text);
+  font-size: 14px;
+  font-family: var(--tool-font);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+.select-input:focus {
+  outline: none;
+  border-color: var(--tool-accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--tool-accent) 20%, transparent);
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--tool-text);
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--tool-accent);
+}
+
+.summary-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.summary-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--tool-border);
+  font-size: 14px;
+}
+
+.summary-list li:last-child {
+  border-bottom: none;
+}
+
+.summary-list span {
+  color: var(--tool-muted);
+}
+
+.summary-list strong {
+  color: var(--tool-text);
+}
+
+.canvas-preview-box {
+  min-height: 180px;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius-sm);
+  padding: 16px;
+  background: var(--tool-surface);
+  color: var(--tool-text);
+  font-family: var(--tool-font);
+  font-size: 14px;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+.placeholder-text {
+  color: var(--tool-muted);
+  font-style: italic;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: var(--tool-font);
+  border-radius: var(--tool-radius);
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.btn-sm {
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.btn-primary {
+  background: var(--tool-accent);
+  color: var(--tool-on-accent);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--tool-accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--tool-accent) 35%, transparent);
+}
+
+.btn-success {
+  background: #16a34a;
+  color: white;
+}
+
+.btn-success:hover:not(:disabled) {
+  background: #15803d;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px color-mix(in srgb, #16a34a 35%, transparent);
+}
+
+.btn-secondary {
+  background: var(--tool-surface-2);
+  color: var(--tool-text);
+  border: 1px solid var(--tool-border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--tool-tint-strong);
+  border-color: var(--tool-accent);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--tool-border);
+  color: var(--tool-text);
+}
+
+.btn-outline:hover:not(:disabled) {
+  background: var(--tool-tint);
+  border-color: var(--tool-accent);
+}
+
+.btn:disabled {
+  background: var(--tool-border);
+  color: var(--tool-muted);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+@media (max-width: 768px) {
+  .app-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .html-docx-app {
+    padding: 24px 16px 40px;
+  }
+}

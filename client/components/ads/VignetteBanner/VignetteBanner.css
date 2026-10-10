@@ -1,0 +1,194 @@
+/* Vignette Banner - Fullscreen overlay between page transitions.
+   Scoped to .ad-vignette-* and mounted at the document root.
+   z-index 70: above InPagePush (64), below DownloadProgressPopup (75). */
+
+.ad-vignette,
+.ad-vignette *,
+.ad-vignette *::before,
+.ad-vignette *::after { box-sizing: border-box; }
+
+/* ---------- overlay ---------- */
+.ad-vignette {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.6);
+  animation: ad-vignette-fade-in 0.2s ease-out;
+}
+
+@keyframes ad-vignette-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.ad-vignette-overlay {
+  position: absolute;
+  inset: 0;
+}
+
+/* ---------- dialog ---------- */
+.ad-vignette-dialog {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 520px;
+  background: var(--background);
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius);
+  box-shadow: var(--tool-shadow);
+  overflow: hidden;
+  animation: ad-vignette-slide-up 0.3s ease-out;
+}
+
+@keyframes ad-vignette-slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- header ---------- */
+.ad-vignette-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--tool-border);
+  background: var(--tool-surface);
+}
+
+.ad-vignette-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tool-muted);
+}
+
+.ad-vignette-close {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  cursor: pointer;
+  color: var(--tool-muted);
+  background: transparent;
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius-sm);
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.ad-vignette-close:hover { color: var(--tool-text); border-color: var(--tool-accent); background: var(--tool-tint); }
+.ad-vignette-close:focus-visible { outline: 2px solid var(--tool-accent-text); outline-offset: 2px; }
+.ad-vignette-close svg { width: 14px; height: 14px; }
+
+/* ---------- creative ---------- */
+.ad-vignette-creative {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px 16px;
+  min-height: 120px;
+}
+
+.ad-vignette-mark {
+  display: grid;
+  place-items: center;
+  width: 80px;
+  height: 80px;
+  font: 700 28px var(--tool-font), system-ui, sans-serif;
+  letter-spacing: -0.02em;
+  color: var(--tool-text);
+  background:
+    radial-gradient(120% 130% at 0% 0%, color-mix(in srgb, var(--tool-accent) 26%, transparent), transparent 64%),
+    var(--tool-surface-2);
+  border: 1px solid var(--tool-border);
+  border-radius: 50%;
+}
+
+/* ---------- body ---------- */
+.ad-vignette-body {
+  padding: 0 20px 20px;
+  text-align: center;
+}
+
+.ad-vignette-advertiser {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--tool-muted);
+}
+
+.ad-vignette-title {
+  margin: 0 0 10px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--tool-text);
+}
+
+.ad-vignette-desc {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--tool-muted);
+}
+
+/* ---------- actions ---------- */
+.ad-vignette-actions {
+  display: flex;
+  justify-content: center;
+  padding: 0 20px 24px;
+}
+
+.ad-vignette-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  font: 600 15px var(--tool-font), system-ui, sans-serif;
+  white-space: nowrap;
+  color: var(--tool-on-accent);
+  text-decoration: none;
+  background: var(--tool-accent);
+  border: 1px solid var(--tool-accent);
+  border-radius: var(--tool-radius-sm);
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+.ad-vignette-cta:hover { background: var(--tool-accent-hover); border-color: var(--tool-accent-hover); }
+.ad-vignette-cta:focus-visible { outline: 2px solid var(--tool-accent-text); outline-offset: 2px; }
+.ad-vignette-cta:active { transform: scale(0.98); }
+
+/* ---------- auto-hide timer ---------- */
+.ad-vignette-timer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--tool-border);
+}
+.ad-vignette-timer-bar {
+  display: block;
+  height: 100%;
+  background: var(--tool-accent);
+  transition: width 0.2s linear;
+}
+
+/* ---------- responsive ---------- */
+@media (max-width: 480px) {
+  .ad-vignette { padding: 16px; }
+  .ad-vignette-dialog { max-width: none; border-radius: 0; }
+  .ad-vignette-title { font-size: 18px; }
+  .ad-vignette-desc { font-size: 14px; }
+  .ad-vignette-cta { padding: 12px 24px; font-size: 14px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ad-vignette,
+  .ad-vignette-dialog,
+  .ad-vignette-cta { animation: none; transition: none; }
+  .ad-vignette-timer-bar { transition: none; }
+}
