@@ -2,6 +2,53 @@
 
 Last updated: 2026-10-12
 
+## MongoDB Connection Retry (COMPLETE)
+
+The backend now retries the MongoDB connection instead of exiting when the first attempt fails.
+
+### Changes
+| File | Change |
+|------|--------|
+| `backend/db/db.js` | Added `connectDBWithRetry()` — loops `connectDB()` with a configurable delay (`DB_RETRY_DELAY_MS`, default 5s) until the connection succeeds; logs each failed attempt and retry |
+| `backend/config/env.js` | Added `dbRetryDelayMs` config |
+| `backend/index.js` | Bootstrap now awaits `connectDBWithRetry()` before `app.listen()` |
+
+### Behavior
+- `npm start` keeps retrying every 5s while the DB is unreachable (network blips, Atlas spin-up, mongod not yet started)
+- Server starts listening on port 5000 only after MongoDB connects
+- No retry cap — retries indefinitely by design (analytics backend is useless without its DB)
+
+### Verification (live against MongoDB Atlas)
+- First two attempts failed with `connect ETIMEDOUT 159.41.242.111:27017`, retried automatically
+- Third attempt succeeded: `MongoDB connected: ac-s9j4zgi-shard-00-00.yeb2lub.mongodb.net/test`
+- `Server is running on port 5000` — `GET /health` returned `{"success":true,"status":"ok","database":"connected","uptime":94.17}`
+
+---
+
+## Backend Rebuilt — DB Connect + Port 5000 (COMPLETE)
+
+The backend (`backend/`) was previously gutted to empty stubs (`app.js`, `index.js`, `db/db.js`, `.env` all empty; only `express` installed). Rebuilt as a minimal service that connects to MongoDB and serves on port 5000.
+
+### Files
+| File | Purpose |
+|------|---------|
+| `backend/config/env.js` | dotenv load + config (`port` from `PORT` env, default 5000; `mongoUri` from `MONGO_URI`, default `mongodb://localhost:27017/analytics`) |
+| `backend/db/db.js` | `connectDB()` via Mongoose 9 + connection state events + `dbState()` helper |
+| `backend/app.js` | Express 5 factory: CORS, JSON 256kb, `GET /`, `GET /health` (reports db state), 404 + error handlers |
+| `backend/index.js` | Bootstrap: `connectDB()` → `app.listen(config.port)`; fatal exit(1) if DB unreachable |
+| `backend/.env` | `PORT=5000`, `MONGO_URI=mongodb://localhost:27017/analytics` (swap in your Atlas URI) |
+
+### Deps installed
+`mongoose@^9.11.1`, `dotenv@^18.0.6`, `cors@^2.8.6` added; `start`/`dev` scripts restored in `package.json`.
+
+### Verification
+- `node --check` passes on all 4 files
+- Live test on port 5000: `GET /` → 200, `GET /health` → 200 `{"status":"ok","database":"disconnected"}`, unknown route → 404 JSON
+- `npm start`: loads `.env` (2 vars), attempts MongoDB, clean `ECONNREFUSED` fatal exit when no DB is running (fail-fast by design, matches original backend behavior)
+- No local mongod/docker in this environment — happy path (DB connected + listening) requires a reachable `MONGO_URI`
+
+---
+
 ## Missing pdf-lib CDN Script — Root Cause of `window.PDFLib is undefined` (COMPLETE)
 
 ### Problem

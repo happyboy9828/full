@@ -6,6 +6,40 @@ Last updated: October 12, 2026 | Current: Phase 10 — Test, Deploy, and Maintai
 
 ---
 
+## Phase 26: MongoDB Connection Retry (COMPLETE)
+
+**Completed:**
+- [x] Added `connectDBWithRetry()` to `backend/db/db.js` — retries `connectDB()` every `DB_RETRY_DELAY_MS` (default 5s) until connected
+- [x] Added `dbRetryDelayMs` to `backend/config/env.js`
+- [x] `backend/index.js` now awaits `connectDBWithRetry()` before `app.listen(config.port)`
+- [x] Verified live against MongoDB Atlas: 2 failed attempts (ETIMEDOUT) → auto-retry → connected → server running on port 5000 → `GET /health` reports `"database":"connected"`
+
+**Task:** "if mongo db is not connected try it again" — the backend no longer exits when the first DB connection attempt fails; it retries until the database is reachable.
+
+Completion Criteria: Backend recovers from DB connection failures without manual restart. — VERIFIED (connected on the 3rd automatic attempt)
+
+---
+
+## Phase 25: Backend Rebuilt — DB Connect + Port 5000 (COMPLETE)
+
+**Completed:**
+- [x] Installed `mongoose`, `dotenv`, `cors` in `backend/` (express was already present)
+- [x] Created `backend/config/env.js` — dotenv + config (`PORT` default 5000, `MONGO_URI` default `mongodb://localhost:27017/analytics`)
+- [x] Wrote `backend/db/db.js` — Mongoose `connectDB()`, connection event handlers, `dbState()`
+- [x] Wrote `backend/app.js` — Express 5 factory (CORS, JSON 256kb, `GET /`, `GET /health`, 404/error handlers)
+- [x] Wrote `backend/index.js` — bootstrap: connect DB → listen on port 5000, fatal exit if DB unreachable
+- [x] Wrote `backend/.env` with `PORT=5000` and `MONGO_URI`
+- [x] Restored `start`/`dev` scripts in `backend/package.json`
+- [x] Verified: syntax checks pass; port 5000 serves `/`, `/health`, 404; `npm start` loads env and attempts DB connection with clean failure when unreachable
+
+**Task:** Update the backend so it connects to the database and runs on port 5000.
+
+**Note:** No local MongoDB in this environment — set `MONGO_URI` in `backend/.env` (e.g. the Atlas connection string) for the DB-connected happy path.
+
+Completion Criteria: Backend connects to MongoDB and serves on port 5000. — VERIFIED (server listens on 5000; DB connection wired, fail-fast when URI unreachable)
+
+---
+
 ## Phase 24: Missing pdf-lib CDN Script — Fix `window.PDFLib is undefined` (COMPLETE)
 
 **Completed:**

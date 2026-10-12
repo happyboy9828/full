@@ -1374,185 +1374,147 @@ details[open] .faq-q::after {
   }
 }
 
-/* ---------- Complete Directory / All Tools (Homepage only) ---------- */
-/* An accordion-style catalogue that keeps the full toolkit scannable
-   without overwhelming the hero fold. Each category expands on mobile;
-   on desktop the grid auto-reveals for quick browsing. */
-.directory-section {
-  padding: clamp(48px, 7vw, 72px) var(--tool-pad-x) clamp(56px, 9vw, 96px);
-  border-top: 1px solid var(--tool-border);
-  background: var(--tool-surface);
-}
-
-.directory-header {
-  text-align: center;
-  max-width: 640px;
-  margin: 0 auto clamp(36px, 5vw, 56px);
-}
-
-.directory-title {
-  margin: 0 0 12px;
-  font-size: clamp(22px, 3.4vw, 30px);
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--tool-text);
-}
-
-.directory-subtitle {
-  margin: 0;
-  font-size: 15px;
-  line-height: 1.6;
-  color: var(--tool-muted);
-}
-
-.directory-accordion {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  max-width: 960px;
+/* ---------- Tools Carousel (All Tools Section) ---------- */
+.tools-carousel {
+  position: relative;
+  max-width: var(--tool-width);
   margin: 0 auto;
-}
-
-.directory-category {
-  background: var(--tool-surface-2);
-  border: 1px solid var(--tool-border);
-  border-radius: var(--tool-radius);
   overflow: hidden;
-  transition: box-shadow 0.15s, border-color 0.15s;
 }
 
-.directory-category[open] {
-  border-color: var(--tool-accent);
-  box-shadow: 0 2px 12px color-mix(in srgb, var(--tool-accent) 8%, transparent);
-}
-
-.directory-category-head {
-  list-style: none;
+.tools-track {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 16px 20px;
-  cursor: pointer;
-  font-weight: 700;
-  color: var(--tool-text);
-  font-size: 15px;
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  transition: background 0.15s;
+  gap: 16px;
+  padding: 8px 4px 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  scroll-padding: 0 24px;
 }
 
-.directory-category-head::-webkit-details-marker {
+.tools-track::-webkit-scrollbar {
   display: none;
 }
 
-.directory-category-head:hover {
-  background: var(--tool-tint);
-}
-
-.directory-category-name {
-  flex: 1;
-}
-
-.directory-category-count {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--tool-muted);
-  text-transform: none;
-  letter-spacing: 0;
-}
-
-.directory-chevron {
-  flex-shrink: 0;
-  font-size: 14px;
-  color: var(--tool-muted);
-  transition: transform 0.2s ease;
-}
-
-.directory-category[open] .directory-chevron {
-  transform: rotate(180deg);
-}
-
-.directory-tools-list {
-  list-style: none;
-  margin: 0;
-  padding: 0 14px 14px;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-.directory-tool-card {
+.tool-swipe-card {
+  flex: 0 0 300px;
+  max-width: 300px;
+  scroll-snap-align: start;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 14px 14px;
+  gap: 10px;
+  padding: 22px;
   background: var(--tool-surface);
   border: 1px solid var(--tool-border);
-  border-radius: var(--tool-radius-sm);
+  border-radius: var(--tool-radius);
   text-decoration: none;
-  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  color: inherit;
+  transition: box-shadow 0.15s, border-color 0.15s, transform 0.15s;
+  min-height: 160px;
 }
 
-.directory-tool-card:hover {
+.tool-swipe-card:hover,
+.tool-swipe-card:focus-visible {
   border-color: var(--tool-accent);
   box-shadow: var(--tool-shadow);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  outline: none;
 }
 
-.directory-tool-title {
+.tool-card-category {
+  font-size: 11px;
   font-weight: 700;
-  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--tool-accent-text);
+  margin-bottom: 4px;
+}
+
+.tool-card-title {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 1.3;
   color: var(--tool-text);
 }
 
-.directory-tool-desc {
+.tool-card-desc {
+  flex: 1;
   font-size: 13px;
-  color: var(--tool-muted);
   line-height: 1.5;
+  color: var(--tool-muted);
 }
 
-/* Desktop: show all categories expanded in a 2-column grid */
-@media (min-width: 769px) {
-  .directory-accordion {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 18px;
-  }
+.tool-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--tool-accent-text);
+  transition: gap 0.15s;
+}
 
-  .directory-category {
-    display: flex;
-    flex-direction: column;
-  }
+.tool-swipe-card:hover .tool-card-cta,
+.tool-swipe-card:focus-visible .tool-card-cta {
+  gap: 10px;
+}
 
-  .directory-category[open] .directory-chevron {
-    transform: rotate(0deg);
-  }
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--tool-surface);
+  border: 1px solid var(--tool-border);
+  border-radius: 50%;
+  color: var(--tool-text);
+  cursor: pointer;
+  transition: all 0.15s;
+  box-shadow: var(--tool-shadow);
+}
 
-  .directory-category-head {
-    cursor: default;
-    border-bottom: 1px solid transparent;
-    padding-bottom: 14px;
-  }
+.carousel-btn:hover {
+  background: var(--tool-tint-strong);
+  border-color: var(--tool-accent);
+  color: var(--tool-accent-text);
+  transform: translateY(-50%) scale(1.05);
+}
 
-  .directory-category-head:hover {
-    background: transparent;
-  }
+.carousel-btn:focus-visible {
+  outline: 2px solid var(--tool-accent);
+  outline-offset: 2px;
+}
 
-  .directory-tools-list {
-    padding: 14px 0 0;
-  }
+.carousel-btn-prev {
+  left: -22px;
+}
+
+.carousel-btn-next {
+  right: -22px;
 }
 
 @media (max-width: 768px) {
-  .directory-category[open] .directory-chevron {
-    transform: rotate(180deg);
+  .carousel-btn {
+    display: none;
   }
 }
 
 @media (max-width: 640px) {
-  .directory-section {
-    padding: 40px 16px 52px;
+  .tools-carousel {
+    padding: 0 16px;
+  }
+  
+  .tool-swipe-card {
+    flex: 0 0 260px;
+    max-width: 260px;
+    padding: 18px;
   }
 }
 

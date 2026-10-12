@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getCategories } from "../lib/pages";
+import ToolsCarousel from "./components/ToolsCarousel";
 
 // Homepage showcase: the six most-used tools as interactive cards.
 // The full catalogue (every route under app/) lives at /tools.
@@ -171,44 +172,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 4: Complete Directory / All Tools */}
-      <section
-        id="all-tools"
-        className="directory-section"
-        aria-labelledby="directory-heading"
-      >
-        <div className="directory-header">
-          <h2 id="directory-heading" className="directory-title">
-            Explore the Full Toolkit
-          </h2>
-          <p className="directory-subtitle">
-            All {totalTools} browser-only utilities, organized by what you need.
-          </p>
-        </div>
-
-        <div className="directory-accordion">
-          {categories.map((category) => (
-            <details key={category.slug} className="directory-category">
-              <summary className="directory-category-head">
-                <span className="directory-category-name">{category.name}</span>
-                <span className="directory-category-count">{category.toolCount} tools</span>
-                <span className="directory-chevron" aria-hidden="true">▾</span>
-              </summary>
-              <ul className="directory-tools-list" role="list">
-                {category.tools.map((tool) => (
-                  <li key={tool.href} className="directory-tool-item">
-                    <Link href={tool.href} className="directory-tool-card">
-                      <span className="directory-tool-title">{tool.title}</span>
-                      <span className="directory-tool-desc">{tool.description}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </details>
-          ))}
-        </div>
-      </section>
-
+      {/* Section 4: Complete Directory / All Tools — Swipeable Cards */}
+      <ToolsCarousel categories={categories} totalTools={totalTools} />
      
     </div>
   );
