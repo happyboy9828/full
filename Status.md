@@ -2,6 +2,69 @@
 
 Last updated: 2026-10-12
 
+## Legal Pages & Team Section Added (COMPLETE)
+
+### Problem
+The website had legal pages (about, contact, docs, faq, terms, privacy) under `/legal-support/` but the footer links pointed to incorrect paths (`/about`, `/contact`, etc.). Also needed a team section showing 3 people as website owners and developers.
+
+### Fix
+| File | Change |
+|------|--------|
+| `client/components/Footer/Footer.js` | Fixed nav and legal link hrefs to point to `/legal-support/about`, `/legal-support/contact`, `/legal-support/docs`, `/legal-support/faq`, `/legal-support/privacy`, `/legal-support/terms` |
+| `client/app/legal-support/about/page.js` | Added Team section with 3 team members (Alex Chen - Founder & Lead Developer, Maria Rodriguez - Co-Founder & UI/UX Designer, James Wilson - Senior Developer) |
+| `client/app/globals.css` | Added `.team-grid`, `.team-card`, `.team-avatar`, `.team-name`, `.team-role`, `.team-bio` styles with responsive grid (3/2/1 columns) |
+
+### Verification
+- `next build`: passes (46/46 static pages prerendered)
+- All legal pages accessible at correct routes
+- Team section displays on About page
+
+---
+
+## Mobile Carousel Arrow Navigation (COMPLETE)
+
+### Problem
+After the Phase 29 mobile carousel fix, the "Explore the Full Toolkit" section could only be navigated on mobile via swipe or dot indicators — the prev/next arrows were still hidden by `display: none` in the `@media (max-width: 768px)` block.
+
+### Fix
+| File | Change |
+|------|--------|
+| `client/app/components/ToolsCarousel.js` | Removed `.carousel-btn { display: none }` from the mobile media query; added mobile positioning `.carousel-btn-prev { left: 10px }` / `.carousel-btn-next { right: 10px }` (desktop's `-24px` offsets would sit half-off the viewport — the page wrapper only has `px-6` padding); strengthened mobile arrow shadow (`0 6px 20px`, 28% foreground) so buttons read clearly overlaid on the card |
+
+### Behavior after fix
+- Left/right arrows visible on mobile (48px touch targets, `z-index: 10` above the card)
+- Tapping an arrow swaps the card and stops auto-rotation — same as swipe and dot indicators
+- No horizontal overflow: arrows are inset inside the carousel bounds
+
+### Verification
+- ESLint: 0 errors on `ToolsCarousel.js`
+- `next build`: passes, 46/46 static pages prerendered
+
+---
+
+## Homepage "Explore the Full Toolkit" — One Card at a Time on Mobile (COMPLETE)
+
+### Problem
+On mobile (≤768px) the "Explore the Full Toolkit" section rendered every category card stacked in a vertical list. Root cause: the `@media (max-width: 768px)` block in `client/app/components/ToolsCarousel.js` overrode the carousel mechanics with `.category-card { position: relative; opacity: 1; visibility: visible; transform: none }` and `.category-track { min-height: auto }`, disabling the absolute-position/fade system that keeps one card visible on desktop.
+
+### Fix
+| File | Change |
+|------|--------|
+| `client/app/components/ToolsCarousel.js` | Removed the mobile stacking overrides (carousel now one-card-at-a-time at every breakpoint); added `ResizeObserver` effect sizing the track to the active card's `scrollHeight` with a smooth height transition; added horizontal touch swipe (≥48px, horizontal-dominant) for swapping; auto-rotate (3s) stops permanently after the first manual interaction; fixed per-card tools bug (`currentCategory.tools` → `category.tools`); removed unused `currentCategory`; `prefers-reduced-motion` also disables the height transition |
+
+### Behavior after fix
+- Exactly one card visible at a time on mobile (fade/scale transition preserved)
+- Swap via: horizontal swipe, dot indicators, or auto-rotate (until first interaction)
+- Track height fits each card's content — no clipping of the 1-column tool list, no large whitespace gaps
+- Vertical page scrolling still works (swipe only triggers on horizontal-dominant gestures)
+- Keyboard/ARIA behavior unchanged (indicators keep `aria-current`, region label preserved)
+
+### Verification
+- ESLint: 0 errors on `ToolsCarousel.js`
+- `next build`: passes, 46/46 static pages prerendered
+
+---
+
 ## Vercel Request Handler Pattern (COMPLETE)
 
 Opening `https://testing-api-backend.vercel.app` in a new tab showed "loading" forever — no welcome message, no response. Root cause: `@vercel/node` invokes the default export as a request handler `(req, res) => {...}`, but the previous `index.js` exported `startServer`, which calls `app.listen()` and returns a `http.Server` instance. A server object is not callable, so Vercel's runtime never got a usable handler and every request hung until the platform timeout killed it.

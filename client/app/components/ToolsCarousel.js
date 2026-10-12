@@ -1,31 +1,90 @@
 'use client';
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
+
+// Minimum horizontal travel (px) that counts as a card-swipe gesture.
+const SWIPE_THRESHOLD = 48;
 
 export default function ToolsCarousel({ categories, totalTools }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const trackRef = useRef(null);
+  const cardRefs = useRef([]);
+  const interactedRef = useRef(false);
+  const touchStart = useRef({ x: 0, y: 0, active: false });
 
-  // Auto-rotate every 3 seconds
+  // Auto-rotate every 3 seconds. Stops for good after the first manual
+  // interaction — touch devices have no hover, so rotation would otherwise
+  // keep swapping cards while the user is reading or tapping one.
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!isPaused) {
+      if (!isPaused && !interactedRef.current) {
         setCurrentIndex((prev) => (prev === categories.length - 1 ? 0 : prev + 1));
       }
     }, 3000);
     return () => clearInterval(interval);
   }, [categories.length, isPaused]);
 
+  const stopAutoRotate = useCallback(() => {
+    interactedRef.current = true;
+  }, []);
+
   const goToPrev = useCallback(() => {
+    stopAutoRotate();
     setCurrentIndex((prev) => (prev === 0 ? categories.length - 1 : prev - 1));
-  }, [categories.length]);
+  }, [categories.length, stopAutoRotate]);
 
   const goToNext = useCallback(() => {
+    stopAutoRotate();
     setCurrentIndex((prev) => (prev === categories.length - 1 ? 0 : prev + 1));
-  }, [categories.length]);
+  }, [categories.length, stopAutoRotate]);
 
-  const currentCategory = categories[currentIndex];
+  // Size the track to the active card so exactly one card is fully visible
+  // at a time on every screen size — mobile content (1-column tool list,
+  // wrapped descriptions) is taller than the desktop track's 420px minimum.
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    const syncHeight = () => {
+      const activeCard = cardRefs.current[currentIndex];
+      if (activeCard) {
+        track.style.height = `${activeCard.scrollHeight}px`;
+      }
+    };
+
+    syncHeight();
+    const observer = new ResizeObserver(syncHeight);
+    cardRefs.current.forEach((card) => {
+      if (card) observer.observe(card);
+    });
+    return () => observer.disconnect();
+  }, [currentIndex, categories.length]);
+
+  // Horizontal swipe swaps cards on touch devices. Vertical swipes are left
+  // alone so normal page scrolling inside the card still works.
+  const onTouchStart = (e) => {
+    touchStart.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+      active: true,
+    };
+  };
+
+  const onTouchEnd = (e) => {
+    if (!touchStart.current.active) return;
+    const deltaX = e.changedTouches[0].clientX - touchStart.current.x;
+    const deltaY = e.changedTouches[0].clientY - touchStart.current.y;
+    touchStart.current.active = false;
+    if (
+      Math.abs(deltaX) > SWIPE_THRESHOLD &&
+      Math.abs(deltaX) > Math.abs(deltaY)
+    ) {
+      if (deltaX < 0) goToNext();
+      else goToPrev();
+    }
+  };
 
   return (
     <section
@@ -43,11 +102,20 @@ export default function ToolsCarousel({ categories, totalTools }) {
         </h2>
       </div>
 
-      <div className="category-carousel" role="region" aria-label="Tool categories carousel">
-        <div className="category-track">
+      <div
+        className="category-carousel"
+        role="region"
+        aria-label="Tool categories carousel"
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
+        <div className="category-track" ref={trackRef}>
           {categories.map((category, index) => (
             <article
               key={category.slug}
+              ref={(el) => {
+                cardRefs.current[index] = el;
+              }}
               className={`category-card ${index === currentIndex ? "active" : ""}`}
               style={{ "--card-index": index }}
             >
@@ -58,17 +126,17 @@ export default function ToolsCarousel({ categories, totalTools }) {
               <div className="card-content">
                 <p className="card-desc">{category.description}</p>
                 <ul className="tools-columns" role="list">
-                  {currentCategory.tools.slice(0, 6).map((tool) => (
+                  {category.tools.slice(0, 6).map((tool) => (
                     <li key={tool.href} className="tool-column-item">
                       <Link href={tool.href} className="tool-column-link">
                         {tool.title}
                       </Link>
                     </li>
                   ))}
-                  {currentCategory.tools.length > 6 && (
+                  {category.tools.length > 6 && (
                     <li className="tool-column-item more">
-                      <Link href={`/category/${currentCategory.slug}`} className="tool-column-link">
-                        + {currentCategory.tools.length - 6} more
+                      <Link href={`/category/${category.slug}`} className="tool-column-link">
+                        + {category.tools.length - 6} more
                       </Link>
                     </li>
                   )}
@@ -104,7 +172,10 @@ export default function ToolsCarousel({ categories, totalTools }) {
             <button
               key={category.slug}
               className={`indicator ${index === currentIndex ? "active" : ""}`}
-              onClick={() => setCurrentIndex(index)}
+              onClick={() => {
+                stopAutoRotate();
+                setCurrentIndex(index);
+              }}
               aria-label={`Go to ${category.name}`}
               aria-current={index === currentIndex ? "true" : "false"}
             />
@@ -129,6 +200,7 @@ export default function ToolsCarousel({ categories, totalTools }) {
         .category-track {
           position: relative;
           min-height: 420px;
+          transition: height 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .category-card {
           position: absolute;
@@ -347,6 +419,9 @@ export default function ToolsCarousel({ categories, totalTools }) {
           .category-card {
             transition: none;
           }
+          .category-track {
+            transition: none;
+          }
           .icon-wrapper,
           .tool-column-link,
           .card-cta,
@@ -355,19 +430,14 @@ export default function ToolsCarousel({ categories, totalTools }) {
           }
         }
         @media (max-width: 768px) {
-          .carousel-btn {
-            display: none;
-          }
-          .category-track {
-            min-height: auto;
-          }
+          /* Keep the one-card-at-a-time carousel on mobile: cards stay
+             absolutely positioned with the fade/scale transition, so only
+             the active card shows. The track height is set from the active
+             card's measured height (see the ResizeObserver effect), and
+             cards are swapped via swipe, the arrows, the dot indicators,
+             or auto-rotate until the first interaction. */
           .category-card {
-            position: relative;
             padding: 24px;
-            min-height: auto;
-            opacity: 1;
-            visibility: visible;
-            transform: none;
           }
           .tools-columns {
             grid-template-columns: 1fr;
@@ -375,6 +445,20 @@ export default function ToolsCarousel({ categories, totalTools }) {
           }
           .card-title {
             font-size: 1.5rem;
+          }
+          /* Left/right arrows stay visible on mobile. The desktop's
+             -24px offsets would sit half-off the viewport on small
+             screens, so they move inside the card edges and get a
+             stronger shadow to stay readable over the card surface. */
+          .carousel-btn {
+            box-shadow: 0 6px 20px
+              color-mix(in srgb, var(--foreground) 28%, transparent);
+          }
+          .carousel-btn-prev {
+            left: 10px;
+          }
+          .carousel-btn-next {
+            right: 10px;
           }
         }
       `}</style>

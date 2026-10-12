@@ -4,19 +4,19 @@ import { getCategories } from "../../lib/pages";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
-  { href: "/about", label: "About" },
+  { href: "/legal-support/about", label: "About" },
   /* Commented out: Premium pricing link
   { href: "/pricing", label: "Pricing" },
   */
-  { href: "/blog", label: "Blog" },
-  { href: "/contact", label: "Contact" },
+  { href: "/legal-support/blog", label: "Blog" },
+  { href: "/legal-support/contact", label: "Contact" },
 ];
 
 const LEGAL_LINKS = [
-  { href: "/privacy", label: "Privacy" },
-  { href: "/terms", label: "Terms" },
-  { href: "/faq", label: "FAQ" },
-  { href: "/docs", label: "Docs" },
+  { href: "/legal-support/privacy", label: "Privacy" },
+  { href: "/legal-support/terms", label: "Terms" },
+  { href: "/legal-support/faq", label: "FAQ" },
+  { href: "/legal-support/docs", label: "Docs" },
 ];
 
 // Shared list renderers so the static desktop columns and the

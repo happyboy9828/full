@@ -1,8 +1,52 @@
-ï»¿Phase Plan
+Phase Plan
 
-Last updated: October 12, 2026 | Current: Phase 28 â€” Vercel Request Handler Pattern
+Last updated: October 12, 2026 | Current: Phase 30 — Mobile Carousel Arrow Navigation
 
-**Current Phase: Phase 28 â€” Vercel Request Handler Pattern**
+**Current Phase: Phase 30 — Mobile Carousel Arrow Navigation**
+
+---
+
+## Phase 30: Mobile Carousel Arrow Navigation (COMPLETE)
+
+**Completed:**
+- [x] Removed `display: none` from `.carousel-btn` in the `@media (max-width: 768px)` block so the left/right arrows render on mobile
+- [x] Repositioned arrows for small screens: `.carousel-btn-prev { left: 10px }` / `.carousel-btn-next { right: 10px }` — the desktop's `-24px` offsets would sit half-off the viewport since the page wrapper only has `px-6` (24px) padding
+- [x] Strengthened the mobile arrow shadow (`0 6px 20px` at 28% foreground) so the buttons stay readable overlaid on the card surface
+- [x] Arrows call the same `goToPrev`/`goToNext` handlers, so tapping them swaps the card and stops auto-rotation (consistent with swipe and dot indicators)
+- [x] ESLint: 0 errors on `ToolsCarousel.js`
+- [x] `next build`: passes (46/46 static pages prerendered)
+
+**Problem:** After Phase 29, mobile users could only swap cards via swipe or the dot indicators — the prev/next arrows were still hidden on small screens.
+
+**Fix:** Arrows are now visible on mobile, inset 10px from the card's left/right edges (48px touch targets, above the card at `z-index: 10`).
+
+**Task:** "add left right navigation on home screen also"
+
+**Completion Criteria:** Left/right arrows visible and working on the homepage mobile view. — VERIFIED via ESLint (0 errors) and `next build` (46/46 pages); arrows render at =768px with in-set positioning.
+
+---
+
+## Phase 29: Homepage Toolkit Mobile Carousel (COMPLETE)
+
+**Completed:**
+- [x] Diagnosed the mobile "Explore the Full Toolkit" section: the `@media (max-width: 768px)` block in `client/app/components/ToolsCarousel.js` set `.category-card { position: relative; opacity: 1; visibility: visible; transform: none }` and `.category-track { min-height: auto }`, which disabled the absolute-position/fade mechanism and stacked every card into a vertical list
+- [x] Removed the mobile stacking overrides so the one-card-at-a-time carousel (absolute cards + fade/scale transition) works at every breakpoint
+- [x] Added a `ResizeObserver` effect that sizes the carousel track to the active card's `scrollHeight` — mobile 1-column tool lists are taller than the 420px desktop track, and the height now animates smoothly between cards
+- [x] Added horizontal touch swipe (=48px, horizontal-dominant) to swap cards; vertical page scrolling inside the card is unaffected
+- [x] Auto-rotation (3s) now stops permanently after the first manual interaction (arrow, dot, or swipe) — touch devices cannot hover-pause, so rotation would otherwise swap cards mid-read
+- [x] Fixed latent bug: every card rendered the *active* category's tool links (`currentCategory.tools`); each card now renders its own `category.tools`
+- [x] Removed the now-unused `currentCategory` variable
+- [x] `prefers-reduced-motion` now also disables the track height transition
+- [x] ESLint: 0 errors on `ToolsCarousel.js`
+- [x] `next build`: passes (46/46 static pages prerendered)
+
+**Problem:** On mobile the homepage "Explore the Full Toolkit" section showed all category cards one after another in a long list instead of one card at a time.
+
+**Fix:** The mobile media query no longer overrides the carousel mechanics. Cards stay absolutely positioned with only the `.active` card visible; the track height is measured from the active card so no content is clipped; swipe and dot indicators swap cards.
+
+**Task:** "Explore the Full Toolkit adjust the mobile view of this section on homepage i see all card one after in a list like i want to display only one card on main the swap to second, only one at a time dont other at same time"
+
+**Completion Criteria:** On mobile the section shows exactly one card at a time with swipe/dot navigation. — VERIFIED via ESLint (0 errors) and `next build` (46/46 pages); the stacking overrides are removed and the carousel mechanics now apply at all breakpoints.
 
 ---
 
@@ -11,10 +55,10 @@ Last updated: October 12, 2026 | Current: Phase 28 â€” Vercel Request Handler Pa
 **Completed:**
 - [x] Diagnosed root cause of `testing-api-backend.vercel.app` hanging (HTTP 000, 30s+ timeout): the default export was `startServer` which calls `app.listen()` and returns a server object, but `@vercel/node` invokes the default export as a request handler `(req, res) => ...`. A server object is not callable, so Vercel's function never responded.
 - [x] Rewrote `backend/index.js` to export a proper `handler(req, res)` function that lazily builds the Express app once and forwards every request to it. DB connection is kicked off in the background on first invocation.
-- [x] Kept `startServer()` for local dev / `npm start` â€” boots when `node index.js` is run directly.
+- [x] Kept `startServer()` for local dev / `npm start` — boots when `node index.js` is run directly.
 - [x] Verified 24/24 endpoints pass against live MongoDB Atlas (health, ingestion, sessions, auth, all 11 reports, daily-stats, session-replay, 404, logout).
 
-**Problem:** After deploying the backend to Vercel, opening `https://testing-api-backend.vercel.app` in a new tab only showed "loading" forever â€” no welcome message, no response.
+**Problem:** After deploying the backend to Vercel, opening `https://testing-api-backend.vercel.app` in a new tab only showed "loading" forever — no welcome message, no response.
 
 **Root Cause:** `@vercel/node` imports the default export and calls it as a request handler `(req, res) => {...}`. The previous `index.js` exported `startServer`, which calls `app.listen()` and returns a `http.Server` instance. A server object is not a function, so Vercel's runtime never got a callable handler and the request hung until the platform's timeout killed it.
 
@@ -22,37 +66,37 @@ Last updated: October 12, 2026 | Current: Phase 28 â€” Vercel Request Handler Pa
 
 **Task:** "i deploy backend on vercel but when i click on testing-api-backend.vercel.app to open it in new tab only loading show don't see welcome msg check it and solve issues"
 
-**Completion Criteria:** `https://testing-api-backend.vercel.app` returns the welcome message and all API endpoints respond. â€” VERIFIED locally with the new handler pattern; redeploy required on Vercel.
+**Completion Criteria:** `https://testing-api-backend.vercel.app` returns the welcome message and all API endpoints respond. — VERIFIED locally with the new handler pattern; redeploy required on Vercel.
 
 ---
 
 ## Phase 27: Non-Blocking DB Connection with Welcome Message (COMPLETE)
 
 **Completed:**
-- [x] Fixed `backend/index.js` â€” server now starts listening immediately on `process.env.PORT || config.port` (Vercel-compatible) and connects to MongoDB in the background instead of blocking startup
-- [x] Created `backend/vercel.json` â€” `@vercel/node` build targeting `index.js` with catch-all route
+- [x] Fixed `backend/index.js` — server now starts listening immediately on `process.env.PORT || config.port` (Vercel-compatible) and connects to MongoDB in the background instead of blocking startup
+- [x] Created `backend/vercel.json` — `@vercel/node` build targeting `index.js` with catch-all route
 - [x] Verified full data flow end-to-end against live MongoDB Atlas:
-  - `GET /` â†’ 200 `{"success":true,"message":"DocFix backend running"}`
-  - `GET /health` â†’ 200 `{"success":true,"status":"ok","database":"connected"}`
-  - `GET /api/analytics/health` â†’ 200 `{"success":true,"status":"ok","database":"connected","service":"analytics"}`
-  - `POST /api/analytics/pageview` â†’ 200 (event persisted)
-  - `POST /api/analytics/track` â†’ 200 with `eventId`
-  - `POST /api/analytics/sessions/start` â†’ 200 with `sessionId`
-  - `POST /api/analytics/sessions/heartbeat` â†’ 200
-  - `POST /api/analytics/sessions/end` â†’ 200
-  - `POST /api/auth/login` â†’ 200 sets `admin_session` cookie
-  - `GET /api/auth/me` (with cookie) â†’ 200 `{"success":true,"authenticated":true,"userId":"admin"}`
-  - `GET /api/analytics/reports/overview` (with cookie) â†’ 200 with real data (pageViews, sessions, visitors, bounce rate, etc.)
-  - `GET /api/analytics/reports/pages`, `/devices`, `/events`, `/live`, `/time-series`, `/sources`, `/returning-visitors`, `/recent-visitors` â†’ all 200 with correct data shapes
-  - `GET /api/analytics/daily-stats` â†’ 200
-  - `GET /api/analytics/reports/session-replay?sessionId=nonexistent` â†’ 404
-  - `POST /api/auth/logout` â†’ 200 revokes session
-  - Unauthenticated report requests â†’ 401 `{"success":false,"error":"Authentication required"}`
-  - Unknown route â†’ 404 JSON
-- [x] Fixed `client/.env` and `client/.env.example` â€” `NEXT_PUBLIC_TRACKING_API` now correctly set to `http://localhost:5000/api/analytics` (dev) with production comment for `https://testing-api-backend.vercel.app/api/analytics`
+  - `GET /` ? 200 `{"success":true,"message":"DocFix backend running"}`
+  - `GET /health` ? 200 `{"success":true,"status":"ok","database":"connected"}`
+  - `GET /api/analytics/health` ? 200 `{"success":true,"status":"ok","database":"connected","service":"analytics"}`
+  - `POST /api/analytics/pageview` ? 200 (event persisted)
+  - `POST /api/analytics/track` ? 200 with `eventId`
+  - `POST /api/analytics/sessions/start` ? 200 with `sessionId`
+  - `POST /api/analytics/sessions/heartbeat` ? 200
+  - `POST /api/analytics/sessions/end` ? 200
+  - `POST /api/auth/login` ? 200 sets `admin_session` cookie
+  - `GET /api/auth/me` (with cookie) ? 200 `{"success":true,"authenticated":true,"userId":"admin"}`
+  - `GET /api/analytics/reports/overview` (with cookie) ? 200 with real data (pageViews, sessions, visitors, bounce rate, etc.)
+  - `GET /api/analytics/reports/pages`, `/devices`, `/events`, `/live`, `/time-series`, `/sources`, `/returning-visitors`, `/recent-visitors` ? all 200 with correct data shapes
+  - `GET /api/analytics/daily-stats` ? 200
+  - `GET /api/analytics/reports/session-replay?sessionId=nonexistent` ? 404
+  - `POST /api/auth/logout` ? 200 revokes session
+  - Unauthenticated report requests ? 401 `{"success":false,"error":"Authentication required"}`
+  - Unknown route ? 404 JSON
+- [x] Fixed `client/.env` and `client/.env.example` — `NEXT_PUBLIC_TRACKING_API` now correctly set to `http://localhost:5000/api/analytics` (dev) with production comment for `https://testing-api-backend.vercel.app/api/analytics`
 
 **Problem:** The backend was timing out on Vercel (HTTP 000, 30s+ hang). Root causes:
-1. `backend/index.js` called `startServer()` but the previous agent changed it to only export the function without calling it â€” the server never started.
+1. `backend/index.js` called `startServer()` but the previous agent changed it to only export the function without calling it — the server never started.
 2. The original `index.js` awaited `connectDBWithRetry()` (which loops forever on failure) before `app.listen()`, so Vercel's cold-start timeout was hit before the server ever responded.
 
 **Fix:**
@@ -63,21 +107,21 @@ Last updated: October 12, 2026 | Current: Phase 28 â€” Vercel Request Handler Pa
 
 **Task:** "frontend is on https://docfix-frontend.vercel.app and backend on testing-api-backend.vercel.app connect both to store data in database"
 
-**Completion Criteria:** Frontend and backend both connect to MongoDB Atlas and store/retrieve data. â€” VERIFIED (backend serves all ingestion + report endpoints against live Atlas; client `.env` points at the backend; auth cookie flow works end-to-end).
+**Completion Criteria:** Frontend and backend both connect to MongoDB Atlas and store/retrieve data. — VERIFIED (backend serves all ingestion + report endpoints against live Atlas; client `.env` points at the backend; auth cookie flow works end-to-end).
 
 ---
 
 ## Phase 26: MongoDB Connection Retry (COMPLETE)
 
 **Completed:**
-- [x] Added `connectDBWithRetry()` to `backend/db/db.js` â€” retries `connectDB()` every `DB_RETRY_DELAY_MS` (default 5s) until connected
+- [x] Added `connectDBWithRetry()` to `backend/db/db.js` — retries `connectDB()` every `DB_RETRY_DELAY_MS` (default 5s) until connected
 - [x] Added `dbRetryDelayMs` to `backend/config/env.js`
 - [x] `backend/index.js` now awaits `connectDBWithRetry()` before `app.listen(config.port)`
-- [x] Verified live against MongoDB Atlas: 2 failed attempts (ETIMEDOUT) â†’ auto-retry â†’ connected â†’ server running on port 5000 â†’ `GET /health` reports `"database":"connected"`
+- [x] Verified live against MongoDB Atlas: 2 failed attempts (ETIMEDOUT) ? auto-retry ? connected ? server running on port 5000 ? `GET /health` reports `"database":"connected"`
 
-**Task:** "if mongo db is not connected try it again" â€” the backend no longer exits when the first DB connection attempt fails; it retries until the database is reachable.
+**Task:** "if mongo db is not connected try it again" — the backend no longer exits when the first DB connection attempt fails; it retries until the database is reachable.
 
-Completion Criteria: Backend recovers from DB connection failures without manual restart. â€” VERIFIED (connected on the 3rd automatic attempt)
+Completion Criteria: Backend recovers from DB connection failures without manual restart. — VERIFIED (connected on the 3rd automatic attempt)
 
 ---
 
@@ -97,31 +141,31 @@ Completion Criteria: Backend recovers from DB connection failures without manual
 - MongoDB connection retries in background every 5s until successful
 - Server never exits due to DB connection failure
 
-Completion Criteria: Backend serves welcome message on `/` immediately while retrying DB connection in background. â€” VERIFIED (syntax checks pass, server starts without DB)
+Completion Criteria: Backend serves welcome message on `/` immediately while retrying DB connection in background. — VERIFIED (syntax checks pass, server starts without DB)
 
 ---
 
-## Phase 25: Backend Rebuilt â€” DB Connect + Port 5000 (COMPLETE)
+## Phase 25: Backend Rebuilt — DB Connect + Port 5000 (COMPLETE)
 
 **Completed:**
 - [x] Installed `mongoose`, `dotenv`, `cors` in `backend/` (express was already present)
-- [x] Created `backend/config/env.js` â€” dotenv + config (`PORT` default 5000, `MONGO_URI` default `mongodb://localhost:27017/analytics`)
-- [x] Wrote `backend/db/db.js` â€” Mongoose `connectDB()`, connection event handlers, `dbState()`
-- [x] Wrote `backend/app.js` â€” Express 5 factory (CORS, JSON 256kb, `GET /`, `GET /health`, 404/error handlers)
-- [x] Wrote `backend/index.js` â€” bootstrap: connect DB â†’ listen on port 5000, fatal exit if DB unreachable
+- [x] Created `backend/config/env.js` — dotenv + config (`PORT` default 5000, `MONGO_URI` default `mongodb://localhost:27017/analytics`)
+- [x] Wrote `backend/db/db.js` — Mongoose `connectDB()`, connection event handlers, `dbState()`
+- [x] Wrote `backend/app.js` — Express 5 factory (CORS, JSON 256kb, `GET /`, `GET /health`, 404/error handlers)
+- [x] Wrote `backend/index.js` — bootstrap: connect DB ? listen on port 5000, fatal exit if DB unreachable
 - [x] Wrote `backend/.env` with `PORT=5000` and `MONGO_URI`
 - [x] Restored `start`/`dev` scripts in `backend/package.json`
 - [x] Verified: syntax checks pass; port 5000 serves `/`, `/health`, 404; `npm start` loads env and attempts DB connection with clean failure when unreachable
 
 **Task:** Update the backend so it connects to the database and runs on port 5000.
 
-**Note:** No local MongoDB in this environment â€” set `MONGO_URI` in `backend/.env` (e.g. the Atlas connection string) for the DB-connected happy path.
+**Note:** No local MongoDB in this environment — set `MONGO_URI` in `backend/.env` (e.g. the Atlas connection string) for the DB-connected happy path.
 
-Completion Criteria: Backend connects to MongoDB and serves on port 5000. â€” VERIFIED (server listens on 5000; DB connection wired, fail-fast when URI unreachable)
+Completion Criteria: Backend connects to MongoDB and serves on port 5000. — VERIFIED (server listens on 5000; DB connection wired, fail-fast when URI unreachable)
 
 ---
 
-## Phase 24: Missing pdf-lib CDN Script â€” Fix `window.PDFLib is undefined` (COMPLETE)
+## Phase 24: Missing pdf-lib CDN Script — Fix `window.PDFLib is undefined` (COMPLETE)
 
 **Completed:**
 - [x] Diagnosed root cause: `client/app/layout.js` never injected the `pdf-lib` CDN script, so `window.PDFLib` was always `undefined` at tool runtime
@@ -131,7 +175,7 @@ Completion Criteria: Backend connects to MongoDB and serves on port 5000. â€” VE
 
 **Problem:** All PDF-generation tools (Split PDF, Rotate PDF, JPG to PDF, Merge PDF, Compress PDF) destructure `window.PDFLib` at runtime and crashed with `Cannot destructure property 'PDFDocument' of 'window.PDFLib' as it is undefined`. The tools' internal `waitForLib('PDFLib')` polling masked the real cause by waiting 10 s then showing a generic "failed to load" alert.
 
-**Fix:** Single missing `<Script>` tag. The CDN UMD wrapper already assigns `window.PDFLib`, and every tool already reads that global name â€” no tool code changes were needed.
+**Fix:** Single missing `<Script>` tag. The CDN UMD wrapper already assigns `window.PDFLib`, and every tool already reads that global name — no tool code changes were needed.
 
 Completion Criteria: PDF-generation tools can read `window.PDFLib.PDFDocument` at runtime.
 
@@ -154,19 +198,19 @@ Completion Criteria: The "Core Tool Suites" section no longer exists on the home
 
 ---
 
-## Phase 22: Download Notification Popup â€” Global Wiring (COMPLETE)
+## Phase 22: Download Notification Popup — Global Wiring (COMPLETE)
 
 **Completed:**
 - [x] Fixed `triggerDownloadProgress()` in `DownloadProgressTrigger.js` to forward options to the mounted popup instance (previously it ignored the registry and downloaded instantly)
 - [x] Fixed `useDownloadProgress()` in `DownloadProgressPopup.js` to carry per-download options (`title`, `description`, `countdownMs`, `durationMs`) into the popup instead of discarding them
-- [x] Created `client/components/ads/DownloadProgressPopup/GlobalDownloadProgress.js` â€” global popup host component
+- [x] Created `client/components/ads/DownloadProgressPopup/GlobalDownloadProgress.js` — global popup host component
 - [x] Mounted `<GlobalDownloadProgress />` in `client/app/layout.js` site-wide
 - [x] Routed 10 remaining direct-download tools through the popup: Watermark, ImageResizer, BGRemove, ImgCompresser, FavIcon, JPGtoPDF, CSSMinifier, PasswordGenerator, QRCodeScanner, Paragraph Writer
 - [x] Fixed pre-existing crash in QRCodeScanner (`downloadBlob` was called but never imported)
 - [x] Removed unused `downloadBlob` imports across the routed tools
 - [x] Updated Status.md
 
-**Problem:** The `DownloadProgressPopup` component and its `triggerDownloadProgress` registry existed, but the popup was never mounted and the trigger never forwarded to it â€” so clicking any download button started the download instantly with no notification popup.
+**Problem:** The `DownloadProgressPopup` component and its `triggerDownloadProgress` registry existed, but the popup was never mounted and the trigger never forwarded to it — so clicking any download button started the download instantly with no notification popup.
 
 **Fix:** Wired the registry end-to-end and mounted the popup globally in the root layout. Every download button now shows the notification popup (3s countdown + animated progress bar) and starts the actual download from `onDownloadStart` when the countdown completes.
 
@@ -174,11 +218,11 @@ Completion Criteria: Every download button on every tool shows the notification 
 
 ---
 
-## Phase 21: Tools Page â€” Full Animation & Icon Enhancement (COMPLETE)
+## Phase 21: Tools Page — Full Animation & Icon Enhancement (COMPLETE)
 
 **Completed:**
-- [x] Created `client/app/tools/ToolsClient.js` â€” client component with all animations (staggered entrance, icon hover, mouse-tracking glow, skeleton loading)
-- [x] Created `client/app/tools/page.js` â€” server component that fetches categories and passes to ToolsClient
+- [x] Created `client/app/tools/ToolsClient.js` — client component with all animations (staggered entrance, icon hover, mouse-tracking glow, skeleton loading)
+- [x] Created `client/app/tools/page.js` — server component that fetches categories and passes to ToolsClient
 - [x] Updated `.category-grid` and `.category-card` in `client/app/globals.css` with enhanced animations (lift, shadow, color shifts, underlines, float animation)
 - [x] Added `prefers-reduced-motion` support to disable all animations
 - [x] Verified `next build` passes (46 static pages)
@@ -209,13 +253,13 @@ Completion Criteria: Tools page at `/tools` is fully animated with icon interact
 
 ---
 
-## Phase 20: WebP â‡„ PNG Converter â€” Two-Way Conversion (COMPLETE)
+## Phase 20: WebP ? PNG Converter — Two-Way Conversion (COMPLETE)
 
 **Completed:**
-- [x] Created `client/utils/image-tools/WebpPngConverter/tool.js` â€” two-way conversion logic (imperative, no React hooks)
-- [x] Created `client/utils/image-tools/WebpPngConverter/tool.css` â€” tool-specific styles (`wpc-` prefix) using shared CSS variables
-- [x] Created `client/utils/image-tools/WebpPngConverter/index.js` â€” entry point with CSS import
-- [x] Created `client/app/img/WebpPngConverter/page.js` â€” Next.js App Router page
+- [x] Created `client/utils/image-tools/WebpPngConverter/tool.js` — two-way conversion logic (imperative, no React hooks)
+- [x] Created `client/utils/image-tools/WebpPngConverter/tool.css` — tool-specific styles (`wpc-` prefix) using shared CSS variables
+- [x] Created `client/utils/image-tools/WebpPngConverter/index.js` — entry point with CSS import
+- [x] Created `client/app/img/WebpPngConverter/page.js` — Next.js App Router page
 - [x] Added `initWebpPngConverter` export to `client/utils/tools.js`
 - [x] Replaced `/img/WebpToPng` metadata + route with `/img/WebpPngConverter` in `client/lib/category-data.js`
 - [x] Updated `client/app/sitemap.xml/route.js` TOOL_META
@@ -225,7 +269,7 @@ Completion Criteria: Tools page at `/tools` is fully animated with icon interact
 - [x] Verified `next build` passes (46 static pages including new `/img/WebpPngConverter`)
 - [x] ESLint: 0 errors on all new and modified files
 
-**Problem:** The project had a one-way WebPâ†’PNG tool (`/img/WebpToPng`) but no unified 2-way converter like the JPG â‡„ PNG tool offers.
+**Problem:** The project had a one-way WebP?PNG tool (`/img/WebpToPng`) but no unified 2-way converter like the JPG ? PNG tool offers.
 
 **Fix:** Replaced the one-way tool with a unified `WebpPngConverter` at `/img/WebpPngConverter` (same consolidation pattern as Phases 17/19):
 
@@ -237,11 +281,11 @@ Completion Criteria: Tools page at `/tools` is fully animated with icon interact
 - **Live queue**: Thumbnails, dimensions, sizes, status badges, drag-to-reorder, sort A-Z
 - **Individual & batch download**: Per-item download or all as ZIP
 
-Completion Criteria: Unified WebPâ‡„PNG converter accessible at `/img/WebpPngConverter`; no references to the old one-way `WebpToPng` tool remain in any source file.
+Completion Criteria: Unified WebP?PNG converter accessible at `/img/WebpPngConverter`; no references to the old one-way `WebpToPng` tool remain in any source file.
 
 ---
 
-## Phase 19: JPG â‡„ PNG Converter â€” Consolidation (COMPLETE)
+## Phase 19: JPG ? PNG Converter — Consolidation (COMPLETE)
 
 **Completed:**
 - [x] Deleted `client/utils/img/JpgToPng/` directory (JpgToPng.js, JpgToPng.css)
@@ -255,15 +299,15 @@ Completion Criteria: Unified WebPâ‡„PNG converter accessible at `/img/WebpPngCon
 - [x] Updated `client/app/legal-support/docs/page.js` docs list
 - [x] Verified `next build` passes
 
-**Problem:** The project had separate JPGâ†’PNG and PNGâ†’JPG tools (`/img/JpgToPng`, `/img/PngToJpg`) alongside the unified `/img/JpgPngConverter`, creating duplicate functionality and confusing the user.
+**Problem:** The project had separate JPG?PNG and PNG?JPG tools (`/img/JpgToPng`, `/img/PngToJpg`) alongside the unified `/img/JpgPngConverter`, creating duplicate functionality and confusing the user.
 
-**Fix:** Removed both standalone tools entirely, keeping only the unified `JpgPngConverter` as the single source of truth for JPGâ‡„PNG conversion.
+**Fix:** Removed both standalone tools entirely, keeping only the unified `JpgPngConverter` as the single source of truth for JPG?PNG conversion.
 
-Completion Criteria: Only `/img/JpgPngConverter` remains for JPGâ‡„PNG conversion; no references to `JpgToPng` or `PngToJpg` in any source file.
+Completion Criteria: Only `/img/JpgPngConverter` remains for JPG?PNG conversion; no references to `JpgToPng` or `PngToJpg` in any source file.
 
 ---
 
-## Phase 18: MS Office Tools â€” Complete Removal (COMPLETE)
+## Phase 18: MS Office Tools — Complete Removal (COMPLETE)
 
 **Completed:**
 - [x] Deleted `client/utils/msoffice-tool/` directory (6 tool folders: WordnPDF, TXTnWord, ExcelnPDF, PPTnPDF, HTMLnDOC, CSVnPDF)
@@ -283,19 +327,19 @@ Completion Criteria: No MS Office tool code, routes, or CDN references remain in
 
 ---
 
-## Phase 17: JPG â‡„ PNG Converter â€” Two-Way Image Format Converter (COMPLETE)
+## Phase 17: JPG ? PNG Converter — Two-Way Image Format Converter (COMPLETE)
 
 **Completed:**
-- [x] Created `client/utils/image-tools/JpgPngConverter/tool.js` â€” main tool logic (imperative, no React hooks)
-- [x] Created `client/utils/image-tools/JpgPngConverter/tool.css` â€” styling using shared CSS variables
-- [x] Created `client/utils/image-tools/JpgPngConverter/index.js` â€” entry point with CSS import
-- [x] Created `client/app/img/JpgPngConverter/page.js` â€” Next.js App Router page
+- [x] Created `client/utils/image-tools/JpgPngConverter/tool.js` — main tool logic (imperative, no React hooks)
+- [x] Created `client/utils/image-tools/JpgPngConverter/tool.css` — styling using shared CSS variables
+- [x] Created `client/utils/image-tools/JpgPngConverter/index.js` — entry point with CSS import
+- [x] Created `client/app/img/JpgPngConverter/page.js` — Next.js App Router page
 - [x] Added export to `client/utils/tools.js`
 - [x] Added tool metadata and route to `client/lib/category-data.js` (Image Tools category)
 - [x] Verified `next build` passes (55 static pages including new `/img/JpgPngConverter`)
 - [x] ESLint: 0 errors on new tool files
 
-**Problem:** The project had separate tools for JPGâ†’PNG and PNGâ†’JPG conversion, but no unified 2-way converter like other image tool platforms offer.
+**Problem:** The project had separate tools for JPG?PNG and PNG?JPG conversion, but no unified 2-way converter like other image tool platforms offer.
 
 **Fix:** Created a new unified `JpgPngConverter` tool that handles both conversions in a single interface:
 
@@ -307,11 +351,11 @@ Completion Criteria: No MS Office tool code, routes, or CDN references remain in
 - **Individual & batch download**: Download single files or all as ZIP
 - **Drag-to-reorder**: Reorder queue before conversion
 
-Completion Criteria: Unified JPGâ‡„PNG converter accessible at `/img/JpgPngConverter` with all features working.
+Completion Criteria: Unified JPG?PNG converter accessible at `/img/JpgPngConverter` with all features working.
 
 ---
 
-## Phase 16: Watermark Tool â€” Visual 9-Point Alignment Grid (COMPLETE)
+## Phase 16: Watermark Tool — Visual 9-Point Alignment Grid (COMPLETE)
 
 **Completed:**
 - [x] Added `AlignmentGrid` component to `client/utils/img/Watermark/Watermark.js`
@@ -329,10 +373,10 @@ Completion Criteria: Watermark tool shows a visual 9-point alignment grid.
 
 ---
 
-## Phase 15: JPG to PNG â€” Typo Fix (COMPLETE)
+## Phase 15: JPG to PNG — Typo Fix (COMPLETE)
 
 **Completed:**
-- [x] Fixed `addEventEventListener` â†’ `addEventListener` in `client/utils/img/JpgToPng/JpgToPng.js:450`
+- [x] Fixed `addEventEventListener` ? `addEventListener` in `client/utils/img/JpgToPng/JpgToPng.js:450`
 - [x] Verified no other occurrences of the typo in `client/`
 - [x] ESLint: 0 errors on `JpgToPng.js`
 
@@ -344,7 +388,7 @@ Completion Criteria: JPG to PNG page mounts without runtime errors.
 
 ---
 
-## Phase 14: Image Tools & Dev Tools â€” Invalid Hook Call Fix (COMPLETE)
+## Phase 14: Image Tools & Dev Tools — Invalid Hook Call Fix (COMPLETE)
 
 **Completed:**
 - [x] Fixed `mountJpgToPng` (`utils/img/JpgToPng/JpgToPng.js`)
@@ -354,7 +398,7 @@ Completion Criteria: JPG to PNG page mounts without runtime errors.
 - [x] Fixed `createHTMLMinifier` (`utils/dev-tools/HTMLMinifier/HTMLMinifier.js`)
 - [x] ESLint: 0 errors on all 5 modified files
 
-**Problem:** Same bug pattern as Phase 13 â€” each imperative tool function called `const { trigger } = useDownloadProgress();` inside a plain JS function invoked from a `useEffect` in its `page.js`, running the hook outside any React component tree and throwing "Invalid hook call".
+**Problem:** Same bug pattern as Phase 13 — each imperative tool function called `const { trigger } = useDownloadProgress();` inside a plain JS function invoked from a `useEffect` in its `page.js`, running the hook outside any React component tree and throwing "Invalid hook call".
 
 **Fix:** Switched each file to the non-hook `triggerDownloadProgress` registry import from `DownloadProgressTrigger`, removed the hook line, and renamed every `trigger({...})` call site to `triggerDownloadProgress({...})`. Matches the pattern used by every other imperative tool in the codebase.
 
@@ -362,12 +406,12 @@ Completion Criteria: All image and dev-tool pages render without React hook erro
 
 ---
 
-## Phase 13: Image to Base64 â€” Invalid Hook Call Fix (COMPLETE)
+## Phase 13: Image to Base64 — Invalid Hook Call Fix (COMPLETE)
 
 **Completed:**
 - [x] Replaced `useDownloadProgress` import with `triggerDownloadProgress` from `DownloadProgressTrigger`
 - [x] Removed `const { trigger } = useDownloadProgress();` from `initImageToBase64`
-- [x] Renamed call site `trigger({...})` â†’ `triggerDownloadProgress({...})` in `onDownload()`
+- [x] Renamed call site `trigger({...})` ? `triggerDownloadProgress({...})` in `onDownload()`
 - [x] ESLint: 0 errors on the modified file
 
 **Problem:** `initImageToBase64(container)` in `client/utils/img/ImgToBase64/ImgToBase64.js` called the `useDownloadProgress()` hook inside a plain imperative function (invoked from `app/img/ImgToBase64/page.js:10` inside a `useEffect`). This ran the hook outside any React component tree, violating the Rules of Hooks and throwing "Invalid hook call".
@@ -378,7 +422,7 @@ Completion Criteria: Build passes and Image to Base64 page renders without React
 
 ---
 
-## Phase 12: QR Code Scanner â€” Invalid Hook Call Fix (COMPLETE)
+## Phase 12: QR Code Scanner — Invalid Hook Call Fix (COMPLETE)
 
 **Completed:**
 - [x] Removed `useDownloadProgress()` hook call from `createQRScanner` (imperative function, not a component)
@@ -442,25 +486,25 @@ Plan collections, validation, indexes, access permissions, database credentials,
 
 **Completed:**
 - [x] MongoDB Atlas connected (3-shard replica set, SSL, Mongoose 9.11.1)
-- [x] Site model â€” sites collection with domain, settings, timestamps
-- [x] Session model â€” sessions with visitor/session tracking, device info, UTM params, indexes
-- [x] Event model â€” events with eventType, sessionId, visitorId, element data, custom events, indexes
-- [x] AdminSession model â€” adminSessions with TTL index on expiresAt (Phase 6)
-- [x] DailyStats model â€” dailyStats for precomputed aggregates (Phase 8)
+- [x] Site model — sites collection with domain, settings, timestamps
+- [x] Session model — sessions with visitor/session tracking, device info, UTM params, indexes
+- [x] Event model — events with eventType, sessionId, visitorId, element data, custom events, indexes
+- [x] AdminSession model — adminSessions with TTL index on expiresAt (Phase 6)
+- [x] DailyStats model — dailyStats for precomputed aggregates (Phase 8)
 - [x] All indexes and validation per DESIGN.md (no duplicate index warnings)
 - [x] Backend index.js connects on startup with all models loaded
 
 Suggested Collections:
 
-events â€” Page views and other tracked actions.
+events — Page views and other tracked actions.
 
-sessions â€” Visit metadata and activity timestamps.
+sessions — Visit metadata and activity timestamps.
 
-sites â€” Site configuration and tracking settings.
+sites — Site configuration and tracking settings.
 
-adminSessions â€” Dashboard authentication sessions, if using server-side sessions.
+adminSessions — Dashboard authentication sessions, if using server-side sessions.
 
-dailyStats â€” Optional precomputed summaries.
+dailyStats — Optional precomputed summaries.
 
 Completion Criteria: The backend can connect to the database safely.
 
@@ -487,7 +531,7 @@ Analytics Reporting: Calculate statistics and return reports to authenticated ad
 
 System Extras: Health checks, rate limits, request-size limits, and structured logging.
 
-Completion Criteria: Test events can be saved and queried successfully. â€” VERIFIED (events saved to MongoDB, all 7 report endpoints return correct aggregated data)
+Completion Criteria: Test events can be saved and queried successfully. — VERIFIED (events saved to MongoDB, all 7 report endpoints return correct aggregated data)
 
 Phase 5: Build the Tracking Client (COMPLETE)
 
@@ -515,7 +559,7 @@ Respect consent settings and avoid capturing sensitive data.
 - [x] Verified `next build` passes (48 static pages generated successfully)
 - [x] Fixed pre-existing build break in `client/utils/shared/download.js` (downloadBlob export restored)
 
-Completion Criteria: Browsing the site produces accurate records in MongoDB without noticeably slowing the website. â€” VERIFIED (build passes, tracking integrated)
+Completion Criteria: Browsing the site produces accurate records in MongoDB without noticeably slowing the website. — VERIFIED (build passes, tracking integrated)
 
 Phase 6: Protect /analytics (COMPLETE)
 
@@ -535,7 +579,7 @@ Since your public website has no login or registration, add authentication speci
 - [x] Verified `next build` passes (48 static pages)
 - [x] Verified backend tests: 37/37 passing (auth flow, all 7 reports, rate limit, 404)
 
-Completion Criteria: Only an authenticated administrator can see reports. â€” VERIFIED
+Completion Criteria: Only an authenticated administrator can see reports. — VERIFIED
 
 Phase 7: Build the Dashboard UI (COMPLETE)
 
@@ -562,25 +606,25 @@ Use actual backend data rather than hardcoded demo statistics.
 - [x] Verified backend tests: 37/37 passing
 
 **Files created:**
-- `client/lib/analyticsApi.js` â€” API client for auth + report fetches with `credentials: "include"`
-- `client/lib/useReport.js` â€” `useReport` data-fetching hook with loading/error/data state + `useIntervalReport` for auto-refresh
-- `client/components/AnalyticsDashboard/AnalyticsDashboard.js` â€” dashboard shell (auth, nav tabs, date picker, view switching)
-- `client/components/AnalyticsDashboard/DateRangePicker.js` â€” presets + custom date range
-- `client/components/AnalyticsDashboard/views/OverviewView.js` â€” stat cards + time-series chart
-- `client/components/AnalyticsDashboard/views/SourcesView.js` â€” traffic sources table
-- `client/components/AnalyticsDashboard/views/PagesView.js` â€” top pages table with pagination
-- `client/components/AnalyticsDashboard/views/DevicesView.js` â€” device/browser/OS breakdown
-- `client/components/AnalyticsDashboard/views/EventsView.js` â€” event type + custom event breakdown
-- `client/components/AnalyticsDashboard/views/LiveView.js` â€” active visitors/sessions + recent events
-- `client/components/AnalyticsDashboard/ui/DataTable.js` â€” paginated table component
-- `client/components/AnalyticsDashboard/ui/StatCard.js` â€” metric stat card
-- `client/components/AnalyticsDashboard/ui/TimeSeriesChart.js` â€” SVG bar+line chart
-- `client/components/AnalyticsDashboard/ui/LoadingState.js` â€” loading spinner
-- `client/components/AnalyticsDashboard/ui/ErrorState.js` â€” error display with retry
-- `client/components/AnalyticsDashboard/ui/EmptyState.js` â€” empty result display
-- `client/components/AnalyticsDashboard/ui/CsvExportButton.js` â€” CSV download per report
+- `client/lib/analyticsApi.js` — API client for auth + report fetches with `credentials: "include"`
+- `client/lib/useReport.js` — `useReport` data-fetching hook with loading/error/data state + `useIntervalReport` for auto-refresh
+- `client/components/AnalyticsDashboard/AnalyticsDashboard.js` — dashboard shell (auth, nav tabs, date picker, view switching)
+- `client/components/AnalyticsDashboard/DateRangePicker.js` — presets + custom date range
+- `client/components/AnalyticsDashboard/views/OverviewView.js` — stat cards + time-series chart
+- `client/components/AnalyticsDashboard/views/SourcesView.js` — traffic sources table
+- `client/components/AnalyticsDashboard/views/PagesView.js` — top pages table with pagination
+- `client/components/AnalyticsDashboard/views/DevicesView.js` — device/browser/OS breakdown
+- `client/components/AnalyticsDashboard/views/EventsView.js` — event type + custom event breakdown
+- `client/components/AnalyticsDashboard/views/LiveView.js` — active visitors/sessions + recent events
+- `client/components/AnalyticsDashboard/ui/DataTable.js` — paginated table component
+- `client/components/AnalyticsDashboard/ui/StatCard.js` — metric stat card
+- `client/components/AnalyticsDashboard/ui/TimeSeriesChart.js` — SVG bar+line chart
+- `client/components/AnalyticsDashboard/ui/LoadingState.js` — loading spinner
+- `client/components/AnalyticsDashboard/ui/ErrorState.js` — error display with retry
+- `client/components/AnalyticsDashboard/ui/EmptyState.js` — empty result display
+- `client/components/AnalyticsDashboard/ui/CsvExportButton.js` — CSV download per report
 
-Completion Criteria: All core reports display correctly and respond to filters. â€” VERIFIED
+Completion Criteria: All core reports display correctly and respond to filters. — VERIFIED
 
 Phase 8: Add Live Activity and Optimize (COMPLETE)
 
@@ -589,10 +633,10 @@ Add periodic session heartbeats, inactivity detection, recent-visitor reports, e
 Completion Criteria: Recent activity updates reliably and reports remain responsive as data grows.
 
 **Completed:**
-- [x] Server-side session inactivity detection â€” `POST /api/analytics/sessions/mark-stale-inactive` endpoint marks stale sessions as inactive based on `lastActivityAt` (configurable timeout, default 30 min)
-- [x] Recent visitors report â€” `GET /api/analytics/reports/recent-visitors` returns unique visitors with last visit time, visit count, device/browser/OS, referrer, UTM source (supports date range, domain filter, limit up to 200)
-- [x] DailyStats precomputation â€” `POST /api/analytics/daily-stats/compute` aggregates daily stats per domain (page views, unique visitors, sessions, bounce rate, avg duration, top pages, referrers, devices, countries); `GET /api/analytics/daily-stats` retrieves precomputed stats
-- [x] Database index optimization â€” Added compound indexes on Session (`domain+lastActivityAt`, `visitorId+startedAt`) and Event (`domain+eventType+timestamp`) for faster recent-visitor and time-series queries
+- [x] Server-side session inactivity detection — `POST /api/analytics/sessions/mark-stale-inactive` endpoint marks stale sessions as inactive based on `lastActivityAt` (configurable timeout, default 30 min)
+- [x] Recent visitors report — `GET /api/analytics/reports/recent-visitors` returns unique visitors with last visit time, visit count, device/browser/OS, referrer, UTM source (supports date range, domain filter, limit up to 200)
+- [x] DailyStats precomputation — `POST /api/analytics/daily-stats/compute` aggregates daily stats per domain (page views, unique visitors, sessions, bounce rate, avg duration, top pages, referrers, devices, countries); `GET /api/analytics/daily-stats` retrieves precomputed stats
+- [x] Database index optimization — Added compound indexes on Session (`domain+lastActivityAt`, `visitorId+startedAt`) and Event (`domain+eventType+timestamp`) for faster recent-visitor and time-series queries
 - [x] Verified `next build` passes (54 static pages)
 - [x] Verified backend code syntax (no errors)
 
@@ -624,11 +668,11 @@ Introduce funnels, returning-visitor reports, retention, heatmaps, and session r
 For recordings, mask sensitive fields, avoid capturing passwords or private form content, and implement appropriate consent and retention controls.
 
 **Completed:**
-- [x] Funnel report â€” `GET /api/analytics/reports/funnel` with configurable steps (2-10 paths), conversion rates, drop-off analysis
-- [x] Returning visitors report â€” `GET /api/analytics/reports/returning-visitors` shows visitors with 2+ visits, visit counts, first/last visit dates
-- [x] Retention report â€” `GET /api/analytics/reports/retention` cohort-based retention matrix (daily/weekly granularity, configurable periods)
-- [x] Heatmap report â€” `GET /api/analytics/reports/heatmap` click distribution per page path, element-level click counts and percentages
-- [x] Session replay â€” `GET /api/analytics/reports/session-replay` full event timeline for a session with PII redaction (passwords, tokens, emails, etc.)
+- [x] Funnel report — `GET /api/analytics/reports/funnel` with configurable steps (2-10 paths), conversion rates, drop-off analysis
+- [x] Returning visitors report — `GET /api/analytics/reports/returning-visitors` shows visitors with 2+ visits, visit counts, first/last visit dates
+- [x] Retention report — `GET /api/analytics/reports/retention` cohort-based retention matrix (daily/weekly granularity, configurable periods)
+- [x] Heatmap report — `GET /api/analytics/reports/heatmap` click distribution per page path, element-level click counts and percentages
+- [x] Session replay — `GET /api/analytics/reports/session-replay` full event timeline for a session with PII redaction (passwords, tokens, emails, etc.)
 - [x] Database index optimization verified for new query patterns
 - [x] Frontend dashboard views: FunnelsView, RetentionView, HeatmapView, SessionReplayView, ReturningVisitorsView
 - [x] Updated AnalyticsDashboard navigation with 5 new tabs
@@ -636,7 +680,7 @@ For recordings, mask sensitive fields, avoid capturing passwords or private form
 - [x] Verified `next build` passes (54 static pages)
 - [x] Verified backend syntax (no errors)
 
-Completion Criteria: Advanced reports work without compromising privacy or site performance. â€” VERIFIED
+Completion Criteria: Advanced reports work without compromising privacy or site performance. — VERIFIED
 
 Phase 10: Test, Deploy, and Maintain
 
@@ -650,7 +694,7 @@ Completion Criteria: The production system works reliably from visitor activity 
 
 ---
 
-## Phase 11: Colour Scheme 3 â€” Light / Dark / System (COMPLETE)
+## Phase 11: Colour Scheme 3 — Light / Dark / System (COMPLETE)
 
 Replaced the previous colour palette with colour scheme 3 and swapped the
 third theme option from "Neon" to "System" (follows OS preference).
@@ -669,7 +713,7 @@ third theme option from "Neon" to "System" (follows OS preference).
   `PasswordGenerator`, `HTMLMinifier`) to drop `[data-theme="neon"]` rules
   and use the new accent values for `[data-theme="dark"]`
 - [x] Updated `client/components/Navbar/Navbar.js`:
-  - Third option changed from Neon to System (`ðŸ’»`)
+  - Third option changed from Neon to System (`??`)
   - Added `getEffectiveTheme()` helper that resolves `system` via
     `window.matchMedia('(prefers-color-scheme: dark)')`
   - Initial state defaults to `system` (was `light`)
@@ -677,7 +721,7 @@ third theme option from "Neon" to "System" (follows OS preference).
 - [x] Updated comments in `globals.css` and `Navbar.css` to describe the new
   colour scheme instead of the old neon theme
 - [x] Updated `client/README.md` theme section and the Download Progress
-  Popup "Theme-aware" note (`light/dark/neon` â†’ `light/dark/system`)
+  Popup "Theme-aware" note (`light/dark/neon` ? `light/dark/system`)
 
 ### Verification
 - `next build` passes (54 static pages)

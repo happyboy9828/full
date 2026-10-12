@@ -30,6 +30,28 @@ export default function AboutPage() {
         <h2>Open Source</h2>
         <p>The core image processing logic is open source. Check out the <a href="https://github.com/docfix" target="_blank" rel="noopener noreferrer">GitHub repository</a>.</p>
 
+        <h2>Team</h2>
+        <div className="team-grid">
+          <article className="team-card">
+            <div className="team-avatar" aria-hidden="true">👨‍💻</div>
+            <h3 className="team-name">Alex Chen</h3>
+            <p className="team-role">Founder & Lead Developer</p>
+            <p className="team-bio">Full-stack engineer passionate about privacy-first tools and client-side processing.</p>
+          </article>
+          <article className="team-card">
+            <div className="team-avatar" aria-hidden="true">👩‍💻</div>
+            <h3 className="team-name">Maria Rodriguez</h3>
+            <p className="team-role">Co-Founder & UI/UX Designer</p>
+            <p className="team-bio">Designer focused on accessible, intuitive interfaces for developer tools.</p>
+          </article>
+          <article className="team-card">
+            <div className="team-avatar" aria-hidden="true">👨‍💻</div>
+            <h3 className="team-name">James Wilson</h3>
+            <p className="team-role">Senior Developer</p>
+            <p className="team-bio">Specializes in WebAssembly, Canvas APIs, and performance optimization.</p>
+          </article>
+        </div>
+
         <h2>Contact</h2>
         <p>Questions or feedback? Email <a href="mailto:hello@docfix.app">hello@docfix.app</a>.</p>
       </div>
