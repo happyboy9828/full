@@ -18,9 +18,8 @@ export default function DocsPage() {
 
         <h2>Tools Overview</h2>
         <ul>
-          <li><strong>WebP to PNG:</strong> Convert WebP images to lossless PNG</li>
-          <li><strong>JPG to PNG:</strong> Convert JPG to PNG with 8-bit or 24-bit color depth</li>
-          <li><strong>PNG to JPG:</strong> Convert transparent PNGs to JPG with custom background fill</li>
+          <li><strong>WebP ⇄ PNG Converter:</strong> Two-way WebP ↔ PNG conversion with batch processing, quality control and transparency handling</li>
+          <li><strong>JPG ⇄ PNG Converter:</strong> Two-way JPEG ↔ PNG conversion with batch processing, quality control and transparency handling</li>
           <li><strong>Image Resizer:</strong> Crop and resize to exact dimensions and aspect ratios</li>
           <li><strong>Image Compressor:</strong> Reduce file size with quality/size targeting</li>
           <li><strong>Image to Base64:</strong> Encode images as Data URLs, HTML, or CSS</li>
@@ -31,10 +30,10 @@ export default function DocsPage() {
 
         <h2>Common Workflows</h2>
         <h3>Batch Processing</h3>
-        <p>Drag multiple files onto any tool's drop zone. Most tools support up to 50 files at once.</p>
+        <p>Drag multiple files onto any tool&apos;s drop zone. Most tools support up to 50 files at once.</p>
 
         <h3>Download Options</h3>
-        <p>Download individual files or use "Download All (.ZIP)" to get a single archive.</p>
+        <p>Download individual files or use &quot;Download All (.ZIP)&quot; to get a single archive.</p>
 
         <h3>Privacy First</h3>
         <p>All processing happens locally in your browser. No uploads, no accounts required for basic use.</p>

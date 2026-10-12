@@ -8,7 +8,7 @@
      createCssMinifier(container, o)      -> { minify, setInput, getOutput, destroy }
    ========================================================================== */
 
-import { downloadBlob } from "../../shared/download";
+import { triggerDownloadProgress } from "@/components/ads/DownloadProgressPopup/DownloadProgressTrigger";
 
 export const DEFAULT_OPTIONS = {
   convertColors: true, // rgb(255,0,0) -> #f00, #ffffff -> #fff
@@ -581,7 +581,22 @@ export function createCssMinifier(container, userOptions) {
   on(btnDownload, 'click', () => {
     if (!output.value) return;
     const blob = new Blob([output.value], { type: 'text/css;charset=utf-8' });
-    downloadBlob(blob, fileName + '.min.css');
+    const url = URL.createObjectURL(blob);
+    triggerDownloadProgress({
+      countdownMs: 3000,
+      durationMs: 2000,
+      title: 'Preparing your minified CSS',
+      description: fileName + '.min.css is being saved.',
+      onDownloadStart: () => {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName + '.min.css';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      },
+    });
   });
 
   refreshEditor();

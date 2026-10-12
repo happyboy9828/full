@@ -4,7 +4,7 @@
    Safe for CRA and Next.js: nothing touches `document` / `window` until mount.
    ============================================================================= */
 
-import { useDownloadProgress } from '@/components/ads/DownloadProgressPopup/DownloadProgressPopup';
+import { triggerDownloadProgress } from '@/components/ads/DownloadProgressPopup/DownloadProgressTrigger';
 
 /* ─────────────────────────────  1. QR ENCODER  ─────────────────────────────
    Byte mode (UTF-8), versions 1–40, ECC L/M/Q/H, automatic mask selection.   */
@@ -775,7 +775,6 @@ export function mountQrCodeGenerator(container) {
   let toastTimer = 0;
   let savedEcc = state.ecc;
   let current = { qr: null };
-  const { trigger } = useDownloadProgress();
 
   /* ---- content type + payload panels ---- */
   const bindText = (key, el) => {
@@ -983,7 +982,7 @@ export function mountQrCodeGenerator(container) {
       const url = URL.createObjectURL(blob);
       const fileName = `${name}.${state.format}`;
       
-      trigger({
+      triggerDownloadProgress({
         countdownMs: 5000,
         durationMs: 3000,
         title: 'Preparing your QR code',

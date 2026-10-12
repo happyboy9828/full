@@ -275,6 +275,7 @@ export default function DownloadProgressPopup({
 // Hook for triggering download progress with countdown from any component
 export function useDownloadProgress() {
   const [isOpen, setIsOpen] = useState(false);
+  const [config, setConfig] = useState({});
   const onCompleteRef = useRef(null);
   const onCloseRef = useRef(null);
   const onDownloadStartRef = useRef(null);
@@ -284,6 +285,7 @@ export function useDownloadProgress() {
     onCompleteRef.current = onComplete;
     onCloseRef.current = onClose;
     onDownloadStartRef.current = onDownloadStart;
+    setConfig(rest);
     setIsOpen(true);
   }, []);
 
@@ -319,6 +321,7 @@ export function useDownloadProgress() {
     handleDownloadStart,
     DownloadProgressPopup: (props) => (
       <DownloadProgressPopup
+        {...config}
         {...props}
         isOpen={isOpen}
         onClose={handleClose}

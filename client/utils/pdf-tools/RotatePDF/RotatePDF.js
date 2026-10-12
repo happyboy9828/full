@@ -26,44 +26,74 @@ export function initRotatePdfTool(containerElement) {
         <input type="file" id="pdf-file-input" accept="application/pdf" style="display: none;">
 
         <div class="batch-actions" id="batch-actions" style="display: none;">
-          <button id="btn-rotate-all-left" class="btn-secondary"> Rotate All Left ⎌</button>
-          <button id="btn-rotate-all-right" class="btn-secondary">Rotate All Right ↷</button>
-          <button id="btn-reset-all" class="btn-secondary-danger">Reset All</button>
+          <span class="batch-info" id="batch-info" style="align-self: center; color: var(--tool-muted); font-size: 13px;"></span>
         </div>
       </div>
 
       <!-- INTERACTIVE PAGE THUMBNAIL WORKSPACE -->
-      <div class="workspace-card">
-        <div id="drop-zone" class="drop-zone">
-          <div class="drop-zone-icon">📁</div>
-          <p>Drag & Drop a PDF file here or click <strong>Upload PDF</strong> above</p>
+      <div class="rotate-pdf-workspace">
+        <div class="rotate-pdf-col-left">
+          <div class="workspace-card">
+            <div id="drop-zone" class="drop-zone">
+              <div class="drop-zone-icon">📁</div>
+              <p>Drag & Drop a PDF file here or click <strong>Upload PDF</strong> above</p>
+            </div>
+
+            <div id="thumbnail-workspace" class="thumbnail-grid" style="display: none;"></div>
+          </div>
         </div>
 
-        <div id="thumbnail-workspace" class="thumbnail-grid" style="display: none;"></div>
-      </div>
+        <!-- RIGHT COLUMN -->
+        <div class="rotate-pdf-col-right">
+          <div class="summary-card">
+            <h3>Rotation Summary</h3>
+            <ul class="summary-list">
+              <li><span>File:</span> <strong id="summary-file">—</strong></li>
+              <li><span>Total Pages:</span> <strong id="summary-pages">0</strong></li>
+              <li><span>Rotated Pages:</span> <strong id="summary-rotated">0</strong></li>
+            </ul>
 
-      <!-- EXPORT PANEL -->
-      <div class="export-panel" id="export-panel" style="display: none;">
-        <button id="btn-save-download" class="btn-primary-lg" disabled>Save & Download Rotated PDF</button>
-        <div id="progress-container" class="progress-container" style="display: none;">
-          <div id="progress-bar" class="progress-bar"></div>
+            <hr class="divider">
+
+            <div class="form-group">
+              <label class="group-label">Quick Actions</label>
+              <div class="quick-tools">
+                <button id="btn-rotate-all-left" class="btn-secondary">⎌ All Left</button>
+                <button id="btn-rotate-all-right" class="btn-secondary">↷ All Right</button>
+                <button id="btn-reset-all" class="btn-danger">Reset All</button>
+              </div>
+            </div>
+
+            <hr class="divider">
+
+            <div class="action-area">
+              <button id="btn-save-download" class="btn-primary" disabled>Save & Download Rotated PDF</button>
+            </div>
+
+            <div id="progress-container" class="progress-container" style="display: none;">
+              <div id="progress-bar" class="progress-bar"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   `;
 
-  // Bind DOM Elements
+// Bind DOM Elements
   const fileInput = containerElement.querySelector('#pdf-file-input');
   const dropZone = containerElement.querySelector('#drop-zone');
   const batchActions = containerElement.querySelector('#batch-actions');
+  const batchInfo = containerElement.querySelector('#batch-info');
   const thumbnailWorkspace = containerElement.querySelector('#thumbnail-workspace');
-  const exportPanel = containerElement.querySelector('#export-panel');
   const btnRotateAllLeft = containerElement.querySelector('#btn-rotate-all-left');
   const btnRotateAllRight = containerElement.querySelector('#btn-rotate-all-right');
   const btnResetAll = containerElement.querySelector('#btn-reset-all');
-  const btnSaveDownload = containerElement.querySelector('#btn-save-download');
+  const onSaveDownload = containerElement.querySelector('#btn-save-download');
   const progressContainer = containerElement.querySelector('#progress-container');
   const progressBar = containerElement.querySelector('#progress-bar');
+  const summaryFile = containerElement.querySelector('#summary-file');
+  const summaryPages = containerElement.querySelector('#summary-pages');
+  const summaryRotated = containerElement.querySelector('#summary-rotated');
 
   // Event Listeners
   fileInput.addEventListener('change', (e) => {
@@ -86,12 +116,30 @@ export function initRotatePdfTool(containerElement) {
   btnRotateAllLeft.addEventListener('click', () => rotateAll(-90));
   btnRotateAllRight.addEventListener('click', () => rotateAll(90));
   btnResetAll.addEventListener('click', resetRotations);
-  btnSaveDownload.addEventListener('click', processAndDownload);
+  onSaveDownload.addEventListener('click', processAndDownload);
 
   // File Loader
   async function handleFile(file) {
     if (file.type !== 'application/pdf') {
       alert('Please select a valid PDF file.');
+      return;
+    }
+
+    // Wait for pdf.js library to load
+    const waitForLib = (name, timeout = 10000) => new Promise((resolve, reject) => {
+      const start = Date.now();
+      const check = () => {
+        if (window[name]) return resolve();
+        if (Date.now() - start > timeout) return reject(new Error(`${name} failed to load`));
+        setTimeout(check, 100);
+      };
+      check();
+    });
+
+    try {
+      await waitForLib('pdfjsLib');
+    } catch (err) {
+      alert('PDF.js library failed to load. Please refresh the page and try again.');
       return;
     }
 
@@ -108,8 +156,12 @@ export function initRotatePdfTool(containerElement) {
     dropZone.style.display = 'none';
     thumbnailWorkspace.style.display = 'grid';
     batchActions.style.display = 'flex';
-    exportPanel.style.display = 'block';
-    btnSaveDownload.disabled = false;
+    onSaveDownload.disabled = false;
+
+    if (summaryFile) summaryFile.textContent = activeFile.name;
+    if (summaryPages) summaryPages.textContent = totalPages;
+    if (summaryRotated) summaryRotated.textContent = '0';
+    if (batchInfo) batchInfo.textContent = `${totalPages} page${totalPages === 1 ? '' : 's'} loaded`;
 
     renderWorkspace();
   }
@@ -197,6 +249,17 @@ export function initRotatePdfTool(containerElement) {
       badge.textContent = `${deg}°`;
       badge.className = deg !== 0 ? 'badge-deg active' : 'badge-deg';
     }
+
+    // Update summary counts
+    let rotatedCount = 0;
+    for (const angle of pageRotations.values()) {
+      if (angle !== 0) rotatedCount++;
+    }
+    if (summaryRotated) summaryRotated.textContent = rotatedCount;
+    if (batchInfo) {
+      const rotatedLabel = rotatedCount === 0 ? 'No pages rotated yet' : `${rotatedCount} of ${totalPages} rotated`;
+      batchInfo.textContent = rotatedLabel;
+    }
   }
 
   // Export & Processing
@@ -257,3 +320,4 @@ export function initRotatePdfTool(containerElement) {
     }
   }
 }
+

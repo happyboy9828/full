@@ -20,7 +20,7 @@ export function crc32(bytes) {
   return (c ^ 0xffffffff) >>> 0;
 }
 
-// Raw DEFLATE stream, used by the PNG encoder in JpgToPng.
+// Raw DEFLATE stream, used by image tools that need compressed PNG data.
 export async function deflate(bytes) {
   const stream = new Blob([bytes]).stream().pipeThrough(new CompressionStream("deflate"));
   return new Uint8Array(await new Response(stream).arrayBuffer());

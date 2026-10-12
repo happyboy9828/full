@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { downloadBlob } from "../../../utils/shared/download";
+import { triggerDownloadProgress } from "@/components/ads/DownloadProgressPopup/DownloadProgressTrigger";
 import { baseName, clamp, nextFrame, sleep } from "../../../utils/shared/format";
 import { ACCEPT_ATTR, isAcceptedFile, loadImage } from "../../../utils/shared/imageFile";
 import {
@@ -222,7 +222,23 @@ export default function RemoveBgPage() {
   async function download() {
     if (!sess || status !== READY) return;
     const blob = await exportBlob(sess, resultRef.current, format);
-    downloadBlob(blob, `${baseName(sess.name)}-no-bg.${format}`);
+    const filename = `${baseName(sess.name)}-no-bg.${format}`;
+    const url = URL.createObjectURL(blob);
+    triggerDownloadProgress({
+      countdownMs: 3000,
+      durationMs: 2000,
+      title: "Preparing your image",
+      description: filename + " is being saved.",
+      onDownloadStart: () => {
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      },
+    });
   }
 
   function onDrop(event) {

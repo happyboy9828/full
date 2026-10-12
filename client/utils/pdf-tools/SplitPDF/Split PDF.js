@@ -171,6 +171,24 @@ export function initSplitPdfTool(containerElement) {
       return;
     }
 
+    // Wait for pdf.js library to load
+    const waitForLib = (name, timeout = 10000) => new Promise((resolve, reject) => {
+      const start = Date.now();
+      const check = () => {
+        if (window[name]) return resolve();
+        if (Date.now() - start > timeout) return reject(new Error(`${name} failed to load`));
+        setTimeout(check, 100);
+      };
+      check();
+    });
+
+    try {
+      await waitForLib('pdfjsLib');
+    } catch (err) {
+      alert('PDF.js library failed to load. Please refresh the page and try again.');
+      return;
+    }
+
     activeFile = file;
     const arrayBuffer = await file.arrayBuffer();
     pdfJsDoc = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
@@ -338,6 +356,24 @@ export function initSplitPdfTool(containerElement) {
 
     const splitMethod = containerElement.querySelector('input[name="split-method"]:checked').value;
     const outputOption = containerElement.querySelector('input[name="output-option"]:checked').value;
+
+    // Wait for PDFLib to load
+    const waitForLib = (name, timeout = 10000) => new Promise((resolve, reject) => {
+      const start = Date.now();
+      const check = () => {
+        if (window[name]) return resolve();
+        if (Date.now() - start > timeout) return reject(new Error(`${name} failed to load`));
+        setTimeout(check, 100);
+      };
+      check();
+    });
+
+    try {
+      await waitForLib('PDFLib');
+    } catch (err) {
+      alert('PDFLib library failed to load. Please refresh the page and try again.');
+      return;
+    }
 
     progressContainer.style.display = 'block';
     progressBar.style.width = '20%';

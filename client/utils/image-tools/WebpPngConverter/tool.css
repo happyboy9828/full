@@ -1,0 +1,32 @@
+/* WebP ⇄ PNG Converter — page shell, cards, controls, buttons, badges and
+   toasts come from app/tool.css; everything below is specific to this tool. */
+
+.wpc-field-stack { display: flex; flex-direction: column; gap: 10px; }
+
+/* queue */
+.wpc-list { display: flex; flex-direction: column; gap: 12px; max-height: 560px; overflow-y: auto; padding-right: 4px; }
+.wpc-item {
+  display: flex; gap: 14px; align-items: center; padding: 12px;
+  border: 1px solid var(--tool-border); border-radius: var(--tool-radius-sm);
+  background: var(--background);
+  transition: border-color 0.15s, opacity 0.15s;
+}
+.wpc-item.is-dragging { opacity: 0.5; border-color: var(--tool-accent); }
+.wpc-thumb {
+  display: flex; flex: 0 0 72px; align-items: center; justify-content: center;
+  height: 72px; overflow: hidden; border: 1px solid var(--tool-border); border-radius: var(--tool-radius-sm);
+}
+.wpc-thumb img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.wpc-info { display: flex; flex: 1; min-width: 0; flex-direction: column; gap: 3px; }
+.wpc-name { font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.wpc-meta { font-family: var(--tool-mono), ui-monospace, monospace; font-size: 12px; color: var(--tool-muted); }
+.wpc-item .tool-badge { align-self: flex-start; margin-top: 4px; }
+.wpc-item-actions { display: flex; flex-direction: column; gap: 6px; }
+.wpc-queue-actions { margin-bottom: 12px; }
+.wpc-queue-actions .tool-btn { flex: 0 1 120px; }
+
+@media (max-width: 520px) {
+  .wpc-item { flex-wrap: wrap; }
+  .wpc-item-actions { flex-direction: row; width: 100%; }
+  .wpc-item-actions .tool-btn { flex: 1; }
+}

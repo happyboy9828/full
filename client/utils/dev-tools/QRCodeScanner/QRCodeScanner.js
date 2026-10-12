@@ -1,4 +1,4 @@
-import { useDownloadProgress } from '@/components/ads/DownloadProgressPopup/DownloadProgressPopup';
+import { triggerDownloadProgress } from "@/components/ads/DownloadProgressPopup/DownloadProgressTrigger";
 
 const JSQR_CDN = 'https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js';
 const HISTORY_LIMIT = 10;
@@ -201,8 +201,6 @@ const TEMPLATE = `
 export function createQRScanner(root) {
   root.innerHTML = TEMPLATE;
 
-  const { trigger } = useDownloadProgress();
-
   const ui = {};
   root.querySelectorAll('[data-ref]').forEach((n) => { ui[n.dataset.ref] = n; });
   const tabs = root.querySelectorAll('[data-tab]');
@@ -264,15 +262,26 @@ export function createQRScanner(root) {
     } else if (kind === 'wifi') {
       const done = () => showHint('Password copied. Open your device Wi-Fi settings, choose "' + wifi.ssid + '" and paste it. Browsers cannot join networks automatically.');
       wifi.password ? copyText(wifi.password).then(done, done) : showHint('Open network "' + wifi.ssid + '" in your device Wi-Fi settings (no password needed).');
-    } else if (kind === 'vcard') {
-      const blob = new Blob([text], { type: 'text/vcard' });
-      const result = downloadBlob(blob, 'contact.vcf');
-      if (!result.ok) {
-        showHint(result.reason);
-      } else {
-        showHint('Contact file downloaded. Open it to add to your contacts.');
-      }
-    } else if (kind === 'geo') {
+      } else if (kind === 'vcard') {
+        const blob = new Blob([text], { type: 'text/vcard' });
+        const url = URL.createObjectURL(blob);
+        triggerDownloadProgress({
+          countdownMs: 3000,
+          durationMs: 2000,
+          title: 'Preparing your contact file',
+          description: 'contact.vcf is being saved.',
+          onDownloadStart: () => {
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'contact.vcf';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showHint('Contact file downloaded. Open it to add to your contacts.');
+          },
+        });
+      } else if (kind === 'geo') {
       const coords = text.replace(/^geo:/i, '').split('?')[0];
       window.open('https://www.google.com/maps?q=' + encodeURIComponent(coords), '_blank', 'noopener,noreferrer');
     } else {

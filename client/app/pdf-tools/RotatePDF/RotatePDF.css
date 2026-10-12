@@ -100,7 +100,25 @@
   background: color-mix(in srgb, #ef4444 15%, transparent);
 }
 
-/* Workspace */
+/* Workspace Layout */
+.rotate-pdf-workspace {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--tool-gap);
+}
+
+@media (min-width: 1024px) {
+  .rotate-pdf-workspace {
+    grid-template-columns: 1fr 380px;
+    align-items: start;
+  }
+
+  .rotate-pdf-col-right {
+    position: sticky;
+    top: 100px;
+  }
+}
+
 .workspace-card {
   background: var(--tool-surface);
   border: 2px dashed var(--tool-border);
@@ -128,7 +146,7 @@
 
 .thumbnail-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: var(--tool-gap);
 }
 
@@ -184,13 +202,14 @@
 
 /* Preview & Animation */
 .preview-wrapper {
-  width: 160px;
-  height: 200px;
+  width: 100%;
+  aspect-ratio: 4/5;
+  max-width: 180px;
+  margin: 0 auto 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  margin-bottom: 12px;
   border-radius: var(--tool-radius-sm);
 }
 

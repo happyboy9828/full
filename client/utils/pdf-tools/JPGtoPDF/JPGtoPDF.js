@@ -1,5 +1,7 @@
 // src/utility/tool.js
 
+import { triggerDownloadProgress } from '@/components/ads/DownloadProgressPopup/DownloadProgressTrigger';
+
 export function initJpgToPdfTool(container) {
   let imageQueue = []; // Array of { id, file, name, dataUrl }
   let draggedIndex = null;
@@ -374,13 +376,21 @@ export function initJpgToPdfTool(container) {
       }
 
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = finalFilename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      triggerDownloadProgress({
+        countdownMs: 3000,
+        durationMs: 2500,
+        title: 'Preparing your PDF document',
+        description: finalFilename + ' is being generated.',
+        onDownloadStart: () => {
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = finalFilename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        },
+      });
     } catch (err) {
       console.error(err);
       alert('Failed to generate PDF document.');

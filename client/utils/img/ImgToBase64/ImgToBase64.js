@@ -4,7 +4,7 @@
 // Nothing touches `document` or `window` at import time, so it is safe to
 // import from a server component.
 
-import { useDownloadProgress } from '@/components/ads/DownloadProgressPopup/DownloadProgressPopup';
+import { triggerDownloadProgress } from '@/components/ads/DownloadProgressPopup/DownloadProgressTrigger';
 import { baseName, formatBytes } from "../../../utils/shared/format";
 
 const SPINNER_THRESHOLD = 2 * 1024 * 1024; // show a spinner for files over 2 MB
@@ -81,7 +81,6 @@ export function initImageToBase64(container) {
   const state = { file: null, dataUrl: "", base64: "", format: "dataurl" };
   let loadToken = 0; // lets us ignore results from a file that was replaced or removed
   let copyTimer = 0;
-  const { trigger } = useDownloadProgress();
 
   /* --- build the DOM --- */
 
@@ -399,7 +398,7 @@ export function initImageToBase64(container) {
     const url = URL.createObjectURL(blob);
     const fileName = baseName(state.file.name) + "-" + format.file + ".txt";
     
-    trigger({
+    triggerDownloadProgress({
       countdownMs: 5000,
       durationMs: 3000,
       title: 'Preparing your Base64 file',

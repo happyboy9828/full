@@ -1,8 +1,280 @@
 ﻿Phase Plan
 
-Last updated: October 10, 2026 | Current: Phase 10 — Test, Deploy, and Maintain
+Last updated: October 12, 2026 | Current: Phase 10 — Test, Deploy, and Maintain
 
 **Current Phase: Phase 10 — Test, Deploy, and Maintain**
+
+---
+
+## Phase 24: Missing pdf-lib CDN Script — Fix `window.PDFLib is undefined` (COMPLETE)
+
+**Completed:**
+- [x] Diagnosed root cause: `client/app/layout.js` never injected the `pdf-lib` CDN script, so `window.PDFLib` was always `undefined` at tool runtime
+- [x] Added the missing `<Script src=".../pdf-lib/1.17.1/pdf-lib.min.js" strategy="lazyOnload" />` tag in `client/app/layout.js` (alongside jszip/pdf.js)
+- [x] Verified the served HTML now contains all four CDN scripts (pdf-lib, pdf.js, jszip, FileSaver)
+- [x] Verified `/pdf-tools/SplitPDF` page renders and loads the tool JS + pdf-lib script
+
+**Problem:** All PDF-generation tools (Split PDF, Rotate PDF, JPG to PDF, Merge PDF, Compress PDF) destructure `window.PDFLib` at runtime and crashed with `Cannot destructure property 'PDFDocument' of 'window.PDFLib' as it is undefined`. The tools' internal `waitForLib('PDFLib')` polling masked the real cause by waiting 10 s then showing a generic "failed to load" alert.
+
+**Fix:** Single missing `<Script>` tag. The CDN UMD wrapper already assigns `window.PDFLib`, and every tool already reads that global name — no tool code changes were needed.
+
+Completion Criteria: PDF-generation tools can read `window.PDFLib.PDFDocument` at runtime.
+
+---
+
+## Phase 23: Remove Core Tool Suites from Home Page (COMPLETE)
+
+**Completed:**
+- [x] Deleted the `FEATURED_CATEGORIES` constant (PDF Tools suite) from `client/app/page.js`
+- [x] Deleted the `<section id="core-tools">` block ("Core Tool Suites") from `client/app/page.js`
+- [x] Renumbered the following directory section comment to Section 4
+- [x] Deleted the entire Core Tool Categories CSS block from `client/app/globals.css` (`.core-tools-section`, `.core-tools-grid`, `.core-tool-*`, and the `max-width: 768px` media query)
+- [x] Verified via grep: no remaining `core-tool*`, `Core Tool Suite`, or `FEATURED_CATEGORIES` references in source files
+
+**Problem:** The homepage "Core Tool Suites" section (Section 4) duplicated the full tools directory (Section 5) and was requested to be removed completely from the home page.
+
+**Fix:** Removed the section's data constant, its JSX markup, and all of its dedicated CSS. The shared `.tools-*` CSS classes were retained since they are reused by the `/tools` page and the homepage's Popular Tools section.
+
+Completion Criteria: The "Core Tool Suites" section no longer exists on the homepage.
+
+---
+
+## Phase 22: Download Notification Popup — Global Wiring (COMPLETE)
+
+**Completed:**
+- [x] Fixed `triggerDownloadProgress()` in `DownloadProgressTrigger.js` to forward options to the mounted popup instance (previously it ignored the registry and downloaded instantly)
+- [x] Fixed `useDownloadProgress()` in `DownloadProgressPopup.js` to carry per-download options (`title`, `description`, `countdownMs`, `durationMs`) into the popup instead of discarding them
+- [x] Created `client/components/ads/DownloadProgressPopup/GlobalDownloadProgress.js` — global popup host component
+- [x] Mounted `<GlobalDownloadProgress />` in `client/app/layout.js` site-wide
+- [x] Routed 10 remaining direct-download tools through the popup: Watermark, ImageResizer, BGRemove, ImgCompresser, FavIcon, JPGtoPDF, CSSMinifier, PasswordGenerator, QRCodeScanner, Paragraph Writer
+- [x] Fixed pre-existing crash in QRCodeScanner (`downloadBlob` was called but never imported)
+- [x] Removed unused `downloadBlob` imports across the routed tools
+- [x] Updated Status.md
+
+**Problem:** The `DownloadProgressPopup` component and its `triggerDownloadProgress` registry existed, but the popup was never mounted and the trigger never forwarded to it — so clicking any download button started the download instantly with no notification popup.
+
+**Fix:** Wired the registry end-to-end and mounted the popup globally in the root layout. Every download button now shows the notification popup (3s countdown + animated progress bar) and starts the actual download from `onDownloadStart` when the countdown completes.
+
+Completion Criteria: Every download button on every tool shows the notification popup before downloading.
+
+---
+
+## Phase 21: Tools Page — Full Animation & Icon Enhancement (COMPLETE)
+
+**Completed:**
+- [x] Created `client/app/tools/ToolsClient.js` — client component with all animations (staggered entrance, icon hover, mouse-tracking glow, skeleton loading)
+- [x] Created `client/app/tools/page.js` — server component that fetches categories and passes to ToolsClient
+- [x] Updated `.category-grid` and `.category-card` in `client/app/globals.css` with enhanced animations (lift, shadow, color shifts, underlines, float animation)
+- [x] Added `prefers-reduced-motion` support to disable all animations
+- [x] Verified `next build` passes (46 static pages)
+- [x] ESLint: 0 errors on new files
+
+**Problem:** The `/tools` page displayed categories as static cards with basic hover effects. The user requested a fully animated experience with enhanced icons.
+
+**Fix:** Enhanced the tools page with comprehensive animations and interactive effects:
+
+**Animations Added:**
+- **Staggered entrance**: Cards animate in sequentially (80ms delay each) with slide-up + scale effect
+- **Header reveal**: Smooth fade-in + slide-up for page title/subtitle
+- **Icon hover**: Scale (1.15x) + rotate (5deg) with float animation on sustained hover
+- **CTA arrow**: Translate + scale on hover
+- **Mouse-tracking radial glow**: Follows cursor position on each card with accent color
+- **Card lift**: Transform translateY(-8px) + scale(1.02) + enhanced shadow on hover
+- **Title color shift**: Category titles change to accent color on hover
+- **Count/CTA underlines**: Animated width expansion on hover
+- **Skeleton loading**: Pulse animation while categories load
+- **Page enter**: Fade + slide animation on initial load
+
+**Accessibility:**
+- `prefers-reduced-motion` media query disables all animations
+- Focus-visible states for keyboard navigation
+- ARIA attributes preserved
+
+Completion Criteria: Tools page at `/tools` is fully animated with icon interactions, mouse-tracking glow, and smooth entrance animations.
+
+---
+
+## Phase 20: WebP ⇄ PNG Converter — Two-Way Conversion (COMPLETE)
+
+**Completed:**
+- [x] Created `client/utils/image-tools/WebpPngConverter/tool.js` — two-way conversion logic (imperative, no React hooks)
+- [x] Created `client/utils/image-tools/WebpPngConverter/tool.css` — tool-specific styles (`wpc-` prefix) using shared CSS variables
+- [x] Created `client/utils/image-tools/WebpPngConverter/index.js` — entry point with CSS import
+- [x] Created `client/app/img/WebpPngConverter/page.js` — Next.js App Router page
+- [x] Added `initWebpPngConverter` export to `client/utils/tools.js`
+- [x] Replaced `/img/WebpToPng` metadata + route with `/img/WebpPngConverter` in `client/lib/category-data.js`
+- [x] Updated `client/app/sitemap.xml/route.js` TOOL_META
+- [x] Updated `client/app/legal-support/docs/page.js` tool list (and fixed its pre-existing unescaped-entity lint errors)
+- [x] Updated `client/README.md` tool table and conventions section
+- [x] Deleted one-way `client/utils/img/WebpToPng/` and `client/app/img/WebpToPng/`
+- [x] Verified `next build` passes (46 static pages including new `/img/WebpPngConverter`)
+- [x] ESLint: 0 errors on all new and modified files
+
+**Problem:** The project had a one-way WebP→PNG tool (`/img/WebpToPng`) but no unified 2-way converter like the JPG ⇄ PNG tool offers.
+
+**Fix:** Replaced the one-way tool with a unified `WebpPngConverter` at `/img/WebpPngConverter` (same consolidation pattern as Phases 17/19):
+
+- **Two-way conversion**: Segmented control toggles between "To PNG" and "To WEBP"
+- **Batch processing**: Drag & drop or browse, up to 50 files
+- **WEBP quality**: 10-100% slider when converting to WEBP
+- **Transparency handling**: Preserve alpha or replace with a solid colour when converting to PNG
+- **Capability check**: `canEncode(WEBP)` disables WEBP output where the browser cannot encode it
+- **Live queue**: Thumbnails, dimensions, sizes, status badges, drag-to-reorder, sort A-Z
+- **Individual & batch download**: Per-item download or all as ZIP
+
+Completion Criteria: Unified WebP⇄PNG converter accessible at `/img/WebpPngConverter`; no references to the old one-way `WebpToPng` tool remain in any source file.
+
+---
+
+## Phase 19: JPG ⇄ PNG Converter — Consolidation (COMPLETE)
+
+**Completed:**
+- [x] Deleted `client/utils/img/JpgToPng/` directory (JpgToPng.js, JpgToPng.css)
+- [x] Deleted `client/utils/img/PngToJpg/` directory (PngToJpg.js, PngToJpg.css)
+- [x] Deleted `client/app/img/JpgToPng/page.js`
+- [x] Deleted `client/app/img/PngToJpg/page.js`
+- [x] Removed `JPG to PNG` and `PNG to JPG` entries from `client/lib/category-data.js` (TOOL_METADATA + CATEGORY_ROUTES)
+- [x] Removed `JPG to PNG` and `PNG to JPG` entries from `client/app/sitemap.xml/route.js` TOOL_META
+- [x] Updated `client/app/page.js` FEATURED_TOOLS to point to `/img/JpgPngConverter`
+- [x] Updated `client/README.md` tool table and conventions section
+- [x] Updated `client/app/legal-support/docs/page.js` docs list
+- [x] Verified `next build` passes
+
+**Problem:** The project had separate JPG→PNG and PNG→JPG tools (`/img/JpgToPng`, `/img/PngToJpg`) alongside the unified `/img/JpgPngConverter`, creating duplicate functionality and confusing the user.
+
+**Fix:** Removed both standalone tools entirely, keeping only the unified `JpgPngConverter` as the single source of truth for JPG⇄PNG conversion.
+
+Completion Criteria: Only `/img/JpgPngConverter` remains for JPG⇄PNG conversion; no references to `JpgToPng` or `PngToJpg` in any source file.
+
+---
+
+## Phase 18: MS Office Tools — Complete Removal (COMPLETE)
+
+**Completed:**
+- [x] Deleted `client/utils/msoffice-tool/` directory (6 tool folders: WordnPDF, TXTnWord, ExcelnPDF, PPTnPDF, HTMLnDOC, CSVnPDF)
+- [x] Deleted `client/app/msoffice-tool/` directory (6 App Router pages)
+- [x] Removed all 13 CDN `<Script>` components from `client/app/layout.js` (mammoth.js, docx.js, html-docx-js, SheetJS, PPTXGenJS, pdf-lib, jsPDF, jsPDF AutoTable, PDF.js, PDF.js worker); FileSaver.js and JSZip retained for other tools
+- [x] Removed 6 MS Office exports from `client/utils/tools.js`
+- [x] Removed `MS Office Tools` category from `client/lib/category-data.js` (CATEGORY_SLUGS, CATEGORY_ICONS, CATEGORY_DESCRIPTIONS, CATEGORY_ROUTES, TOOL_METADATA)
+- [x] Removed `MS Office Tools` featured category from `client/app/page.js`
+- [x] Verified `next build` passes (48 static pages + 4 category SSG pages)
+- [x] Removed stale `Office` text references: `client/app/tools/page.js` meta description, `client/app/page.js` hero trust text + "two collections" subtitle, `client/app/globals.css` core-tools comment
+
+**Problem:** The MS Office tool suite (6 conversion tools) and its 13 CDN libraries were no longer needed and added unnecessary bundle weight and maintenance surface.
+
+**Fix:** Complete removal of all MS Office tool code, routes, category metadata, and CDN scripts from the codebase.
+
+Completion Criteria: No MS Office tool code, routes, or CDN references remain in the client source.
+
+---
+
+## Phase 17: JPG ⇄ PNG Converter — Two-Way Image Format Converter (COMPLETE)
+
+**Completed:**
+- [x] Created `client/utils/image-tools/JpgPngConverter/tool.js` — main tool logic (imperative, no React hooks)
+- [x] Created `client/utils/image-tools/JpgPngConverter/tool.css` — styling using shared CSS variables
+- [x] Created `client/utils/image-tools/JpgPngConverter/index.js` — entry point with CSS import
+- [x] Created `client/app/img/JpgPngConverter/page.js` — Next.js App Router page
+- [x] Added export to `client/utils/tools.js`
+- [x] Added tool metadata and route to `client/lib/category-data.js` (Image Tools category)
+- [x] Verified `next build` passes (55 static pages including new `/img/JpgPngConverter`)
+- [x] ESLint: 0 errors on new tool files
+
+**Problem:** The project had separate tools for JPG→PNG and PNG→JPG conversion, but no unified 2-way converter like other image tool platforms offer.
+
+**Fix:** Created a new unified `JpgPngConverter` tool that handles both conversions in a single interface:
+
+- **Two-way conversion**: Toggle between "To PNG" and "To JPG" modes
+- **Batch processing**: Drag & drop multiple images (JPG and PNG supported)
+- **Quality control**: JPG quality slider (10-100%) when converting to JPG
+- **Transparency handling**: Option to preserve transparency or fill with white when converting to PNG
+- **Live preview**: See converted images with dimensions and file sizes
+- **Individual & batch download**: Download single files or all as ZIP
+- **Drag-to-reorder**: Reorder queue before conversion
+
+Completion Criteria: Unified JPG⇄PNG converter accessible at `/img/JpgPngConverter` with all features working.
+
+---
+
+## Phase 16: Watermark Tool — Visual 9-Point Alignment Grid (COMPLETE)
+
+**Completed:**
+- [x] Added `AlignmentGrid` component to `client/utils/img/Watermark/Watermark.js`
+- [x] Updated ANCHORS array with `row`/`col` grid positions
+- [x] Replaced text-button grid with visual 3x3 alignment grid in `page.js`
+- [x] Added `.wm-align-grid`, `.wm-align-cell`, `.wm-align-label` CSS styles
+- [x] Verified `next build` passes (54 static pages)
+- [x] ESLint: 0 errors on modified files
+
+**Problem:** The Watermark tool's 9-point alignment grid was rendered as plain text buttons. The user requested a visual grid that shows the watermark position relative to the photo.
+
+**Fix:** Created a visual `AlignmentGrid` React component that renders a 3x3 grid with dashed borders, hover states, and a filled dot indicator on the active cell. Each cell shows its label (Top-L, Top-C, etc.) and responds to clicks to set the watermark anchor.
+
+Completion Criteria: Watermark tool shows a visual 9-point alignment grid.
+
+---
+
+## Phase 15: JPG to PNG — Typo Fix (COMPLETE)
+
+**Completed:**
+- [x] Fixed `addEventEventListener` → `addEventListener` in `client/utils/img/JpgToPng/JpgToPng.js:450`
+- [x] Verified no other occurrences of the typo in `client/`
+- [x] ESLint: 0 errors on `JpgToPng.js`
+
+**Problem:** `mountJpgToPng` called the non-existent `drop.addEventEventListener("dragleave", ...)` method, throwing `TypeError: drop.addEventEventListener is not a function` when the tool mounted.
+
+**Fix:** Single-character typo corrected to the standard `addEventListener` API, matching the other event bindings in the same function.
+
+Completion Criteria: JPG to PNG page mounts without runtime errors.
+
+---
+
+## Phase 14: Image Tools & Dev Tools — Invalid Hook Call Fix (COMPLETE)
+
+**Completed:**
+- [x] Fixed `mountJpgToPng` (`utils/img/JpgToPng/JpgToPng.js`)
+- [x] Fixed `mountPngToJpgTool` (`utils/img/PngToPng/PngToJpg.js`)
+- [x] Fixed `mountWebpToPng` (`utils/img/WebpToPng/WebpToPng.js`)
+- [x] Fixed `createQRCodeGenerator` (`utils/dev-tools/QRCodeGenerator/QRCodeGenerator.js`)
+- [x] Fixed `createHTMLMinifier` (`utils/dev-tools/HTMLMinifier/HTMLMinifier.js`)
+- [x] ESLint: 0 errors on all 5 modified files
+
+**Problem:** Same bug pattern as Phase 13 — each imperative tool function called `const { trigger } = useDownloadProgress();` inside a plain JS function invoked from a `useEffect` in its `page.js`, running the hook outside any React component tree and throwing "Invalid hook call".
+
+**Fix:** Switched each file to the non-hook `triggerDownloadProgress` registry import from `DownloadProgressTrigger`, removed the hook line, and renamed every `trigger({...})` call site to `triggerDownloadProgress({...})`. Matches the pattern used by every other imperative tool in the codebase.
+
+Completion Criteria: All image and dev-tool pages render without React hook errors.
+
+---
+
+## Phase 13: Image to Base64 — Invalid Hook Call Fix (COMPLETE)
+
+**Completed:**
+- [x] Replaced `useDownloadProgress` import with `triggerDownloadProgress` from `DownloadProgressTrigger`
+- [x] Removed `const { trigger } = useDownloadProgress();` from `initImageToBase64`
+- [x] Renamed call site `trigger({...})` → `triggerDownloadProgress({...})` in `onDownload()`
+- [x] ESLint: 0 errors on the modified file
+
+**Problem:** `initImageToBase64(container)` in `client/utils/img/ImgToBase64/ImgToBase64.js` called the `useDownloadProgress()` hook inside a plain imperative function (invoked from `app/img/ImgToBase64/page.js:10` inside a `useEffect`). This ran the hook outside any React component tree, violating the Rules of Hooks and throwing "Invalid hook call".
+
+**Fix:** Switched to the non-hook `triggerDownloadProgress` registry, matching the pattern used by every other imperative tool (CompressPDF, WordtoPDFnPDFtoWord, SplitPDF, RotatePDF, PDFtoJPG, MergePDFFiles, Sort Text, Remove Duplicate Lines, PPTnPDF, EccelnPDF, CSVnExcel, TXTnWord).
+
+Completion Criteria: Build passes and Image to Base64 page renders without React hook errors.
+
+---
+
+## Phase 12: QR Code Scanner — Invalid Hook Call Fix (COMPLETE)
+
+**Completed:**
+- [x] Removed `useDownloadProgress()` hook call from `createQRScanner` (imperative function, not a component)
+- [x] Removed unused `useDownloadProgress` import from `QRCodeScanner.js`
+- [x] Verified `next build` compiles successfully (54 static pages)
+
+**Problem:** `createQRScanner` called `useDownloadProgress()` inside a non-component function, violating the Rules of Hooks and throwing "Invalid hook call". The destructured `trigger` was never used.
+
+**Fix:** Deleted the hook call and its import. The scanner never needed download progress triggering.
+
+Completion Criteria: Build passes and QR scanner renders without React hook errors.
 
 ---
 

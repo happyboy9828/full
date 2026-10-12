@@ -139,10 +139,28 @@ export function initMergePdfTool(containerElement) {
 
   // File Handlers
   async function handleFiles(files) {
+    // Wait for pdf.js library to load
+    const waitForLib = (name, timeout = 10000) => new Promise((resolve, reject) => {
+      const start = Date.now();
+      const check = () => {
+        if (window[name]) return resolve();
+        if (Date.now() - start > timeout) return reject(new Error(`${name} failed to load`));
+        setTimeout(check, 100);
+      };
+      check();
+    });
+
+    try {
+      await waitForLib('pdfjsLib');
+    } catch (err) {
+      alert('PDF.js library failed to load. Please refresh the page and try again.');
+      return;
+    }
+
     for (let file of files) {
       if (file.type !== 'application/pdf') continue;
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const pdf = await window.pdfjsLib.getDocument({ data: arrayBuffer.slice(0) }).promise;
 
       uploadedFiles.push({
         id: Math.random().toString(36).substr(2, 9),

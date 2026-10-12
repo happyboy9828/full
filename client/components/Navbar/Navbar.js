@@ -115,6 +115,7 @@ export default function Navbar() {
       {categories.map((category, index) => (
         <li key={index} className="nav-dropdown-container">
           <button className="nav-button" onClick={() => handleDropdownToggle(index)}>
+            <span className="nav-button-icon" aria-hidden="true">{category.icon}</span>
             <span>{category.name}</span>
             <span>&#9662;</span>
           </button>
@@ -123,7 +124,10 @@ export default function Navbar() {
               {category.tools.length > 0 ? (
                 category.tools.map((tool, toolIndex) => (
                   <li key={toolIndex}>
-                    <a href={tool.href} onClick={closeMobileMenu}>{tool.title}</a>
+                    <a href={tool.href} onClick={closeMobileMenu}>
+                      <span className="dropdown-tool-icon" aria-hidden="true">{tool.icon}</span>
+                      <span>{tool.title}</span>
+                    </a>
                   </li>
                 ))
               ) : null}

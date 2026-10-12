@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { downloadBlob } from "../../../utils/shared/download";
+import { triggerDownloadProgress } from "@/components/ads/DownloadProgressPopup/DownloadProgressTrigger";
 import { clamp } from "../../../utils/shared/format";
 import { ACCEPT_ATTR, isAcceptedFile, kindOf, loadImage } from "../../../utils/shared/imageFile";
 import { createZipFromBlobs } from "../../../utils/shared/zip";
 import {
   ANCHORS,
+  AlignmentGrid,
   DEFAULT_SETTINGS,
   FONTS,
   LOGO_KINDS,
@@ -172,7 +173,22 @@ export default function WatermarkPage() {
         setProgress({ done: n + 1, total: items.length });
         await new Promise((r) => setTimeout(r, 0));
       }
-      downloadBlob(await createZipFromBlobs(files), "watermarked-photos.zip");
+      const url = URL.createObjectURL(await createZipFromBlobs(files));
+      triggerDownloadProgress({
+        countdownMs: 3000,
+        durationMs: 2500,
+        title: "Preparing your watermarked photos",
+        description: "Your ZIP archive is being packaged.",
+        onDownloadStart: () => {
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "watermarked-photos.zip";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        },
+      });
     } catch (err) { showToast(err.message); }
     setProgress(null);
   }
@@ -182,7 +198,22 @@ export default function WatermarkPage() {
     try {
       await loadFont(font);
       const f = await exportPhoto(selected, s, logo);
-      downloadBlob(f.blob, f.name);
+      const url = URL.createObjectURL(f.blob);
+      triggerDownloadProgress({
+        countdownMs: 3000,
+        durationMs: 2000,
+        title: "Preparing your watermarked photo",
+        description: f.name + " is being saved.",
+        onDownloadStart: () => {
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = f.name;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        },
+      });
     } catch (err) { showToast(err.message); }
   }
 
@@ -377,28 +408,11 @@ export default function WatermarkPage() {
             <h2 className="tool-card-title">Placement & opacity</h2>
             <Slider id="wm-opacity" label="Opacity" value={s.opacity} min={5} max={100} unit="%" onChange={(v) => patch({ opacity: v })} />
             {s.mode === "single" && (
-              <p className="tool-label" style={{ margin: "14px 0 8px" }}>9-point alignment grid</p>
-            )}
-            {s.mode === "single" && (
-              <div
-                className={"wm-anchors" + (s.mode === "tile" ? " is-off" : "")}
-                role="group"
-                aria-label="9-point alignment grid"
-              >
-                {ANCHORS.map((a) => (
-                  <button
-                    key={a.id}
-                    type="button"
-                    disabled={s.mode === "tile"}
-                    aria-label={a.aria}
-                    aria-pressed={s.anchor === a.id}
-                    className={"wm-anchor" + (s.anchor === a.id ? " is-active" : "")}
-                    onClick={() => patch({ anchor: a.id, custom: null })}
-                  >
-                    {a.label}
-                  </button>
-                ))}
-              </div>
+              <AlignmentGrid
+                anchor={s.anchor}
+                onChange={(id) => patch({ anchor: id, custom: null })}
+                disabled={s.mode === "tile"}
+              />
             )}
             {s.mode === "single" && (
               <Slider id="wm-margin" label="Margin from edge" value={s.margin} min={0} max={15} unit="%" onChange={(v) => patch({ margin: v })} />

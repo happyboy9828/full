@@ -203,23 +203,37 @@ export function initCompressPDF(container) {
 
   // Realize PDF Compression via stream re-serialization
   async function performCompression() {
-    if (!fileBuffer || !window.PDFLib) return;
+    if (!fileBuffer) return;
+
+    // Wait for libraries to load
+    const waitForLib = (name, timeout = 10000) => new Promise((resolve, reject) => {
+      const start = Date.now();
+      const check = () => {
+        if (window[name]) return resolve();
+        if (Date.now() - start > timeout) return reject(new Error(`${name} failed to load`));
+        setTimeout(check, 100);
+      };
+      check();
+    });
 
     btnCompress.disabled = true;
     progressWrapper.classList.remove('hidden');
-    progressBar.style.width = '10%';
-    progressText.textContent = 'Analyzing PDF structures...';
+    progressBar.style.width = '5%';
+    progressText.textContent = 'Loading libraries...';
 
     try {
-      const { PDFDocument } = window.PDFLib;
+      await Promise.all([waitForLib('PDFLib'), waitForLib('pdfjsLib')]);
+
+      const { PDFDocument, StandardFonts } = window.PDFLib;
       
-      progressBar.style.width = '30%';
-      progressText.textContent = 'Optimizing internal objects and metadata...';
+      // Load with pdf.js to access page rendering
+      const pdfjsDoc = await window.pdfjsLib.getDocument({ data: fileBuffer.slice(0) }).promise;
+      const pageCount = pdfjsDoc.numPages;
 
-      // Load original document
-      const pdfDoc = await PDFDocument.load(fileBuffer, { ignoreEncryption: true });
+      // Load with pdf-lib for rebuilding
+      const pdfDoc = await PDFDocument.load(fileBuffer.slice(0), { ignoreEncryption: true });
 
-      // Strip unnecessary document attributes & metadata
+      // Strip metadata
       pdfDoc.setTitle('');
       pdfDoc.setAuthor('');
       pdfDoc.setSubject('');
@@ -227,33 +241,55 @@ export function initCompressPDF(container) {
       pdfDoc.setProducer('Compress PDF Utility');
       pdfDoc.setCreator('Compress PDF Utility');
 
-      progressBar.style.width = '60%';
-      progressText.textContent = 'Compressing stream filters...';
+      // Quality settings per preset
+      const qualitySettings = {
+        extreme: { scale: 0.75, jpegQuality: 0.4 },   // 75% resolution, 40% JPEG quality
+        recommended: { scale: 1.0, jpegQuality: 0.7 }, // 100% resolution, 70% JPEG quality
+        low: { scale: 1.0, jpegQuality: 0.9 }          // 100% resolution, 90% JPEG quality
+      };
+      const { scale, jpegQuality } = qualitySettings[currentPreset] || qualitySettings.recommended;
 
-      // Re-serialize PDF with max stream object compression using pdf-lib
-      const pdfBytes = await pdfDoc.save({
-        useObjectStreams: true, // Compress structural metadata into object streams
-        addDefaultPage: false
-      });
+      // Create new PDF with compressed images
+      const newPdfDoc = await PDFDocument.create();
+      const font = await newPdfDoc.embedFont(StandardFonts.Helvetica);
 
-      progressBar.style.width = '90%';
-      progressText.textContent = 'Finalizing file output...';
+      for (let pageNum = 1; pageNum <= pageCount; pageNum++) {
+        progressBar.style.width = `${Math.round((pageNum / pageCount) * 90)}%`;
+        progressText.textContent = `Compressing page ${pageNum} of ${pageCount}...`;
 
-      // Calculate actual size reduction based on preset ratio scaling
-      let targetBytes = Math.round(pdfBytes.byteLength * presetRatios[currentPreset]);
-      if (targetBytes >= originalSizeBytes) {
-        targetBytes = Math.round(originalSizeBytes * 0.85); // Safeguard upper limit
+        // Render page to canvas with pdf.js
+        const page = await pdfjsDoc.getPage(pageNum);
+        const viewport = page.getViewport({ scale });
+        const canvas = document.createElement('canvas');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        const ctx = canvas.getContext('2d');
+        
+        await page.render({ canvasContext: ctx, viewport }).promise;
+
+        // Convert to compressed JPEG
+        const jpegDataUrl = canvas.toDataURL('image/jpeg', jpegQuality);
+        const jpegBytes = await fetch(jpegDataUrl).then(r => r.arrayBuffer());
+        const jpegImage = await newPdfDoc.embedJpg(jpegBytes);
+
+        // Add page with compressed image
+        const newPage = newPdfDoc.addPage([viewport.width, viewport.height]);
+        newPage.drawImage(jpegImage, { x: 0, y: 0, width: viewport.width, height: viewport.height });
       }
 
-      // Create compressed Blob output
+      progressBar.style.width = '95%';
+      progressText.textContent = 'Finalizing...';
+
+      // Save with object stream compression
+      const pdfBytes = await newPdfDoc.save({ useObjectStreams: true, addDefaultPage: false });
+
       compressedBlob = new Blob([pdfBytes], { type: 'application/pdf' });
-      compressedSizeBytes = targetBytes;
+      compressedSizeBytes = pdfBytes.byteLength;
 
       setTimeout(() => {
         progressBar.style.width = '100%';
         progressText.textContent = 'Compression Complete!';
 
-        // Update UI metrics with actual calculated values
         const actualSavings = Math.round(((originalSizeBytes - compressedSizeBytes) / originalSizeBytes) * 100);
         summaryNewSize.textContent = formatBytes(compressedSizeBytes);
         summarySavings.textContent = `-${actualSavings}% Saved`;

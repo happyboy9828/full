@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, useRef } from "react";
+import { triggerDownloadProgress } from "@/components/ads/DownloadProgressPopup/DownloadProgressTrigger";
 import { ACCEPT_ATTR, isAcceptedFile, loadImage } from "../../../utils/shared/imageFile";
 import {
   ACCEPTED_KINDS,
@@ -145,14 +146,21 @@ export default function FaviconGeneratorPage() {
     try {
       const zipBlob = await buildFaviconZip(source, options, selection);
       const url = URL.createObjectURL(zipBlob);
-      
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = "favicon-package.zip";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
+      triggerDownloadProgress({
+        countdownMs: 3000,
+        durationMs: 2500,
+        title: "Preparing your favicon package",
+        description: "favicon-package.zip is being packaged.",
+        onDownloadStart: () => {
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = "favicon-package.zip";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        },
+      });
     } catch (err) {
       showToast(err.message);
     }

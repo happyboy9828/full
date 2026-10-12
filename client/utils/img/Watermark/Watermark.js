@@ -23,9 +23,15 @@ export const FONTS = [
 ];
 
 export const ANCHORS = [
-  { id: "tl", label: "Top-L", aria: "Top left" }, { id: "tc", label: "Top-C", aria: "Top center" }, { id: "tr", label: "Top-R", aria: "Top right" },
-  { id: "ml", label: "Mid-L", aria: "Middle left" }, { id: "c", label: "Center", aria: "Center" }, { id: "mr", label: "Mid-R", aria: "Middle right" },
-  { id: "bl", label: "Bot-L", aria: "Bottom left" }, { id: "bc", label: "Bot-C", aria: "Bottom center" }, { id: "br", label: "Bot-R", aria: "Bottom right" },
+  { id: "tl", label: "Top-L", aria: "Top left", row: 0, col: 0 },
+  { id: "tc", label: "Top-C", aria: "Top center", row: 0, col: 1 },
+  { id: "tr", label: "Top-R", aria: "Top right", row: 0, col: 2 },
+  { id: "ml", label: "Mid-L", aria: "Middle left", row: 1, col: 0 },
+  { id: "c", label: "Center", aria: "Center", row: 1, col: 1 },
+  { id: "mr", label: "Mid-R", aria: "Middle right", row: 1, col: 2 },
+  { id: "bl", label: "Bot-L", aria: "Bottom left", row: 2, col: 0 },
+  { id: "bc", label: "Bot-C", aria: "Bottom center", row: 2, col: 1 },
+  { id: "br", label: "Bot-R", aria: "Bottom right", row: 2, col: 2 },
 ];
 
 export const DEFAULT_SETTINGS = {
@@ -63,6 +69,28 @@ export function loadFont(def) {
 }
 
 // ---------- Drawing ----------
+
+// Renders a visual 9-point alignment grid component for React.
+export function AlignmentGrid({ anchor, onChange, disabled }) {
+  return (
+    <div className="wm-align-grid" role="group" aria-label="9-point alignment grid">
+      {ANCHORS.map((a) => (
+        <button
+          key={a.id}
+          type="button"
+          disabled={disabled}
+          aria-label={a.aria}
+          aria-pressed={anchor === a.id}
+          className={"wm-align-cell" + (anchor === a.id ? " is-active" : "")}
+          style={{ gridRow: a.row + 1, gridColumn: a.col + 1 }}
+          onClick={() => onChange(a.id)}
+        >
+          <span className="wm-align-label">{a.label}</span>
+        </button>
+      ))}
+    </div>
+  );
+}
 
 function makeStamp(W, s, logo) {
   if (s.type === "logo") {

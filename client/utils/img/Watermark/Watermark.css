@@ -58,6 +58,58 @@
 .wm-anchor:disabled { cursor: not-allowed; }
 .wm-anchor:focus-visible { outline: 2px solid var(--tool-accent-text); outline-offset: 2px; }
 
+/* Visual 9-point alignment grid */
+.wm-align-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 4px;
+  width: 100%;
+  max-width: 240px;
+  aspect-ratio: 1 / 1;
+  padding: 8px;
+  background: var(--tool-surface);
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius-sm);
+}
+.wm-align-cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--tool-border);
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.wm-align-cell:hover {
+  border-color: var(--tool-accent);
+  background: color-mix(in srgb, var(--tool-accent) 10%, transparent);
+}
+.wm-align-cell.is-active {
+  border-color: var(--tool-accent);
+  background: var(--tool-accent);
+}
+.wm-align-cell.is-active::after {
+  content: "";
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  background: var(--tool-on-accent);
+  border-radius: 50%;
+}
+.wm-align-label {
+  position: absolute;
+  font: 600 9px var(--tool-font), system-ui, sans-serif;
+  color: var(--tool-muted);
+  pointer-events: none;
+  user-select: none;
+}
+.wm-align-cell.is-active .wm-align-label {
+  color: var(--tool-on-accent);
+}
+
 /* ---------- logo upload ---------- */
 .wm-logo-row { display: flex; align-items: center; gap: 12px; }
 .wm-logo-thumb { width: 56px; height: 56px; object-fit: contain; border-radius: var(--tool-radius-sm); border: 1px solid var(--tool-border); background: var(--background); }

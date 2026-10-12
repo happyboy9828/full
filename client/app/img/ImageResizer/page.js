@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { downloadBlob } from "../../../utils/shared/download";
+import { triggerDownloadProgress } from "@/components/ads/DownloadProgressPopup/DownloadProgressTrigger";
 import { clamp } from "../../../utils/shared/format";
 import { ACCEPT_ATTR, WEBP, canEncode, isAcceptedFile, loadImage } from "../../../utils/shared/imageFile";
 import {
@@ -197,7 +197,23 @@ export default function ImageResizerPage() {
     try {
       const blob = await exportBlob(work.canvas, crop, eff.w, eff.h, format, quality);
       const base = work.name.replace(/\.[^.]+$/, "") || "image";
-      downloadBlob(blob, base + "-" + eff.w + "x" + eff.h + "." + format);
+      const filename = base + "-" + eff.w + "x" + eff.h + "." + format;
+      const url = URL.createObjectURL(blob);
+      triggerDownloadProgress({
+        countdownMs: 3000,
+        durationMs: 2000,
+        title: "Preparing your resized image",
+        description: filename + " is being saved.",
+        onDownloadStart: () => {
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = filename;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        },
+      });
     } catch (err) { showToast(err.message); }
     setBusy(false);
   }

@@ -207,6 +207,24 @@ export function initPdfToJpgTool(container) {
       return;
     }
 
+    // Wait for pdf.js library to load
+    const waitForLib = (name, timeout = 10000) => new Promise((resolve, reject) => {
+      const start = Date.now();
+      const check = () => {
+        if (window[name]) return resolve();
+        if (Date.now() - start > timeout) return reject(new Error(`${name} failed to load`));
+        setTimeout(check, 100);
+      };
+      check();
+    });
+
+    try {
+      await waitForLib('pdfjsLib');
+    } catch (err) {
+      alert('PDF.js library failed to load. Please refresh the page and try again.');
+      return;
+    }
+
     activeFile = file;
     clearOutputs();
 

@@ -1,5 +1,6 @@
-export function initParagraphWriter(containerId) {
-  const container = typeof containerId === "string" 
+import { triggerDownloadProgress } from "@/components/ads/DownloadProgressPopup/DownloadProgressTrigger";
+
+export function initParagraphWriter(containerId) {  const container = typeof containerId === "string" 
     ? document.getElementById(containerId) 
     : containerId;
 
@@ -193,10 +194,22 @@ export function initParagraphWriter(containerId) {
   exportBtn.addEventListener("click", () => {
     if (!canvas.innerText) return;
     const blob = new Blob([canvas.innerText], { type: "text/plain;charset=utf-8" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "generated-paragraph.txt";
-    link.click();
+    const url = URL.createObjectURL(blob);
+    triggerDownloadProgress({
+      countdownMs: 3000,
+      durationMs: 2000,
+      title: "Preparing your paragraph",
+      description: "generated-paragraph.txt is being saved.",
+      onDownloadStart: () => {
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "generated-paragraph.txt";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      },
+    });
   });
 
   // Inline Floating Selection Micro-menu

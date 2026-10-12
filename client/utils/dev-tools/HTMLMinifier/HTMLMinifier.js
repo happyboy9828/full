@@ -9,7 +9,7 @@
  * so importing this file is safe on the server (Next.js SSR).
  */
 
-import { useDownloadProgress } from '@/components/ads/DownloadProgressPopup/DownloadProgressPopup';
+import { triggerDownloadProgress } from '@/components/ads/DownloadProgressPopup/DownloadProgressTrigger';
 
 /* ------------------------------------------------------------------ */
 /* Minifier engine                                                     */
@@ -383,7 +383,6 @@ export function createHtmlMinifier(container, userOptions) {
   let raf = 0;
   let toastTimer = 0;
   let shownPercent = 0;
-  const { trigger } = useDownloadProgress();
 
   /* ---------- left column ---------- */
   const textarea = el('textarea', {
@@ -618,7 +617,7 @@ export function createHtmlMinifier(container, userOptions) {
     const name = fileName ? fileName.replace(/\.(x?html?)$/i, '') + '.min.html' : 'minified.html';
     const url = URL.createObjectURL(blob);
     
-    trigger({
+    triggerDownloadProgress({
       countdownMs: 5000,
       durationMs: 3000,
       title: 'Preparing your minified HTML',

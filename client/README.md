@@ -18,9 +18,8 @@ Fast, secure image tools that run 100% in your browser. Nothing is uploaded to a
 | `/img/ImageResizer` | Resize photos to exact pixel dimensions or crop them to an aspect ratio |
 | `/img/ImgCompresser` | Shrink image file sizes with a quality slider or target size limit, with batch ZIP download |
 | `/img/ImgToBase64` | Encode an image as a data URL, HTML tag, CSS background or raw Base64 |
-| `/img/JpgToPng` | Convert JPG to lossless PNG, optionally 8-bit indexed, optionally clearing white edges |
-| `/img/PngToJpg` | Convert PNG to JPG, filling transparent areas with white, black or a custom hex colour |
-| `/img/WebpToPng` | Convert WebP to PNG in batches, preserving or replacing transparency |
+| `/img/JpgPngConverter` | Two-way JPEG ⇄ PNG converter with batch processing, quality control and transparency handling |
+| `/img/WebpPngConverter` | Two-way WebP ⇄ PNG converter with batch processing, quality control and transparency handling |
 | `/img/Watermark` | Protect your images with custom text or image watermarks |
 | `/dev-tools/CSSMinifier` | Compress CSS by stripping comments, whitespace and redundant code |
 | `/dev-tools/HTMLMinifier` | Minify HTML markup by removing comments, collapsing whitespace and optimising inline CSS and JavaScript |
@@ -33,7 +32,6 @@ Fast, secure image tools that run 100% in your browser. Nothing is uploaded to a
 | Category | Status |
 | --- | --- |
 | PDF Tools | Under build |
-| MS Office Tools | Under build |
 | Text Tools | Under build |
 
 ---
@@ -96,7 +94,7 @@ ads/              ad units (banner, popup, push notification, etc.)
 ### Conventions
 
 - **React components use JSX.** Plain-DOM helpers inside `utils/` use a local `h`/`el` helper. Do not use `createElement` for components: the React Compiler lint rules cannot see through it and will reject every ref.
-- **Two component styles are intentional.** New tools should be React with hooks. The imperative tools (`ImgToBase64`, `JpgToPng`, `PngToJpg`, `WebpToPng` in `utils/img/`, and `CSSMinifier`, `HTMLMinifier`, `PasswordGenerator`, `QRCodeGenerator`, `QRCodeScanner` in `utils/dev-tools/`) build their DOM in a `mount*` or `create*` function that returns a cleanup; their pages just call it from a `useEffect`. Keep new tools on the React side.
+- **Two component styles are intentional.** New tools should be React with hooks. The imperative tools (`ImgToBase64` in `utils/img/`, `JpgPngConverter` and `WebpPngConverter` in `utils/image-tools/`, and `CSSMinifier`, `HTMLMinifier`, `PasswordGenerator`, `QRCodeGenerator`, `QRCodeScanner` in `utils/dev-tools/`) build their DOM in an `init*` or `create*` function that returns a cleanup; their pages just call it from a `useEffect`. Keep new tools on the React side.
 - **Double quotes** in JS and CSS.
 - **Own your root element.** `app/layout.js` renders the single `<main>`, so a page renders a `<div class="<prefix>-page">`, never another `<main>`.
 - **CSS custom property prefixes.** Each tool scopes its styles (`rb-`, `fg-`, `ci-`, `itb-`, `j2p-`, `p2j-`, `w2p-`, `cm-`, `hm-`, `pg-`, `qrt-`, `qrs-`) but reads the shared `--tool-width`, `--tool-font` and `--tool-mono` from `app/globals.css` so all tools line up.

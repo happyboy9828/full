@@ -1,37 +1,6 @@
 import Link from "next/link";
 import { getCategories } from "../lib/pages";
 
-const FEATURED_CATEGORIES = [
-  {
-    name: "PDF Tools",
-    icon: "📄",
-    description: "Split, merge, compress, convert, and rotate PDFs entirely in your browser.",
-    href: "/category/pdf-tools",
-    tools: [
-      { title: "Split PDF", href: "/pdf-tools/SplitPDF" },
-      { title: "Merge PDF", href: "/pdf-tools/MergePDFFiles" },
-      { title: "Compress PDF", href: "/pdf-tools/CompressPDF" },
-      { title: "PDF to JPG", href: "/pdf-tools/PDFtoJPG" },
-      { title: "Rotate PDF", href: "/pdf-tools/RotatePDF" },
-      { title: "JPG to PDF", href: "/pdf-tools/JPGtoPDF" },
-    ],
-  },
-  {
-    name: "MS Office Tools",
-    icon: "📊",
-    description: "Convert between Word, Excel, PowerPoint, PDF, HTML, CSV and TXT formats.",
-    href: "/category/ms-office-tools",
-    tools: [
-      { title: "Word ↔ PDF", href: "/msoffice-tool/WordnPDF" },
-      { title: "TXT ↔ Word", href: "/msoffice-tool/TXTnWord" },
-      { title: "Excel ↔ PDF", href: "/msoffice-tool/ExcelnPDF" },
-      { title: "PowerPoint ↔ PDF", href: "/msoffice-tool/PPTnPDF" },
-      { title: "HTML ↔ Word", href: "/msoffice-tool/HTMLnDOC" },
-      { title: "CSV ↔ Excel", href: "/msoffice-tool/CSVnPDF" },
-    ],
-  },
-];
-
 // Homepage showcase: the six most-used tools as interactive cards.
 // The full catalogue (every route under app/) lives at /tools.
 const FEATURED_TOOLS = [
@@ -54,9 +23,9 @@ const FEATURED_TOOLS = [
     href: "/img/ImageResizer",
   },
   {
-    title: "JPG to PNG / WebP Converter",
-    description: "Batch convert image formats instantly.",
-    href: "/img/JpgToPng",
+    title: "JPG ⇄ PNG Converter",
+    description: "Two-way JPEG ↔ PNG conversion with batch processing.",
+    href: "/img/JpgPngConverter",
   },
   {
     title: "Favicon Generator",
@@ -120,7 +89,7 @@ export default function Home() {
           </div>
           <div className="trust-item" role="listitem">
             <span className="trust-icon" aria-hidden="true">📂</span>
-            <span className="trust-text">Images, PDFs, Office, Code & Text</span>
+            <span className="trust-text">Images, PDFs, Code & Text</span>
           </div>
         </div>
       </header>
@@ -202,52 +171,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section 4: Core Tool Categories (2-column featured) */}
-      <section
-        id="core-tools"
-        className="core-tools-section"
-        aria-labelledby="core-tools-heading"
-      >
-        <div className="tools-header">
-          <h2 id="core-tools-heading" className="tools-title">
-            Core Tool Suites
-          </h2>
-          <p className="tools-subtitle">
-            Our two most comprehensive tool collections for document and image workflows.
-          </p>
-        </div>
-
-        <ul className="core-tools-grid" role="list">
-          {FEATURED_CATEGORIES.map((category) => (
-            <li key={category.name} className="core-tool-card">
-              <div className="core-tool-link">
-                <div className="core-tool-header">
-                  <span className="core-tool-icon" aria-hidden="true">{category.icon}</span>
-                  <div>
-                    <h3 className="core-tool-title">{category.name}</h3>
-                    <p className="core-tool-desc">{category.description}</p>
-                  </div>
-                </div>
-                <ul className="core-tool-list" role="list">
-                  {category.tools.map((tool) => (
-                    <li key={tool.href} className="core-tool-item">
-                      <Link href={tool.href} className="core-tool-sub-link">
-                        <span>{tool.title}</span>
-                        <span className="core-tool-arrow" aria-hidden="true">→</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-                <Link href={category.href} className="core-tool-cta">
-                  View All {category.name} <span className="core-tool-cta-arrow" aria-hidden="true">→</span>
-                </Link>
-              </div>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      {/* Section 5: Complete Directory / All Tools */}
+      {/* Section 4: Complete Directory / All Tools */}
       <section
         id="all-tools"
         className="directory-section"

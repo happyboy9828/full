@@ -2,7 +2,6 @@
 // .zip packaging and the HTML <head> snippet. Browser only, zero dependencies.
 
 import { canvasToBytes, loadImage } from "../../../utils/shared/imageFile";
-import { downloadBlob } from "../../../utils/shared/download";
 import { createZip, encodeText } from "../../../utils/shared/zip";
 
 // The widest icon this tool renders, and the fallback for SVGs with no size.

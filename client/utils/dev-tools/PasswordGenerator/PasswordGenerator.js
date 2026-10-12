@@ -1,5 +1,5 @@
 /* ---------- Data ---------- */
-import { downloadBlob } from "../../shared/download";
+import { triggerDownloadProgress } from "@/components/ads/DownloadProgressPopup/DownloadProgressTrigger";
 
 const SETS = {
   upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
@@ -88,59 +88,65 @@ const TEMPLATE = `
   </header>
 
   <section class="pg-card">
-    <div class="pg-output">
-      <div class="pg-value" data-out aria-live="polite"></div>
-      <div class="pg-actions">
-        <button type="button" class="pg-btn" data-copy>Copy</button>
-        <button type="button" class="pg-btn pg-btn-icon" data-refresh aria-label="Generate new">&#8635;</button>
+    <div class="pg-grid-layout">
+      <div class="pg-main">
+        <div class="pg-output">
+          <div class="pg-value" data-out aria-live="polite"></div>
+          <div class="pg-actions">
+            <button type="button" class="pg-btn" data-copy>Copy</button>
+            <button type="button" class="pg-btn pg-btn-icon" data-refresh aria-label="Generate new">&#8635;</button>
+          </div>
+        </div>
+
+        <div class="pg-meter">
+          <div class="pg-bar"><div class="pg-fill" data-fill></div></div>
+          <span class="pg-meter-label" data-meter-label></span>
+        </div>
+
+        <h2 class="pg-title">Parameter Options</h2>
+
+        <div class="pg-row">
+          <span class="pg-label">Mode</span>
+          <div class="pg-segment">
+            <button type="button" data-mode="password" aria-pressed="true">Random Password</button>
+            <button type="button" data-mode="passphrase" aria-pressed="false">Memorable Passphrase</button>
+          </div>
+        </div>
+
+        <div class="pg-row pg-column">
+          <span class="pg-label" data-len-label></span>
+          <input type="range" class="pg-range" data-len aria-label="Length" />
+        </div>
+
+        <div data-group="password">
+          <h2 class="pg-title">Character Sets Included</h2>
+          <div class="pg-grid">
+            <label class="pg-check"><input type="checkbox" data-set="upper" checked /> Uppercase (A-Z)</label>
+            <label class="pg-check"><input type="checkbox" data-set="lower" checked /> Lowercase (a-z)</label>
+            <label class="pg-check"><input type="checkbox" data-set="numbers" checked /> Numbers (0-9)</label>
+            <label class="pg-check"><input type="checkbox" data-set="symbols" checked /> Symbols (@#$%^&*)</label>
+          </div>
+          <label class="pg-check pg-block"><input type="checkbox" data-similar /> Exclude similar (i, l, 1, L, o, 0, O)</label>
+        </div>
+
+        <div data-group="passphrase" hidden>
+          <h2 class="pg-title">Passphrase Options</h2>
+          <div class="pg-grid">
+            <label class="pg-check"><input type="checkbox" data-capitalize checked /> Capitalize words</label>
+            <label class="pg-check"><input type="checkbox" data-addnumber checked /> Append a number</label>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="pg-meter">
-      <div class="pg-bar"><div class="pg-fill" data-fill></div></div>
-      <span class="pg-meter-label" data-meter-label></span>
-    </div>
-
-    <h2 class="pg-title">Parameter Options</h2>
-
-    <div class="pg-row">
-      <span class="pg-label">Mode</span>
-      <div class="pg-segment">
-        <button type="button" data-mode="password" aria-pressed="true">Random Password</button>
-        <button type="button" data-mode="passphrase" aria-pressed="false">Memorable Passphrase</button>
+      <div class="pg-sidebar">
+        <h2 class="pg-title">Bulk Export Generator</h2>
+        <div class="pg-bulk">
+          <label class="pg-label">Quantity
+            <input type="number" class="pg-input" data-qty min="1" max="1000" value="10" />
+          </label>
+          <button type="button" class="pg-btn pg-btn-primary" data-bulk>Generate & Export Bulk List (.TXT)</button>
+        </div>
       </div>
-    </div>
-
-    <div class="pg-row pg-column">
-      <span class="pg-label" data-len-label></span>
-      <input type="range" class="pg-range" data-len aria-label="Length" />
-    </div>
-
-    <div data-group="password">
-      <h2 class="pg-title">Character Sets Included</h2>
-      <div class="pg-grid">
-        <label class="pg-check"><input type="checkbox" data-set="upper" checked /> Uppercase (A-Z)</label>
-        <label class="pg-check"><input type="checkbox" data-set="lower" checked /> Lowercase (a-z)</label>
-        <label class="pg-check"><input type="checkbox" data-set="numbers" checked /> Numbers (0-9)</label>
-        <label class="pg-check"><input type="checkbox" data-set="symbols" checked /> Symbols (@#$%^&amp;*)</label>
-      </div>
-      <label class="pg-check pg-block"><input type="checkbox" data-similar /> Exclude similar (i, l, 1, L, o, 0, O)</label>
-    </div>
-
-    <div data-group="passphrase" hidden>
-      <h2 class="pg-title">Passphrase Options</h2>
-      <div class="pg-grid">
-        <label class="pg-check"><input type="checkbox" data-capitalize checked /> Capitalize words</label>
-        <label class="pg-check"><input type="checkbox" data-addnumber checked /> Append a number</label>
-      </div>
-    </div>
-
-    <h2 class="pg-title">Bulk Export Generator</h2>
-    <div class="pg-bulk">
-      <label class="pg-label">Quantity
-        <input type="number" class="pg-input" data-qty min="1" max="1000" value="10" />
-      </label>
-      <button type="button" class="pg-btn pg-btn-primary" data-bulk>Generate &amp; Export Bulk List (.TXT)</button>
     </div>
   </section>
 
@@ -288,12 +294,23 @@ export function initPasswordGenerator(container) {
     const lines = [];
     for (let i = 0; i < n; i++) lines.push(generateCurrent().value);
     const blob = new Blob([lines.join('\n') + '\n'], { type: 'text/plain' });
-    const result = downloadBlob(blob, `passwords-${n}.txt`);
-    if (!result.ok) {
-      showToast(result.reason);
-      return;
-    }
-    showToast(`${n} passwords exported. Store the file securely and delete it after use.`);
+    const url = URL.createObjectURL(blob);
+    triggerDownloadProgress({
+      countdownMs: 3000,
+      durationMs: 2000,
+      title: 'Preparing your passwords',
+      description: n + ' passwords are being exported.',
+      onDownloadStart: () => {
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'passwords-' + n + '.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast(n + ' passwords exported. Store the file securely and delete it after use.');
+      },
+    });
   }
 
   /* ---------- Events ---------- */

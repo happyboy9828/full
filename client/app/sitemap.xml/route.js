@@ -42,17 +42,13 @@ const TOOL_META = {
     title: "Image to Base64 — Encode images as data URLs",
     desc: "Encode an image as a data URL, HTML tag, CSS background or raw Base64 string.",
   },
-  "/JpgToPng": {
-    title: "JPG to PNG — Convert images online",
-    desc: "Convert JPG images to lossless PNG, with optional 8-bit indexed colour.",
+  "/JpgPngConverter": {
+    title: "JPG ⇄ PNG Converter — Two-Way Image Format Converter",
+    desc: "Convert between JPEG and PNG formats with batch processing, quality control and transparency handling.",
   },
-  "/PngToJpg": {
-    title: "PNG to JPG — Convert images online",
-    desc: "Convert PNG graphics to JPG, filling transparent areas with a custom colour.",
-  },
-  "/WebpToPng": {
-    title: "WebP to PNG — Convert WebP images online",
-    desc: "Convert WebP images to PNG in batches, preserving transparency.",
+  "/WebpPngConverter": {
+    title: "WebP ⇄ PNG Converter — Two-Way Image Format Converter",
+    desc: "Convert between WebP and PNG formats with batch processing, quality control and transparency handling.",
   },
 };
 

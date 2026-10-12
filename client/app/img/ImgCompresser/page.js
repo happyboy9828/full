@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { downloadBlob } from "../../../utils/shared/download";
+import { triggerDownloadProgress } from "@/components/ads/DownloadProgressPopup/DownloadProgressTrigger";
 import { clamp, formatBytes, savingsPercent } from "../../../utils/shared/format";
 import { ACCEPT_ATTR, WEBP, canEncode, isAcceptedFile } from "../../../utils/shared/imageFile";
 import { createZipFromBlobs } from "../../../utils/shared/zip";
@@ -240,7 +240,22 @@ export default function CompressImagePage() {
         if (compressed) files.push({ name: compressed.name, blob: compressed.blob });
       }
       if (!files.length) throw new Error("Nothing to download yet.");
-      downloadBlob(await createZipFromBlobs(files), "compressed-images.zip");
+      const url = URL.createObjectURL(await createZipFromBlobs(files));
+      triggerDownloadProgress({
+        countdownMs: 3000,
+        durationMs: 2500,
+        title: "Preparing your compressed images",
+        description: "Your ZIP archive is being packaged.",
+        onDownloadStart: () => {
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "compressed-images.zip";
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        },
+      });
     } catch (err) {
       showToast(err.message);
     }
@@ -248,7 +263,23 @@ export default function CompressImagePage() {
   }
 
   function downloadOne() {
-    if (result) downloadBlob(result.blob, result.name);
+    if (!result) return;
+    const url = URL.createObjectURL(result.blob);
+    triggerDownloadProgress({
+      countdownMs: 3000,
+      durationMs: 2000,
+      title: "Preparing your compressed image",
+      description: result.name + " is being saved.",
+      onDownloadStart: () => {
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = result.name;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      },
+    });
   }
 
   function onPickFiles(event) {

@@ -6,13 +6,9 @@ export { initPdfToJpgTool } from './pdf-tools/PDFtoJPG/PDFtoJPG.js';
 export { initRotatePdfTool } from './pdf-tools/RotatePDF/RotatePDF.js';
 export { initJpgToPdfTool } from './pdf-tools/JPGtoPDF/JPGtoPDF.js';
 
-// MS Office Tools
-export { initWordPdfConverter } from './msoffice-tool/WordnPDF/WordtoPDFnPDFtoWord.js';
-export { initTxtWordConverter } from './msoffice-tool/TXTnWord/TXTnWord.js';
-export { initExcelPdfConverter } from './msoffice-tool/ExcelnPDF/EccelnPDF.js';
-export { renderPptPdfTool } from './msoffice-tool/PPTnPDF/PPTnPDF.js';
-export { initHtmlToDocx } from './msoffice-tool/HTMLnDOC/HTMLnDOC.js';
-export { initCSVExcelTool } from './msoffice-tool/CSVnPDF/CSVnExcel.js';
+// Image Tools
+export { initJpgPngConverter } from './image-tools/JpgPngConverter/index.js';
+export { initWebpPngConverter } from './image-tools/WebpPngConverter/index.js';
 
 // Writing Tools
 export { renderCaseConverter } from './writing-tool/Case Converter/tool.js';
