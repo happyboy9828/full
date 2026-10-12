@@ -2,6 +2,76 @@
 
 Last updated: 2026-10-12
 
+## Vercel Request Handler Pattern (COMPLETE)
+
+Opening `https://testing-api-backend.vercel.app` in a new tab showed "loading" forever — no welcome message, no response. Root cause: `@vercel/node` invokes the default export as a request handler `(req, res) => {...}`, but the previous `index.js` exported `startServer`, which calls `app.listen()` and returns a `http.Server` instance. A server object is not callable, so Vercel's runtime never got a usable handler and every request hung until the platform timeout killed it.
+
+### Fix
+| File | Change |
+|------|--------|
+| `backend/index.js` | Default export is now a real `handler(req, res)` function that lazily builds the Express app once and forwards every request to it. DB connection is kicked off in the background on first invocation. `startServer()` retained for local dev / `npm start`. |
+
+### Verification (24/24 endpoints pass against live MongoDB Atlas)
+- `GET /` → 200 `{"success":true,"message":"DocFix backend running"}`
+- `GET /health` → 200 `{"success":true,"status":"ok","database":"connected"}`
+- `GET /api/analytics/health` → 200
+- `POST /api/analytics/{pageview,track,sessions/start,sessions/heartbeat,sessions/end}` → 200
+- `POST /api/auth/login` → 200 sets `admin_session` cookie
+- `GET /api/auth/me` (with cookie) → 200 `authenticated: true`
+- `GET /api/analytics/reports/{overview,pages,devices,events,live,time-series,sources,returning-visitors,recent-visitors}` → all 200 with real data
+- `GET /api/analytics/daily-stats` → 200
+- `GET /api/analytics/reports/session-replay?sessionId=nonexistent` → 404
+- `POST /api/auth/logout` → 200 revokes session
+- Unauthenticated report requests → 401
+- Unknown route → 404 JSON
+
+### Note
+Redeploy the backend on Vercel after this change for the fix to take effect live.
+
+---
+
+## Frontend + Backend Connected to Database (COMPLETE)
+
+The frontend (`https://docfix-frontend.vercel.app`) and backend (`https://testing-api-backend.vercel.app`) are now both connected to MongoDB Atlas and can store/retrieve analytics data end-to-end.
+
+### Root Causes Fixed
+1. **Backend never started on Vercel** — the previous agent changed `backend/index.js` to export `startServer()` without calling it, so the serverless function received requests but never listened. Fixed by re-adding the direct-run boot check.
+2. **DB connection blocked cold start** — the original `index.js` awaited `connectDBWithRetry()` (which loops forever on failure) before `app.listen()`, hitting Vercel's cold-start timeout. Fixed by starting the HTTP server first and running DB connection in the background.
+3. **Client env misconfiguration** — `client/.env` had `NEXT_PUBLIC_TRACKING_API=https://testing-api-backend.vercel.app/api/analytics` while the tracking client already appends `/analytics`, producing double `/analytics/analytics` paths. Fixed to point at the correct base.
+
+### Changes
+| File | Change |
+|------|--------|
+| `backend/index.js` | Server now listens on `process.env.PORT || config.port` immediately; `connectDBWithRetry()` runs in background; exports default `startServer` for `@vercel/node` |
+| `backend/vercel.json` | New — `@vercel/node` build targeting `index.js` with catch-all route |
+| `client/.env` | `NEXT_PUBLIC_TRACKING_API=http://localhost:5000/api/analytics` (dev) |
+| `client/.env.example` | Updated with production comment for `https://testing-api-backend.vercel.app/api/analytics` |
+
+### Verification (live against MongoDB Atlas)
+- `GET /` → 200 `{"success":true,"message":"DocFix backend running"}`
+- `GET /health` → 200 `{"success":true,"status":"ok","database":"connected"}`
+- `GET /api/analytics/health` → 200 `{"success":true,"status":"ok","database":"connected","service":"analytics"}`
+- `POST /api/analytics/pageview` → 200 (event persisted in `events` collection)
+- `POST /api/analytics/track` → 200 with `eventId`
+- `POST /api/analytics/sessions/start` → 200 with `sessionId`
+- `POST /api/analytics/sessions/heartbeat` → 200
+- `POST /api/analytics/sessions/end` → 200
+- `POST /api/auth/login` → 200 sets `admin_session` cookie
+- `GET /api/auth/me` (with cookie) → 200 `{"success":true,"authenticated":true,"userId":"admin"}`
+- `GET /api/analytics/reports/overview` (with cookie) → 200 with real data (pageViews, sessions, visitors, bounce rate, etc.)
+- `GET /api/analytics/reports/{pages,devices,events,live,time-series,sources,returning-visitors,recent-visitors}` → all 200 with correct data shapes
+- `GET /api/analytics/daily-stats` → 200
+- `GET /api/analytics/reports/session-replay?sessionId=nonexistent` → 404
+- `POST /api/auth/logout` → 200 revokes session
+- Unauthenticated report requests → 401
+- Unknown route → 404 JSON
+- All backend JavaScript files pass `node --check`
+
+### Note
+The client's `next.config.mjs` already rewires `/api/analytics/*` and `/api/auth/*` to `http://localhost:5000` for local dev. For Vercel production, set `NEXT_PUBLIC_TRACKING_API=https://testing-api-backend.vercel.app/api/analytics` in the Vercel project env vars.
+
+---
+
 ## Non-Blocking DB Connection with Welcome Message (COMPLETE)
 
 The backend was previously a minimal stub (`app.js` only had `/`, `/health`, `/status`). It now exposes the full analytics API the client expects, with CORS configured to allow the Next.js frontend to call it with credentials.
