@@ -2,6 +2,56 @@
 
 Last updated: 2026-10-12
 
+## Backend API + CORS — Client Integration (COMPLETE)
+
+The backend was previously a minimal stub (`app.js` only had `/`, `/health`, `/status`). It now exposes the full analytics API the client expects, with CORS configured to allow the Next.js frontend to call it with credentials.
+
+### What was built
+
+| Layer | Files | Purpose |
+|-------|-------|---------|
+| **Models** | `backend/models/Site.js`, `Session.js`, `Event.js`, `AdminSession.js`, `DailyStats.js`, `index.js` | Mongoose schemas for sites, sessions, events, admin auth sessions, and daily aggregates — all per DESIGN.md |
+| **Utils** | `backend/utils/logger.js`, `sanitize.js`, `cookies.js` | Structured JSON logging, PII sanitization (URL param stripping, customData scrubbing, UA parsing), cookie helpers |
+| **Middleware** | `backend/middleware/rateLimit.js`, `auth.js`, `validate.js` | In-memory sliding-window rate limiting, `requireAdmin` cookie-based session check, payload/UUID/date-range validators |
+| **Controllers** | `backend/controllers/analyticsController.js`, `authController.js`, `reportsController.js`, `dailyStatsController.js` | Event ingestion (track/pageview/session start/heartbeat/end), scrypt password auth + session management, 11 report aggregations, daily stats precompute |
+| **Routes** | `backend/routes/health.js`, `analytics.js`, `auth.js`, `reports.js`, `dailyStats.js`, `index.js` | Express routers mounted under `/api/auth`, `/api/analytics`, `/api/analytics/reports`, `/api/analytics/daily-stats` |
+| **Config** | `backend/config/env.js` | Extended with `CORS_ORIGIN`, `ADMIN_PASSWORD`/`ADMIN_PASSWORD_HASH`, `ADMIN_SESSION_TTL_DAYS`, rate-limit knobs |
+| **App** | `backend/app.js` | CORS with `credentials: true` + `origin` whitelist, cookie-parser, JSON 256kb, request logger, all routes, 404 + error handlers |
+
+### CORS configuration
+- `Access-Control-Allow-Origin: http://localhost:3000` (configurable via `CORS_ORIGIN`)
+- `Access-Control-Allow-Credentials: true`
+- `Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS`
+- `Access-Control-Allow-Headers: Content-Type,Authorization`
+- `Access-Control-Max-Age: 86400000`
+
+### Verification (live against MongoDB Atlas)
+- `GET /` → 200 `{"success":true,"message":"DocFix backend running"}`
+- `GET /health` → 200 `{"success":true,"status":"ok","database":"connected","dbName":"analytics"}`
+- `GET /api/analytics/health` → 200 `{"success":true,"status":"ok","database":"connected","service":"analytics"}`
+- `POST /api/analytics/sessions/start` → 200 with valid UUIDs
+- `POST /api/analytics/pageview` → 200
+- `POST /api/analytics/track` → 200 with `eventId`
+- `POST /api/analytics/sessions/heartbeat` → 200
+- `POST /api/analytics/sessions/end` → 200
+- `POST /api/auth/login` → 200 sets `admin_session` cookie
+- `GET /api/auth/me` → 200 `{"success":true,"authenticated":true,"userId":"admin"}`
+- `GET /api/analytics/reports/{overview,sources,pages,devices,events,live,time-series,funnel,retention,heatmap,session-replay,returning-visitors,recent-visitors}` → all 200 with correct data shapes
+- `GET /api/analytics/reports/session-replay?sessionId=nonexistent` → 404
+- `GET /api/analytics/daily-stats` → 200
+- `POST /api/auth/logout` → 200 revokes session
+- Unauthenticated report requests → 401
+- CORS preflight (OPTIONS) → 204 with correct `Access-Control-*` headers
+- All 25 backend source files pass `node --check`
+
+### Deps added
+`cookie-parser@^1.4.7` added; `nodejs@^0.0.0` removed (bogus dependency).
+
+### Note
+The client's `next.config.mjs` already rewires `/api/analytics/*` and `/api/auth/*` to `http://localhost:5000`, so the frontend can call the backend transparently. Set `CORS_ORIGIN` in `backend/.env` to the production frontend URL before deploying.
+
+---
+
 ## MongoDB Connection Retry (COMPLETE)
 
 The backend now retries the MongoDB connection instead of exiting when the first attempt fails.

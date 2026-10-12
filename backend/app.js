@@ -1,49 +1,40 @@
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import { dbState } from "./db/db.js";
+import { mountRoutes } from "./routes/index.js";
+import { requestLogger } from "./utils/logger.js";
+import config from "./config/env.js";
 
 export function createApp() {
   const app = express();
 
   app.disable("x-powered-by");
-  app.use(cors());
+
+  app.use(
+    cors({
+      origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        const allowed = config.cors.origin;
+        if (allowed.includes(origin) || allowed.includes("*")) {
+          return callback(null, true);
+        }
+        return callback(null, true);
+      },
+      credentials: config.cors.credentials,
+      methods: config.cors.methods,
+      allowedHeaders: config.cors.allowedHeaders,
+      maxAge: config.cors.maxAge,
+    })
+  );
+
+  app.use(cookieParser());
   app.use(express.json({ limit: "256kb" }));
+  app.use(express.urlencoded({ extended: true, limit: "256kb" }));
+  app.use(requestLogger);
 
-  app.get("/", (req, res) => {
-    res.json({ success: true, message: "DocFix backend running" });
-  });
-
-  app.get("/health", (req, res) => {
-    res.json({
-      success: true,
-      status: "ok",
-      database: dbState(),
-      dbName: mongoose.connection.name,
-      uptime: process.uptime(),
-    });
-  });
-
-  app.get("/status", async (req, res) => {
-    const state = dbState();
-    let collections = null;
-    if (mongoose.connection.readyState === 1 && mongoose.connection.db) {
-      try {
-        const cols = await mongoose.connection.db.listCollections().toArray();
-        collections = cols.map((c) => c.name).sort();
-      } catch (err) {
-        console.error(err);
-      }
-    }
-    res.json({
-      success: true,
-      status: "ok",
-      database: state,
-      dbName: mongoose.connection.name,
-      collections,
-      uptime: process.uptime(),
-    });
-  });
+  mountRoutes(app);
 
   app.use((req, res) => {
     res.status(404).json({ success: false, error: "Not found", path: req.originalUrl });
