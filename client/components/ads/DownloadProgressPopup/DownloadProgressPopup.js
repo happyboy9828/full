@@ -1,7 +1,4 @@
-// Download Progress Popup - Shows countdown then progress bar when user clicks download
-// Appears as a modal overlay with countdown (5s) then animated progress bar
-// Auto-dismisses when progress reaches 100%
-
+// Download Progress Popup - Minimal blank box
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -11,52 +8,34 @@ import "./DownloadProgressPopup.css";
 
 const DEFAULTS = {
   slot: "download-progress",
-  label: "Downloading",
-  title: "Preparing your download",
-  description: "Your file is being processed and will start shortly.",
   autoCloseMs: 1000,
-  countdownMs: 5000, // 5 second countdown before download starts
+  countdownMs: 5000,
 };
 
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(max, value));
-}
-
 export default function DownloadProgressPopup({
-  // Trigger control
   isOpen = false,
   onClose = null,
   onComplete = null,
-  // Progress simulation
-  durationMs = 3000, // Total time to reach 100% after countdown
-  // Content
+  durationMs = 3000,
   slot = DEFAULTS.slot,
-  label = DEFAULTS.label,
-  title = DEFAULTS.title,
-  description = DEFAULTS.description,
-  // Behavior
   autoCloseMs = DEFAULTS.autoCloseMs,
   countdownMs = DEFAULTS.countdownMs,
-  dismissible = false, // Can't dismiss during download
-  // Callback to execute actual download after countdown
+  dismissible = false,
   onDownloadStart = null,
 }) {
-  const [progress, setProgress] = useState(0);
-  const [phase, setPhase] = useState("countdown"); // countdown, preparing, downloading, completing
-  const [countdown, setCountdown] = useState(Math.ceil(countdownMs / 1000));
   const dialogRef = useRef(null);
   const closeRef = useRef(null);
   const restoreRef = useRef(null);
-  const animationRef = useRef(null);
   const countdownRef = useRef(null);
-  const startTimeRef = useRef(null);
+  const progressRef = useRef(null);
   const downloadStartedRef = useRef(false);
+  const startTimeRef = useRef(null);
   const blocked = useOverlaySlot(`download:${slot}`, isOpen);
 
+  const [countdownProgress, setCountdownProgress] = useState(100);
+  const [timeRemaining, setTimeRemaining] = useState(Math.ceil(5000 / 1000));
+
   const close = useCallback(() => {
-    if (animationRef.current) {
-      window.cancelAnimationFrame(animationRef.current);
-    }
     if (countdownRef.current) {
       window.clearInterval(countdownRef.current);
     }
@@ -64,95 +43,62 @@ export default function DownloadProgressPopup({
   }, [onClose]);
 
   const complete = useCallback(() => {
-    setProgress(100);
-    setPhase("completing");
     onComplete?.();
-
-    // Auto-close after delay
     const timer = window.setTimeout(() => {
       close();
     }, autoCloseMs);
-
     return () => window.clearTimeout(timer);
-  }, [autoCloseMs, close]);
+  }, [autoCloseMs, close, onComplete]);
 
-  // Countdown phase
+  // Countdown phase with progress bar
   useEffect(() => {
-    if (!isOpen || blocked || phase !== "countdown") return;
+    if (!isOpen || blocked) return;
 
-    setCountdown(Math.ceil(countdownMs / 1000));
-    downloadStartedRef.current = false;
+    setCountdownProgress(100);
+    setTimeRemaining(Math.ceil(countdownMs / 1000));
+    startTimeRef.current = Date.now();
+
+    progressRef.current = window.setInterval(() => {
+      const elapsed = Date.now() - startTimeRef.current;
+      const remainingPct = Math.max(0, 100 - (elapsed / countdownMs) * 100);
+      setCountdownProgress(remainingPct);
+      setTimeRemaining(Math.max(0, Math.ceil((countdownMs - elapsed) / 1000)));
+    }, 50);
 
     countdownRef.current = window.setInterval(() => {
-      setCountdown((prev) => {
-        const next = prev - 1;
-        if (next <= 0) {
-          window.clearInterval(countdownRef.current);
-          countdownRef.current = null;
-          return 0;
-        }
-        return next;
-      });
+      // Countdown tick for any other logic
     }, 1000);
 
     return () => {
+      if (progressRef.current) {
+        window.clearInterval(progressRef.current);
+      }
       if (countdownRef.current) {
         window.clearInterval(countdownRef.current);
       }
     };
-  }, [isOpen, blocked, countdownMs, phase]);
+  }, [isOpen, blocked, countdownMs]);
 
-  // Transition from countdown to progress animation
+  // When countdown completes, fire download and close
   useEffect(() => {
-    if (phase !== "countdown" || countdown > 0) return;
+    if (!isOpen || blocked) return;
 
-    // Start the actual download when countdown reaches 0
-    if (!downloadStartedRef.current && onDownloadStart) {
-      downloadStartedRef.current = true;
-      onDownloadStart();
-    }
-
-    // Move to progress animation phase
-    setPhase("preparing");
-    setProgress(0);
-    startTimeRef.current = Date.now();
-  }, [phase, countdown, onDownloadStart]);
-
-  // Animate progress from 0 to 100 (after countdown)
-  useEffect(() => {
-    if (!isOpen || blocked || phase === "countdown") return;
-
-    const animate = () => {
-      const elapsed = Date.now() - (startTimeRef.current ?? Date.now());
-      const rawProgress = clamp((elapsed / durationMs) * 100, 0, 100);
-
-      setProgress(rawProgress);
-
-      if (rawProgress < 30) {
-        setPhase("preparing");
-      } else if (rawProgress < 95) {
-        setPhase("downloading");
-      } else {
-        setPhase("completing");
+    const timer = window.setTimeout(() => {
+      if (!downloadStartedRef.current && onDownloadStart) {
+        downloadStartedRef.current = true;
+        try {
+          onDownloadStart();
+        } catch (err) {
+          console.error("Download start failed:", err);
+        }
       }
+      complete();
+    }, countdownMs);
 
-      if (rawProgress < 100) {
-        animationRef.current = window.requestAnimationFrame(animate);
-      } else {
-        complete();
-      }
-    };
+    return () => window.clearTimeout(timer);
+  }, [isOpen, blocked, countdownMs, onDownloadStart, complete]);
 
-    animationRef.current = window.requestAnimationFrame(animate);
-
-    return () => {
-      if (animationRef.current) {
-        window.cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [isOpen, blocked, durationMs, complete, phase]);
-
-  // Modal behaviour while open: scroll lock, Escape (if dismissible), focus trap, focus restore.
+  // Modal behaviour
   useEffect(() => {
     if (!isOpen || blocked) return;
 
@@ -201,16 +147,6 @@ export default function DownloadProgressPopup({
 
   if (!isOpen || blocked) return null;
 
-  const phaseLabels = {
-    countdown: `Download starts in {countdown}s...`,
-    preparing: "Preparing download...",
-    downloading: "Downloading...",
-    completing: "Finalizing...",
-  };
-
-  const isCountdownPhase = phase === "countdown";
-  const displayPhase = isCountdownPhase ? "countdown" : phase;
-
   return (
     <div
       className="ad-download-progress"
@@ -220,51 +156,43 @@ export default function DownloadProgressPopup({
         className="ad-download-progress-dialog"
         role="dialog"
         aria-modal="true"
-        aria-label={label}
+        aria-label="Download"
         data-slot={slot}
         ref={dialogRef}
       >
         <div className="ad-download-progress-header">
-          <span className="ad-download-progress-label">{label}</span>
-          {dismissible && (
-            <button
-              type="button"
-              className="ad-download-progress-close"
-              onClick={close}
-              aria-label="Close download progress"
-            >
-              <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-                <path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
-              </svg>
-            </button>
-          )}
+          <div className="ad-download-progress-notification" aria-live="polite">
+            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false" width="16" height="16">
+              <path d="M8 1L1 15h14L8 1z" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M8 5v4M8 11v0.01" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+            </svg>
+            <span>Download starting...</span>
+          </div>
+          <button
+            type="button"
+            className="ad-download-progress-close"
+            onClick={close}
+            ref={closeRef}
+            aria-label="Close"
+          >
+            <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+              <path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+            </svg>
+          </button>
         </div>
-
         <div className="ad-download-progress-body">
-          <div className="ad-download-progress-spinner" aria-hidden="true" />
-          <h2 className="ad-download-progress-title">{title}</h2>
-          <p className="ad-download-progress-desc">{description}</p>
-          {isCountdownPhase && (
-            <div className="ad-download-progress-countdown" aria-live="polite">
-              {countdown}
-            </div>
-          )}
-          <p className="ad-download-progress-phase">
-            {isCountdownPhase 
-              ? "Download starts in..." 
-              : phaseLabels[displayPhase]
-            }
-          </p>
-
-          <div className="ad-download-progress-bar-container" role="progressbar" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100} aria-label="Download progress">
+          <div className="ad-download-progress-ad-box">
+            <p className="ad-download-progress-ad-text">LIMITED OFFER</p>
+            <p className="ad-download-progress-ad-subtext">Get 50% Off Premium — Upgrade today!</p>
+          </div>
+          <div className="ad-download-progress-countdown-bar-container" aria-label="Countdown timer">
             <div
-              className="ad-download-progress-bar"
-              style={{ width: `${progress}%` }}
+              className="ad-download-progress-countdown-bar"
+              style={{ width: `${countdownProgress}%` }}
             />
           </div>
-
-          <div className="ad-download-progress-percent" aria-hidden="true">
-            {isCountdownPhase ? `${countdown}s` : `${Math.round(progress)}%`}
+          <div className="ad-download-progress-time-remaining" aria-live="polite">
+            {timeRemaining}s remaining
           </div>
         </div>
       </div>
@@ -272,7 +200,6 @@ export default function DownloadProgressPopup({
   );
 }
 
-// Hook for triggering download progress with countdown from any component
 export function useDownloadProgress() {
   const [isOpen, setIsOpen] = useState(false);
   const [config, setConfig] = useState({});
@@ -306,9 +233,6 @@ export function useDownloadProgress() {
     onDownloadStartRef.current = null;
   }, []);
 
-  // Register this instance as the active download trigger so non-React tool
-  // init functions (which run outside a component tree) can reach it without
-  // violating the Rules of Hooks.
   useEffect(() => {
     return subscribeDownloadProgress(trigger);
   }, [trigger]);

@@ -1,7 +1,4 @@
-/* Download Progress Popup - Modal with animated progress bar.
-   Scoped to .ad-download-progress-* and mounted at the document root.
-   z-index 75: above VignetteBanner (70). */
-
+/* Download Progress Popup - Minimal blank box */
 .ad-download-progress,
 .ad-download-progress *,
 .ad-download-progress *::before,
@@ -30,7 +27,8 @@
   position: relative;
   z-index: 1;
   width: 100%;
-  max-width: 420px;
+  max-width: 400px;
+  min-height: 180px;
   background: var(--background);
   border: 1px solid var(--tool-border);
   border-radius: var(--tool-radius);
@@ -49,24 +47,33 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 18px;
+  gap: 12px;
+  padding: 12px 16px;
   border-bottom: 1px solid var(--tool-border);
   background: var(--tool-surface);
 }
 
-.ad-download-progress-label {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--tool-muted);
+.ad-download-progress-notification {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--tool-accent);
+  background: color-mix(in srgb, var(--tool-accent) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--tool-accent) 30%, var(--tool-border));
+  border-radius: var(--tool-radius-sm);
+  flex: 1;
+  min-width: 0;
 }
+.ad-download-progress-notification svg { flex-shrink: 0; color: var(--tool-accent); }
 
 .ad-download-progress-close {
   display: grid;
   place-items: center;
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   padding: 0;
   cursor: pointer;
   color: var(--tool-muted);
@@ -74,127 +81,86 @@
   border: 1px solid var(--tool-border);
   border-radius: var(--tool-radius-sm);
   transition: color 0.15s, border-color 0.15s, background 0.15s;
+  flex-shrink: 0;
 }
 .ad-download-progress-close:hover { color: var(--tool-text); border-color: var(--tool-accent); background: var(--tool-tint); }
 .ad-download-progress-close:focus-visible { outline: 2px solid var(--tool-accent-text); outline-offset: 2px; }
-.ad-download-progress-close svg { width: 13px; height: 13px; }
+.ad-download-progress-close svg { width: 12px; height: 12px; }
 
 /* ---------- body ---------- */
 .ad-download-progress-body {
-  padding: 28px 24px 24px;
+  padding: 24px;
+}
+
+/* Ad box with red border */
+.ad-download-progress-ad-box {
+  padding: 20px;
   text-align: center;
+  border: 2px solid #FF6B6B;
+  border-radius: var(--tool-radius-sm);
+  background: color-mix(in srgb, #FF6B6B 8%, transparent);
 }
 
-/* Spinner */
-.ad-download-progress-spinner {
-  width: 48px;
-  height: 48px;
-  margin: 0 auto 16px;
-  border: 3px solid var(--tool-border);
-  border-top-color: var(--tool-accent);
-  border-radius: 50%;
-  animation: ad-download-progress-spin 0.8s linear infinite;
-}
-
-@keyframes ad-download-progress-spin {
-  to { transform: rotate(360deg); }
-}
-
-.ad-download-progress-title {
+.ad-download-progress-ad-text {
   margin: 0 0 8px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
-  line-height: 1.3;
-  color: var(--tool-text);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #FF6B6B;
 }
 
-.ad-download-progress-desc {
-  margin: 0 0 16px;
-  font-size: 14px;
+.ad-download-progress-ad-subtext {
+  margin: 0;
+  font-size: 13px;
   line-height: 1.5;
   color: var(--tool-muted);
 }
 
-.ad-download-progress-phase {
-  margin: 0 0 16px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--tool-accent);
-  min-height: 20px;
-  transition: opacity 0.2s;
-}
-
-/* Countdown display */
-.ad-download-progress-countdown {
-  font-size: 32px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  color: var(--tool-accent);
-  font-family: var(--tool-font-mono), ui-monospace, monospace;
-  margin: 8px 0 16px;
-  line-height: 1.2;
-}
-
-/* Progress bar */
-.ad-download-progress-bar-container {
-  position: relative;
-  height: 8px;
-  background: var(--tool-border);
-  border-radius: 999px;
-  overflow: hidden;
-  margin-bottom: 10px;
-}
-
-.ad-download-progress-bar {
-  display: block;
-  height: 100%;
-  background: linear-gradient(90deg, var(--tool-accent), color-mix(in srgb, var(--tool-accent) 70%, var(--tool-accent-hover)));
-  border-radius: 999px;
-  transition: width 0.15s ease-out;
-  position: relative;
-}
-
-.ad-download-progress-bar::after {
-  content: "";
+/* Countdown progress bar at bottom */
+.ad-download-progress-countdown-bar-container {
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   right: 0;
-  bottom: 0;
+  height: 4px;
+  background: var(--tool-border);
+  overflow: hidden;
+}
+
+.ad-download-progress-countdown-bar {
+  height: 100%;
   background: linear-gradient(
     90deg,
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
+    #FF6B6B,
+    color-mix(in srgb, #FF6B6B 70%, var(--tool-accent))
   );
-  animation: ad-download-progress-shimmer 1.5s infinite;
+  border-radius: 0;
+  transition: width 0.05s linear;
 }
 
-@keyframes ad-download-progress-shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-.ad-download-progress-percent {
-  font-size: 14px;
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  color: var(--tool-text);
+/* Time remaining text under the bar */
+.ad-download-progress-time-remaining {
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
   font-family: var(--tool-font-mono), ui-monospace, monospace;
+  color: var(--tool-muted);
+  pointer-events: none;
 }
 
 /* ---------- responsive ---------- */
 @media (max-width: 480px) {
   .ad-download-progress { padding: 16px; }
   .ad-download-progress-dialog { max-width: none; border-radius: 0; }
-  .ad-download-progress-body { padding: 24px 20px; }
-  .ad-download-progress-title { font-size: 16px; }
+  .ad-download-progress-body { padding: 20px 16px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ad-download-progress,
-  .ad-download-progress-dialog,
-  .ad-download-progress-bar,
-  .ad-download-progress-spinner { animation: none; transition: none; }
-  .ad-download-progress-bar::after { animation: none; }
+  .ad-download-progress-dialog { animation: none; }
 }
