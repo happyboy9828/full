@@ -3,7 +3,8 @@
 import { useEffect, useRef, useCallback } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 
-const TRACKING_API = (process.env.NEXT_PUBLIC_TRACKING_API || "/api") + "/analytics";
+const baseApi = process.env.NEXT_PUBLIC_TRACKING_API || "/api";
+const TRACKING_API = baseApi.endsWith("/analytics") ? baseApi : `${baseApi}/analytics`;
 const HEARTBEAT_INTERVAL_MS = 30000;
 const SESSION_TIMEOUT_MS = 30 * 60 * 1000;
 const MAX_RETRIES = 3;
