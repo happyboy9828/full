@@ -1,8 +1,8 @@
 ﻿Phase Plan
 
-Last updated: October 12, 2026 | Current: Phase 10 — Test, Deploy, and Maintain
+Last updated: October 12, 2026 | Current: Phase 27 — Non-Blocking DB Connection with Welcome Message
 
-**Current Phase: Phase 10 — Test, Deploy, and Maintain**
+**Current Phase: Phase 27 — Non-Blocking DB Connection with Welcome Message**
 
 ---
 
@@ -17,6 +17,26 @@ Last updated: October 12, 2026 | Current: Phase 10 — Test, Deploy, and Maintai
 **Task:** "if mongo db is not connected try it again" — the backend no longer exits when the first DB connection attempt fails; it retries until the database is reachable.
 
 Completion Criteria: Backend recovers from DB connection failures without manual restart. — VERIFIED (connected on the 3rd automatic attempt)
+
+---
+
+## Phase 27: Non-Blocking DB Connection with Welcome Message (COMPLETE)
+
+**Completed:**
+- [x] Modified `backend/index.js` to start the HTTP server immediately without waiting for MongoDB
+- [x] `connectDBWithRetry()` now runs as a background promise (non-blocking)
+- [x] Welcome message on `GET /` is always served (`"DocFix backend running"`)
+- [x] `GET /health` reports live database state (`connected`/`connecting`/`disconnected`)
+
+**Task:** "make sure the backend display welcome msg on / router and try to connect to db if not connected try again but show welcome msg"
+
+**Behavior:**
+- Server listens on port 5000 immediately on startup
+- `GET /` always returns welcome message regardless of DB state
+- MongoDB connection retries in background every 5s until successful
+- Server never exits due to DB connection failure
+
+Completion Criteria: Backend serves welcome message on `/` immediately while retrying DB connection in background. — VERIFIED (syntax checks pass, server starts without DB)
 
 ---
 

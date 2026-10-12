@@ -2,7 +2,7 @@
 
 Last updated: 2026-10-12
 
-## Backend API + CORS — Client Integration (COMPLETE)
+## Non-Blocking DB Connection with Welcome Message (COMPLETE)
 
 The backend was previously a minimal stub (`app.js` only had `/`, `/health`, `/status`). It now exposes the full analytics API the client expects, with CORS configured to allow the Next.js frontend to call it with credentials.
 
@@ -72,6 +72,30 @@ The backend now retries the MongoDB connection instead of exiting when the first
 - First two attempts failed with `connect ETIMEDOUT 159.41.242.111:27017`, retried automatically
 - Third attempt succeeded: `MongoDB connected: ac-s9j4zgi-shard-00-00.yeb2lub.mongodb.net/test`
 - `Server is running on port 5000` — `GET /health` returned `{"success":true,"status":"ok","database":"connected","uptime":94.17}`
+
+---
+
+## Non-Blocking DB Connection with Welcome Message (COMPLETE)
+
+The backend now starts the HTTP server immediately and serves the welcome message on `/` regardless of database connection state. The MongoDB connection is retried in the background.
+
+### Changes
+| File | Change |
+|------|--------|
+| `backend/index.js` | Server now starts immediately with `app.listen()`; `connectDBWithRetry()` runs as a background promise without blocking startup |
+
+### Behavior
+- Server listens on port 5000 immediately on startup
+- `GET /` always returns `{"success":true,"message":"DocFix backend running"}` (welcome message)
+- `GET /health` reports current database state (`connected`, `connecting`, `disconnected`)
+- MongoDB connection retries in the background every 5s (`DB_RETRY_DELAY_MS`) until successful
+- No fatal exit if DB is unreachable — server stays up and continues retrying
+
+### Verification
+- Syntax check passes on all backend files (`node --check`)
+- Server starts without waiting for MongoDB
+- Welcome message served on `/` even when DB is disconnected
+- `/health` endpoint correctly reports `database: "disconnected"` when DB is not yet connected
 
 ---
 
