@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
-/* Base tokens = LIGHT palette (colour scheme 3). This :root block is the
+/* Base tokens = LIGHT palette (warm green + amber). This :root block is the
    default for the "System" option when the OS is in light mode, and is
    also the fallback before any data-theme attribute is applied. */
 :root {
-  --background: #F5F6FA;
-  --foreground: #1E1B2E;
+  --background: #FAF7F0;
+  --foreground: #473C33;
 
   /* Every tool stylesheet reads these, so all seven tools share one container
      width, one font and one monospace face instead of hard-coding their own. */
@@ -16,15 +16,19 @@
   /* Shared surface tokens. Tools only map their own prefixed variables onto
      these, which is what keeps the routes looking like one app. */
   --tool-surface: #FFFFFF;
-  --tool-surface-2: #F5F6FA;
-  --tool-border: #E2E8F0;
-  --tool-text: #1E1B2E;
-  --tool-muted: #6B7280;
-  --tool-accent: #5E5CE6;
-  --tool-accent-hover: #4834D4;
-  --tool-accent-text: #5E5CE6;
-  --tool-on-accent: #FFFFFF;
-  --tool-highlight: #FF6B6B;
+  --tool-surface-2: #F3EDE2;
+  --tool-border: #E9E1D3;
+  --tool-text: #473C33;
+  --tool-muted: #756A5E;
+  --tool-muted-2: #9A8F83;
+  --tool-accent: #ABC270;
+  --tool-accent-hover: #96AB62;
+  --tool-accent-text: #647740;
+  --tool-on-accent: #473C33;
+  --tool-secondary: #FEC868;
+  --tool-secondary-hover: #EAB860;
+  --tool-on-secondary: #473C33;
+  --tool-highlight: #FDA769;
   --tool-tint: color-mix(in srgb, var(--foreground) 6%, transparent);
   --tool-tint-strong: color-mix(in srgb, var(--foreground) 12%, transparent);
   --tool-shadow: 0 10px 30px color-mix(in srgb, var(--foreground) 18%, transparent);
@@ -49,7 +53,7 @@
   --nav-border: var(--tool-border);
   --nav-hover: var(--tool-tint);
   --nav-limit-bg: color-mix(in srgb, var(--tool-highlight) 14%, transparent);
-  --nav-limit-text: #b91c1c;
+  --nav-limit-text: #B45309;
   --overlay-bg: color-mix(in srgb, var(--foreground) 55%, transparent);
   --font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
@@ -70,45 +74,55 @@
 /* System default: follow the OS preference when no explicit choice is set. */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0B0F19;
-    --foreground: #F3F4F6;
-    --tool-surface: #1E293B;
-    --tool-surface-2: #0B0F19;
-    --tool-border: #334155;
-    --tool-text: #F3F4F6;
-    --tool-muted: #9CA3AF;
-    --tool-accent: #818CF8;
-    --tool-accent-hover: #4F46E5;
-    --tool-accent-text: #818CF8;
-    --tool-on-accent: #1E1B2E;
-    --tool-highlight: #F87171;
+    --background: #0D1F23;
+    --foreground: #E9ECEE;
+    --tool-surface: #132E35;
+    --tool-surface-2: #0D1F23;
+    --tool-surface-3: #2D4A53;
+    --tool-border: #69818D;
+    --tool-text: #E9ECEE;
+    --tool-muted: #AFB3B7;
+    --tool-muted-2: #5A636A;
+    --tool-accent: #B9CC82;
+    --tool-accent-hover: #CAD99C;
+    --tool-accent-text: #B9CC82;
+    --tool-on-accent: #0D1F23;
+    --tool-secondary: #FEC868;
+    --tool-secondary-hover: #FFD67E;
+    --tool-on-secondary: #473C33;
+    --tool-highlight: #FDA769;
 
     --nav-bg: color-mix(in srgb, var(--background) 94%, transparent);
     --nav-text: var(--foreground);
     --nav-border: var(--tool-border);
     --nav-hover: var(--tool-tint);
     --nav-limit-bg: color-mix(in srgb, var(--tool-highlight) 18%, transparent);
-    --nav-limit-text: #fca5a5;
+    --nav-limit-text: #FFB86B;
     --overlay-bg: color-mix(in srgb, var(--foreground) 60%, transparent);
   }
 }
 
 /* Explicit Light: wins over the media query regardless of OS setting.
-   Colour scheme 3 light — soft off-white canvas, white cards, indigo
-   primary (#5E5CE6) and coral highlight (#FF6B6B). */
+   Warm palette — off-white canvas (#FAF7F0), white cards, green
+   primary (#ABC270), yellow CTA (#FEC868, fill only — never text),
+   dark brown text (#473C33) and amber highlight (#FDA769). */
 :root[data-theme="light"] {
-  --background: #F5F6FA;
-  --foreground: #1E1B2E;
+  --background: #FAF7F0;
+  --foreground: #473C33;
   --tool-surface: #FFFFFF;
-  --tool-surface-2: #F5F6FA;
-  --tool-border: #E2E8F0;
-  --tool-text: #1E1B2E;
-  --tool-muted: #6B7280;
-  --tool-accent: #5E5CE6;
-  --tool-accent-hover: #4834D4;
-  --tool-accent-text: #5E5CE6;
-  --tool-on-accent: #FFFFFF;
-  --tool-highlight: #FF6B6B;
+  --tool-surface-2: #F3EDE2;
+  --tool-border: #E9E1D3;
+  --tool-text: #473C33;
+  --tool-muted: #756A5E;
+  --tool-muted-2: #9A8F83;
+  --tool-accent: #ABC270;
+  --tool-accent-hover: #96AB62;
+  --tool-accent-text: #647740;
+  --tool-on-accent: #473C33;
+  --tool-secondary: #FEC868;
+  --tool-secondary-hover: #EAB860;
+  --tool-on-secondary: #473C33;
+  --tool-highlight: #FDA769;
   --tool-tint: color-mix(in srgb, var(--foreground) 6%, transparent);
   --tool-tint-strong: color-mix(in srgb, var(--foreground) 12%, transparent);
   --tool-shadow: 0 10px 30px color-mix(in srgb, var(--foreground) 18%, transparent);
@@ -116,25 +130,30 @@
 
 /* Explicit Dark: wins over the media query regardless of OS setting. */
 :root[data-theme="dark"] {
-  --background: #0B0F19;
-  --foreground: #F3F4F6;
-  --tool-surface: #1E293B;
-  --tool-surface-2: #0B0F19;
-  --tool-border: #334155;
-  --tool-text: #F3F4F6;
-  --tool-muted: #9CA3AF;
-  --tool-accent: #818CF8;
-  --tool-accent-hover: #4F46E5;
-  --tool-accent-text: #818CF8;
-  --tool-on-accent: #1E1B2E;
-  --tool-highlight: #F87171;
+  --background: #0D1F23;
+  --foreground: #E9ECEE;
+  --tool-surface: #132E35;
+  --tool-surface-2: #0D1F23;
+  --tool-surface-3: #2D4A53;
+  --tool-border: #69818D;
+  --tool-text: #E9ECEE;
+  --tool-muted: #AFB3B7;
+  --tool-muted-2: #5A636A;
+  --tool-accent: #B9CC82;
+  --tool-accent-hover: #CAD99C;
+  --tool-accent-text: #B9CC82;
+  --tool-on-accent: #0D1F23;
+  --tool-secondary: #FEC868;
+  --tool-secondary-hover: #FFD67E;
+  --tool-on-secondary: #473C33;
+  --tool-highlight: #FDA769;
 
   --nav-bg: color-mix(in srgb, var(--background) 94%, transparent);
   --nav-text: var(--foreground);
   --nav-border: var(--tool-border);
   --nav-hover: var(--tool-tint);
   --nav-limit-bg: color-mix(in srgb, var(--tool-highlight) 18%, transparent);
-  --nav-limit-text: #fca5a5;
+  --nav-limit-text: #FFB86B;
   --overlay-bg: color-mix(in srgb, var(--foreground) 60%, transparent);
 }
 
@@ -559,6 +578,90 @@ html {
   color: var(--tool-accent-text);
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+/* ---------- sitemap ---------- */
+.sitemap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 22px;
+  margin-top: 18px;
+}
+.sitemap-category {
+  background: var(--tool-surface);
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius);
+  padding: 18px;
+}
+.sitemap-category-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 12px;
+  color: var(--tool-text);
+}
+.sitemap-category-icon {
+  font-size: 18px;
+}
+.sitemap-tool-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sitemap-tool-link {
+  font-size: 13px;
+  color: var(--tool-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.sitemap-tool-link:hover {
+  color: var(--tool-accent-text);
+}
+.sitemap-support-list,
+.sitemap-legal-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sitemap-support-list a,
+.sitemap-legal-list a {
+  font-size: 13px;
+  color: var(--tool-muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.sitemap-support-list a:hover,
+.sitemap-legal-list a:hover {
+  color: var(--tool-accent-text);
+}
+
+/* ---------- blog post detail ---------- */
+.blog-post-article {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.blog-post-article time {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--tool-accent-text);
+}
+.blog-post-intro {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--tool-text);
+  font-style: italic;
+  margin: 0;
 }
 
 /* ---------- faq ---------- */

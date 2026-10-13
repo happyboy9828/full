@@ -37,6 +37,16 @@ const config = {
   trackRateWindowMs: Number(process.env.TRACK_RATE_WINDOW_MS) || 60_000,
   authRateLimit: Number(process.env.AUTH_RATE_LIMIT) || 20,
   authRateWindowMs: Number(process.env.AUTH_RATE_WINDOW_MS) || 15 * 60_000,
+
+  email: {
+    host: process.env.EMAIL_HOST || "",
+    port: Number(process.env.EMAIL_PORT) || 587,
+    secure: process.env.EMAIL_SECURE === "true",
+    user: process.env.EMAIL_USER || "",
+    pass: process.env.EMAIL_PASS || "",
+    from: process.env.EMAIL_FROM || "noreply@docfix.app",
+    to: process.env.EMAIL_TO || "",
+  },
 };
 
 export default config;

@@ -2,7 +2,148 @@
 
 Last updated: 2026-10-12
 
-## Legal Pages & Team Section Added (COMPLETE)
+## Theme Colour Update — Warm Light + Slate Dark (COMPLETE)
+
+Replaced the indigo/coral "colour scheme 3" palette with the new warm green/amber light palette and professional slate dark palette across all four theme blocks.
+
+### New Palettes
+
+**Light mode** (`--background: #FAF7F0` warm off-white canvas):
+| Token | Colour | Usage |
+|---|---|---|
+| `--tool-accent` | `#ABC270` | Primary — headers/buttons |
+| `--tool-accent-hover` | `#96AB62` | Darker green on hover |
+| `--tool-accent-text` | `#647740` | Green for text/links (plain `#ABC270` fails contrast on white) |
+| `--tool-on-accent` | `#473C33` | Text on green buttons (5.4:1) |
+| `--tool-secondary` | `#FEC868` | CTA yellow — **fill only, never text** (low contrast on white) |
+| `--tool-secondary-hover` / `--tool-on-secondary` | `#EAB860` / `#473C33` | Hover + 7:1 dark-brown text on yellow |
+| `--foreground` / `--tool-text` | `#473C33` | Dark brown text |
+| `--tool-muted` / `--tool-muted-2` | `#756A5E` / `#9A8F83` | Muted text (4.9:1 on canvas) |
+| `--tool-border` | `#E9E1D3` | Warm borders |
+| `--tool-highlight` | `#FDA769` | Alerts/badges |
+
+**Dark mode** (`#0D1F23` deepest background):
+| Token | Colour | Usage |
+|---|---|---|
+| `--background` / `--tool-surface-2` | `#0D1F23` | Deepest background / footer |
+| `--tool-surface` | `#132E35` | Cards |
+| `--tool-surface-3` (**new**) | `#2D4A53` | Raised/hover surfaces |
+| `--tool-border` | `#69818D` | Borders / muted |
+| `--tool-muted` / `--tool-muted-2` | `#AFB3B7` / `#5A636A` | Secondary text |
+| `--tool-accent` | `#B9CC82` | Green lightened for dark (9.7:1 on bg) |
+| `--tool-accent-hover` / `--tool-accent-text` | `#CAD99C` / `#B9CC82` | Lighter green hover / text |
+| `--tool-on-accent` | `#0D1F23` | Text on green in dark |
+| `--tool-secondary` / `--tool-secondary-hover` | `#FEC868` / `#FFD67E` | CTA yellow (fill only) |
+| `--tool-highlight` | `#FDA769` | Alerts/badges |
+
+### Changes
+| File | Change |
+|------|--------|
+| `client/app/globals.css` | All 4 theme blocks (`:root`, `prefers-color-scheme: dark`, `[data-theme="light"]`, `[data-theme="dark"]`) updated to the new palettes; added `--tool-secondary`, `--tool-secondary-hover`, `--tool-on-secondary`, `--tool-surface-3`, `--tool-muted-2` tokens; `--nav-limit-text` → `#B45309` (light) / `#FFB86B` (dark) |
+| `client/components/ads/DownloadProgressPopup/DownloadProgressPopup.css` | Hard-coded `#FF6B6B` ad-box border/tint/text + countdown gradient → `#FDA769` |
+| `client/app/contact/contact.css` | `--tool-highlight` fallback `#FF6B6B` → `#FDA769` |
+
+### Notes
+- Yellow `#FEC868` is exposed as `--tool-secondary` for CTA/Save-button fills only — it is never used as a text colour (low contrast on white); `--tool-on-secondary: #473C33` gives 7:1 contrast on it.
+- All components that read theme tokens (Navbar, Footer, ContentPage, tool stylesheets, download popup) pick up the new palette automatically since they map onto the shared tokens.
+- FeedbackForm keeps its own self-contained `--text-muted` widget styling (embeddable widget, separate from the site theme).
+
+### Verification
+- `npm run build`: Compiled successfully — 56/56 static pages prerendered
+- No old palette colours (`#5E5CE6`, `#FF6B6B`, etc.) remain in any app/components/utils source file
+
+---
+
+## Build Error Fix — Invalid UTF-8 in Source Files (COMPLETE)
+
+Turbopack build failed with "Reading source code for parsing failed … failed to convert rope into string … invalid utf-8 sequence" on `./app/cookie-policy/page.js`.
+
+### Root Cause
+- `client/app/cookie-policy/page.js` contained two Windows-1252 encoded em-dashes (raw `0x97` bytes) — not valid UTF-8.
+- 12 tool entry-point `index.js` files under `client/utils/pdf-tools/` and `client/utils/writing-tool/` were saved as UTF-16 LE (starting with a `FF FE` BOM, null-interleaved ASCII) — also invalid UTF-8 for Turbopack's parser.
+
+### Fix
+| File | Change |
+|------|--------|
+| `client/app/cookie-policy/page.js` | Converted CP1252 → UTF-8 (both `0x97` bytes → proper UTF-8 em-dash `E2 80 94`) |
+| `client/utils/pdf-tools/{CompressPDF,JPGtoPDF,MergePDFFiles,PDFtoJPG,RotatePDF,SplitPDF}/index.js` | Converted UTF-16 LE → UTF-8 |
+| `client/utils/writing-tool/{Case Converter,Lorem Ipsum Generator,Paragraph Writer,Remove Duplicate Lines,Sort Text,WordCounter}/index.js` | Converted UTF-16 LE → UTF-8 |
+
+### Verification
+- Strict UTF-8 decode scan over all client source files (`*.js`, `*.mjs`, `*.css`, `*.json`, excluding `node_modules`/`.next`): 0 invalid files
+- `npm run build`: Compiled successfully — 56/56 static pages prerendered
+
+---
+
+## Disclaimer Page Update (COMPLETE)
+
+Rewrote `client/app/disclaimer/page.js` with the full 10-section disclaimer covering processing accuracy, device limitations, user responsibility, third-party components, availability, liability, external links, and contact.
+
+### Changes
+| File | Change |
+|------|--------|
+| `client/app/disclaimer/page.js` | Replaced 6-section disclaimer with the full 10-section version: 1. General Information, 2. No Guarantee of Processing Results, 3. File Processing and Device Limitations, 4. User Responsibility and Backups (5-point recommended list), 5. Third-Party Libraries and Services, 6. Availability and Technical Errors, 7. Limitation of Liability (with pointer to Terms of Service), 8. External Links, 9. Changes to This Disclaimer, 10. Contact Us (email + contact page links); updated `metadata.description` and page description to "Important information about DocFix tools, processing accuracy, and limitations." |
+
+### Verification
+- ESLint: 0 errors on `app/disclaimer/page.js`
+- `next build`: Compiled successfully — 56/56 static pages prerendered (`/disclaimer` included)
+
+---
+
+## About Page Content Refresh (COMPLETE)
+
+Rewrote `client/app/about/page.js` with fresh, privacy-focused prose. Replaced the previous long-form mission/team/contact narrative with concise, technically accurate messaging aligned with the site's "Simple, fast, and privacy-conscious file tools for everyone" positioning.
+
+### Changes
+| File | Change |
+|------|--------|
+| `client/app/about/page.js` | Rewrote all prose: intro tagline, "Our Mission", "Why Choose DocFix?" (4 subsections: Privacy by Design, Fast and Convenient, Simple to Use, Accessible When You Need It), "How We Build DocFix" (WASM/JS/Canvas/Web Workers), "Our Approach to Privacy", "Built for Everyday File Tasks" (bullet list), "Get in Touch" with contact email, and footer tagline; updated `metadata.description`; escaped all apostrophes (`&apos;`) for ESLint compliance |
+
+### Verification
+- ESLint: 0 errors on `app/about/page.js`
+- `next build`: Compiled successfully — 56/56 static pages prerendered
+
+---
+
+## Legal & Compliance + SEO Foundation + Route Flattening (COMPLETE)
+
+Implemented the Phase 1 legal, trust, and SEO-critical pages plus the supporting sitemap/robots/footer infrastructure. All changes verified with `next build` (56/56 static pages) and ESLint (0 new errors on modified files).
+
+### Problem
+The site claimed "No Data Logging" / "Zero Server Uploads" on the homepage but the legal pages didn't back that up. The sitemap listed broken static URLs (`/about` instead of `/legal-support/about`), `getPages()` dumped non-tool routes into the sitemap as fake "tool" entries, there was no Cookie Policy / Disclaimer / DMCA / How-It-Works page, the FAQ had only 5 questions, the `/tools` page only showed category cards (no searchable tool index), the footer links were stale, the site title was just "DocFix", and there was no OG/Twitter metadata. Legal pages were also nested under the non-semantic `/legal-support/` prefix.
+
+### Changes
+| File | Change |
+|------|--------|
+| `client/app/layout.js` | Updated `metadata`: title default → "DocFix — Free Private File Tools"; richer description; added `metadataBase`, `alternates.canonical`, `openGraph` (site name, locale, 1200×630 image), `twitter.card` |
+| `app/privacy/page.js` (was `legal-support/`) | Rewrote: Zero Data Collection, Browser-Based Processing (WASM), No Cookies, No Server Storage, GDPR/CCPA rights |
+| `app/terms/page.js` (was `legal-support/`) | Expanded to 12 sections: usage limits, liability for file processing, indemnification, IP |
+| `app/about/page.js` (was `legal-support/`) | Added mission statement, "Why Browser-Based?" (WASM/Canvas/Web Workers), "Who We Are" + team; fixed `</strong>strong>` typo |
+| `app/contact/page.js` (was `legal-support/`) | Fixed typos; added email contact block |
+| `app/faq/page.js` (was `legal-support/`) | Expanded 5→14 questions across 4 accordion sections (Privacy, How It Works, Usage, Troubleshooting) |
+| `app/cookie-policy/page.js` (**new**) | 0 tracking cookies, single theme cookie, GDPR/CCPA compliance |
+| `app/disclaimer/page.js` (**new**) | No warranty on processing accuracy, user responsibility, limitation of liability |
+| `app/dmca/page.js` (**new**) | Copyright/DMCA policy with designated agent (`copyright@docfix.app`) |
+| `app/how-it-works/page.js` (**new**) | 4-step WASM flow, architecture diagram, benefits |
+| `app/site-map/page.js` (**new**) | HTML sitemap — all tool categories + legal/support links |
+| `app/blog/page.js` + `blog/posts.js` + `blog/[slug]/page.js` (**new**) | Blog listing + 5 starter articles via dynamic SSG route |
+| `app/pricing/page.js` (was `legal-support/`) | Rewrote from stub → "Free Forever" page |
+| `app/tools/page.js` | Server component: flattens all 31 tools with icons/categories, passes to ToolsClient |
+| `app/tools/ToolsClient.js` | Search input + category filter chips + searchable grid of all tools |
+| `app/sitemap.xml/route.js` | Fixed: correct `/privacy`, `/terms` etc. paths; added all new pages; **fixed TOOL_META keys** to full routes; added `isToolRoute()` filter so non-tool pages aren't fake tool entries |
+| `app/robots.txt/route.js` | Verified `Allow: /` + sitemap pointer (not blocked) |
+| `components/Footer/Footer.js` | Added "All Tools", "How It Works" nav; expanded Legal column (Privacy, Terms, Cookie, Disclaimer, DMCA, FAQ, Docs) |
+| `app/globals.css` | Added `.sitemap-*`, `.blog-post-*` CSS blocks; `tool-link-icon`/`tool-link-category` styles |
+
+### Route Flattening
+Moved all 14 pages from `/legal-support/<page>` to top-level `/<page>` routes (about, contact, faq, privacy, terms, docs, blog, pricing, cookie-policy, disclaimer, dmca, how-it-works, site-map). Fixed all import paths (one fewer `../`) and updated internal links/sitemap/footer to the direct paths. Removed the empty `app/legal-support/` directory.
+
+### Verification
+- `next build`: ✅ Compiled successfully — 56/56 static pages prerendered (was 46)
+- ESLint: 0 errors on all modified/new files
+- Routes verified: `/about`, `/contact`, `/cookie-policy`, `/docs`, `/faq`, `/how-it-works`, `/privacy`, `/site-map`, `/terms`, `/dmca`, `/disclaimer`, `/pricing`, `/blog`, `/blog/[5 posts]`, `/tools` (searchable), `/sitemap.xml`, `/robots.txt`
+
+---
 
 ### Problem
 The website had legal pages (about, contact, docs, faq, terms, privacy) under `/legal-support/` but the footer links pointed to incorrect paths (`/about`, `/contact`, etc.). Also needed a team section showing 3 people as website owners and developers.
@@ -1091,3 +1232,18 @@ Added compound indexes for query performance:
 - All backend JavaScript files pass syntax check (`node --check` on controllers/reportsController.js, routes/reports.js, middleware/validate.js)
 - ESLint: 0 errors on all new and modified files
 - No duplicate index warnings in MongoDB models
+
+---
+
+## Cookie Policy Update (COMPLETE)
+
+Updated client/app/cookie-policy/page.js with Cookie Policy content.
+
+### Changes
+| File | Change |
+|------|--------|
+| client/app/cookie-policy/page.js | Updated Cookie Policy page with cookies policy content as specified |
+
+### Verification
+- Cookie policy page content matches the provided policy text
+

@@ -1,5 +1,7 @@
 "use client";
 
+import { canDownload, recordDownload, getDownloadStats } from "@/utils/shared/downloadLimit";
+
 // Non-React trigger registry for the global DownloadProgressPopup.
 //
 // Tool init functions (initDuplicateRemover, initSortTextTool, initWebpPngConverter,
@@ -23,13 +25,28 @@ export function subscribeDownloadProgress(trigger) {
 }
 
 export function triggerDownloadProgress(options = {}) {
+  // Check download limit before proceeding
+  if (!canDownload()) {
+    const stats = getDownloadStats();
+    const resetTime = new Date(stats.resetsAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    alert(`Daily download limit reached (${stats.limit}/day). Limit resets at ${resetTime} UTC.`);
+    return;
+  }
+
   if (current) {
-    current(options);
+    current({
+      ...options,
+      onDownloadStart: () => {
+        recordDownload();
+        if (options.onDownloadStart) options.onDownloadStart();
+      }
+    });
     return;
   }
 
   if (options.onDownloadStart) {
     try {
+      recordDownload();
       options.onDownloadStart();
     } catch (err) {
       console.error("Download start failed:", err);

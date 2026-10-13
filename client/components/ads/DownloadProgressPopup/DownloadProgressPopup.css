@@ -96,9 +96,9 @@
 .ad-download-progress-ad-box {
   padding: 20px;
   text-align: center;
-  border: 2px solid #FF6B6B;
+  border: 2px solid #FDA769;
   border-radius: var(--tool-radius-sm);
-  background: color-mix(in srgb, #FF6B6B 8%, transparent);
+  background: color-mix(in srgb, #FDA769 8%, transparent);
 }
 
 .ad-download-progress-ad-text {
@@ -107,7 +107,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #FF6B6B;
+  color: #FDA769;
 }
 
 .ad-download-progress-ad-subtext {
@@ -132,8 +132,8 @@
   height: 100%;
   background: linear-gradient(
     90deg,
-    #FF6B6B,
-    color-mix(in srgb, #FF6B6B 70%, var(--tool-accent))
+    #FDA769,
+    color-mix(in srgb, #FDA769 70%, var(--tool-accent))
   );
   border-radius: 0;
   transition: width 0.05s linear;

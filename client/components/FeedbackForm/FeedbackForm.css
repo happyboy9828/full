@@ -1,0 +1,161 @@
+.feedback-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 560px;
+}
+
+.feedback-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.feedback-field label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary, #1f2937);
+}
+
+.feedback-field input,
+.feedback-field textarea {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: var(--text-primary, #1f2937);
+  background: var(--bg-primary, #ffffff);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.feedback-field input:focus,
+.feedback-field textarea:focus {
+  outline: none;
+  border-color: var(--primary-color, #3b82f6);
+  box-shadow: 0 0 0 3px var(--primary-focus, rgba(59, 130, 246, 0.15));
+}
+
+.feedback-field input:disabled,
+.feedback-field textarea:disabled {
+  background: var(--bg-secondary, #f9fafb);
+  color: var(--text-muted, #9ca3af);
+  cursor: not-allowed;
+}
+
+.feedback-field input::placeholder,
+.feedback-field textarea::placeholder {
+  color: var(--text-muted, #9ca3af);
+}
+
+.feedback-error {
+  padding: 0.75rem 1rem;
+  background: var(--error-bg, #fef2f2);
+  border: 1px solid var(--error-border, #fecaca);
+  border-radius: 8px;
+  color: var(--error-text, #dc2626);
+  font-size: 0.875rem;
+}
+
+.feedback-submit-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  background: var(--primary-color, #3b82f6);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  margin-top: 0.5rem;
+}
+
+.feedback-submit-btn:hover:not(:disabled) {
+  background: var(--primary-hover, #2563eb);
+}
+
+.feedback-submit-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.feedback-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.feedback-note {
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--text-muted, #9ca3af);
+  margin-top: 0.75rem;
+}
+
+.feedback-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 3rem 2rem;
+  background: var(--success-bg, #f0fdf4);
+  border: 1px solid var(--success-border, #bbf7d0);
+  border-radius: 12px;
+  color: var(--success-text, #166534);
+}
+
+.feedback-success svg {
+  color: var(--success-text, #16a34a);
+  margin-bottom: 1rem;
+}
+
+.feedback-success h3 {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+}
+
+.feedback-success p {
+  margin: 0 0 1.5rem;
+  color: var(--text-secondary, #4b5563);
+}
+
+.feedback-success .feedback-submit-btn {
+  background: var(--success-text, #16a34a);
+}
+
+.feedback-success .feedback-submit-btn:hover {
+  background: var(--success-hover, #15803d);
+}
+
+@media (max-width: 640px) {
+  .feedback-form {
+    gap: 1rem;
+  }
+
+  .feedback-field input,
+  .feedback-field textarea {
+    padding: 0.625rem 0.875rem;
+  }
+
+  .feedback-submit-btn {
+    width: 100%;
+  }
+}

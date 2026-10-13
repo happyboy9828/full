@@ -1,17 +1,16 @@
-/* Commented out: Premium download limit feature
 /* Download limit tracker — a per-browser, UTC-midnight calendar-day counter.
    Because DocFix is a zero-backend, browser-only app, "per user" maps to
    "per browser". The counter lives in localStorage and resets automatically
    at 00:00 UTC when the calendar day changes.
 
    Public API:
-     canDownload()              → boolean
-     recordDownload()           → { count, date }  (call after a successful download)
-     getDownloadStats()         → { count, remaining, resetsAt, limit, date }
-     formatTimeRemaining(ms)    → human-readable string
-     onLimitChange(cb)          → unsubscribe function
-     resetDownloadLimit()       → force a reset (testing / manual)
- */
+      canDownload()              → boolean
+      recordDownload()           → { count, date }  (call after a successful download)
+      getDownloadStats()         → { count, remaining, resetsAt, limit, date }
+      formatTimeRemaining(ms)    → human-readable string
+      onLimitChange(cb)          → unsubscribe function
+      resetDownloadLimit()       → force a reset (testing / manual)
+  */
 
 const STORAGE_KEY = "docfix_dl_limit";
 export const DAILY_LIMIT = 10;
@@ -133,4 +132,3 @@ export function resetDownloadLimit() {
   writeRaw({ date: today, count: 0 });
   notify();
 }
-*/

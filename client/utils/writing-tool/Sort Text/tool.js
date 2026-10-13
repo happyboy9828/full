@@ -221,7 +221,7 @@ export function initSortTextTool(containerElement) {
     const blob = new Blob([outputEl.value], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     
-    trigger({
+    triggerDownloadProgress({
       countdownMs: 5000,
       durationMs: 3000,
       title: 'Preparing your sorted list',

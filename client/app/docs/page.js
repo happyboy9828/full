@@ -1,4 +1,4 @@
-import ContentPage from "../../../components/ContentPage/ContentPage";
+﻿import ContentPage from "../../components/ContentPage/ContentPage";
 
 export const metadata = {
   title: "Documentation",
@@ -14,29 +14,49 @@ export default function DocsPage() {
     >
       <div className="prose">
         <h2>Getting Started</h2>
-        <p>DocFix is a suite of browser-based image tools. No installation required — just open a tool and start working.</p>
+        <p>
+          DocFix is a suite of browser-based file tools. No installation required — just open a tool
+          and start working. Everything runs locally in your browser using WebAssembly.
+        </p>
 
         <h2>Tools Overview</h2>
         <ul>
-          <li><strong>WebP ⇄ PNG Converter:</strong> Two-way WebP ↔ PNG conversion with batch processing, quality control and transparency handling</li>
-          <li><strong>JPG ⇄ PNG Converter:</strong> Two-way JPEG ↔ PNG conversion with batch processing, quality control and transparency handling</li>
-          <li><strong>Image Resizer:</strong> Crop and resize to exact dimensions and aspect ratios</li>
-          <li><strong>Image Compressor:</strong> Reduce file size with quality/size targeting</li>
-          <li><strong>Image to Base64:</strong> Encode images as Data URLs, HTML, or CSS</li>
-          <li><strong>Favicon Generator:</strong> Create multi-size favicon packages</li>
-          <li><strong>Watermark:</strong> Add text or logo watermarks to batches of photos</li>
-          <li><strong>Background Remover:</strong> Automatic subject detection with manual refinement</li>
+          <li>
+            <strong>Image Tools:</strong> Compress, resize, convert (JPG ⇄ PNG, WebP ⇄ PNG), remove
+            backgrounds, add watermarks, generate favicons, and convert to Base64.
+          </li>
+          <li>
+            <strong>PDF Tools:</strong> Split, merge, compress, rotate, and convert PDFs — all in
+            your browser.
+          </li>
+          <li>
+            <strong>Dev Tools:</strong> Minify CSS/HTML, generate passwords, create and scan QR
+            codes.
+          </li>
+          <li>
+            <strong>Text Tools:</strong> Case conversion, Lorem Ipsum generation, paragraph
+            writing, line sorting, duplicate removal, and word counting.
+          </li>
         </ul>
 
         <h2>Common Workflows</h2>
         <h3>Batch Processing</h3>
-        <p>Drag multiple files onto any tool&apos;s drop zone. Most tools support up to 50 files at once.</p>
+        <p>
+          Drag multiple files onto any tool&apos;s drop zone. Most tools support up to 50 files at
+          once and offer a &quot;Download All (.ZIP)&quot; option.
+        </p>
 
         <h3>Download Options</h3>
-        <p>Download individual files or use &quot;Download All (.ZIP)&quot; to get a single archive.</p>
+        <p>
+          Download individual files or use &quot;Download All (.ZIP)&quot; to get a single archive.
+        </p>
 
         <h3>Privacy First</h3>
-        <p>All processing happens locally in your browser. No uploads, no accounts required for basic use.</p>
+        <p>
+          All processing happens locally in your browser. No uploads, no accounts required. See our{" "}
+          <a href="/privacy">Privacy Policy</a> and{" "}
+          <a href="/how-it-works">How It Works</a> for details.
+        </p>
       </div>
     </ContentPage>
   );

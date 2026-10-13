@@ -1,4 +1,3 @@
-/* Commented out: Premium download limit hook feature
 import { useEffect, useState } from "react";
 import { getDownloadStats, onLimitChange, DAILY_LIMIT } from "./downloadLimit";
 
@@ -8,7 +7,7 @@ import { getDownloadStats, onLimitChange, DAILY_LIMIT } from "./downloadLimit";
  *  Usage:
  *    const { remaining, resetsAt, limit } = useDownloadLimit();
  *    if (remaining === 0) <button disabled>...</button>
- * /
+ */
 function getDefaultStats() {
   return {
     count: 0,
@@ -30,4 +29,3 @@ export function useDownloadLimit() {
 
   return stats;
 }
-*/

@@ -1,0 +1,166 @@
+.contact-page .prose {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contact-page .contact-section {
+  margin-bottom: 2rem;
+}
+
+.contact-page .contact-section:last-child {
+  margin-bottom: 0;
+}
+
+.contact-page h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--tool-text);
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--tool-border);
+}
+
+.contact-page h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--tool-text);
+  margin: 1.25rem 0 0.5rem;
+}
+
+.contact-page h3:first-of-type {
+  margin-top: 0;
+}
+
+.contact-page .contact-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--tool-accent-text);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.15s;
+}
+
+.contact-page .contact-email:hover {
+  color: var(--tool-accent-hover);
+  text-decoration: underline;
+}
+
+.contact-page .contact-form-wrapper {
+  background: var(--tool-surface);
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius);
+  padding: 2rem;
+  margin: 1.5rem 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.contact-page .contact-info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-page .contact-info-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem;
+  background: var(--tool-surface);
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius-sm);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  line-height: 1.6;
+}
+
+.contact-page .contact-info-list li:hover {
+  border-color: var(--tool-accent);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.contact-page .contact-info-list strong {
+  color: var(--tool-text);
+  font-size: 0.95rem;
+}
+
+.contact-page .contact-faq-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--tool-accent-text);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.15s;
+  margin-top: 1rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--tool-surface);
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius-sm);
+}
+
+.contact-page .contact-faq-link:hover {
+  color: var(--tool-accent-hover);
+  background: var(--tool-tint);
+  border-color: var(--tool-accent);
+}
+
+.contact-page .contact-note {
+  margin-top: 1.5rem;
+  padding: 1rem 1.25rem;
+  background: var(--tool-surface-2);
+  border-left: 4px solid var(--tool-accent);
+  border-radius: 0 var(--tool-radius-sm) var(--tool-radius-sm) 0;
+  font-size: 0.9rem;
+  color: var(--tool-muted);
+  line-height: 1.6;
+}
+
+.contact-page .contact-note a {
+  color: var(--tool-accent-text);
+  text-decoration: underline;
+}
+
+.contact-page .contact-note a:hover {
+  color: var(--tool-accent-hover);
+}
+
+.contact-page .contact-signoff {
+  margin-top: 1.5rem;
+  font-weight: 700;
+  color: var(--tool-text);
+}
+
+.contact-page .contact-signoff-email {
+  margin-top: 0.5rem;
+}
+
+.contact-page .contact-divider {
+  height: 1px;
+  background: var(--tool-border);
+  margin: 2rem 0;
+}
+
+/* Form field labels with required asterisk */
+.contact-page .contact-form-wrapper .feedback-field label::after {
+  content: " *";
+  color: var(--tool-highlight, #FDA769);
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .contact-page .contact-form-wrapper {
+    padding: 1.25rem;
+  }
+
+  .contact-page h2 {
+    font-size: 1.25rem;
+  }
+
+  .contact-page h3 {
+    font-size: 1.05rem;
+  }
+}

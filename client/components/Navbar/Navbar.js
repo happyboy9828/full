@@ -3,9 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 /* Commented out: Premium pricing modal import
 import PricingModal from "../PricingModal/PricingModal";
 */
-/* Commented out: Premium download limit hook
 import { useDownloadLimit } from "../../utils/shared/useDownloadLimit";
-*/
 import { STATIC_CATEGORIES } from "../../lib/categories";
 import './Navbar.css';
 
@@ -19,9 +17,7 @@ export default function Navbar() {
   const [selectedTheme, setSelectedTheme] = useState('system');
   const [themeDropdownOpen, setThemeDropdownOpen] = useState(false);
   const themeDropdownRef = useRef(null);
-  /* Commented out: Premium download limit hook
   const downloadLimit = useDownloadLimit();
-  */
 
   const themeOptions = [
     { value: 'light', label: 'Light', icon: '☀️' },
@@ -140,7 +136,6 @@ export default function Navbar() {
 
   const navActions = (
     <>
-      {/* Commented out: Premium download limit indicator
       <div className="download-limit-wrapper">
         <span
           className={`download-limit-indicator${downloadLimit.remaining === 0 ? " is-limit-reached" : ""}`}
@@ -151,7 +146,6 @@ export default function Navbar() {
             : 'Limit reached'}
         </span>
       </div>
-      */}
 
       <div className={`theme-selector${themeDropdownOpen ? ' open' : ''}`} ref={themeDropdownRef}>
         <button

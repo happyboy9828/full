@@ -1,6 +1,118 @@
 Phase Plan
 
-Last updated: October 12, 2026 | Current: Phase 30 — Mobile Carousel Arrow Navigation
+Last updated: October 12, 2026 | Current: Phase 35 — Theme Colour Update (COMPLETE)
+
+**Current Phase: Phase 35 — Theme Colour Update (COMPLETE)**
+
+## Phase 35: Theme Colour Update — Warm Light + Slate Dark (COMPLETE)
+
+**Completed:**
+- [x] Replaced light palette in all light blocks (`:root`, `[data-theme="light"]`): accent `#ABC270` (green primary), secondary `#FEC868` (yellow CTA, fill-only), text `#473C33`, highlight `#FDA769`; warm off-white canvas `#FAF7F0`, white cards, warm borders `#E9E1D3`, muted `#756A5E`
+- [x] Replaced dark palette in both dark blocks (`prefers-color-scheme: dark`, `[data-theme="dark"]`): background `#0D1F23`, surfaces `#132E35`/`#2D4A53`, borders/muted `#69818D`, text `#AFB3B7`/`#5A636A`; green accent lightened to `#B9CC82` for dark contrast
+- [x] Added new tokens: `--tool-secondary`, `--tool-secondary-hover`, `--tool-on-secondary`, `--tool-surface-3`, `--tool-muted-2`
+- [x] Updated hard-coded `#FF6B6B` ? `#FDA769` in `DownloadProgressPopup.css` (ad box + countdown gradient) and `contact.css` fallback
+- [x] `--nav-limit-text` ? `#B45309` (light) / `#FFB86B` (dark)
+- [x] `npm run build`: Compiled successfully — 56/56 static pages prerendered
+
+**Task:** "update light and dark theme colours" with the warm green/amber light palette (#ABC270 #FEC868 #FDA769 #473C33) and slate dark palette (#0D1F23 #132E35 #2D4A53 #69818D #AFB3B7 #5A636A)
+
+**Key constraint:** Yellow `#FEC868` has low contrast on white — used only as a fill (`--tool-secondary`) with dark-brown text (`--tool-on-secondary: #473C33`, 7:1), never as a text colour.
+
+**Completion Criteria:** All theme blocks use the new palettes; components reading shared tokens adapt automatically; build passes. — VERIFIED (56/56 pages, no old palette colours remain).
+
+---
+
+**Current Phase: Phase 34 — Build Error Fix: Invalid UTF-8 Source Files (COMPLETE)**
+
+## Phase 34: Build Error Fix — Invalid UTF-8 Source Files (COMPLETE)
+
+**Completed:**
+- [x] Diagnosed Turbopack error "failed to convert rope into string / invalid utf-8 sequence" on `./app/cookie-policy/page.js`
+- [x] Converted `client/app/cookie-policy/page.js` from CP1252 ? UTF-8 (two `0x97` em-dash bytes)
+- [x] Found and converted 12 UTF-16 LE (FF FE BOM) tool entry files ? UTF-8: 6 under `utils/pdf-tools/*/index.js` and 6 under `utils/writing-tool/*/index.js`
+- [x] Verified strict UTF-8 validity across all client source files (0 invalid)
+- [x] `npm run build`: Compiled successfully — 56/56 static pages prerendered
+
+**Problem:** Turbopack parses source files as UTF-8; the cookie-policy page had CP1252 em-dashes and 12 tool `index.js` files were saved as UTF-16 LE, causing the build to fail while reading/parsing them.
+
+**Fix:** Re-encoded all 13 files to UTF-8 without BOM.
+
+**Task:** "Build Error: Reading source code for parsing failed … invalid utf-8 sequence of 1 bytes from index 215"
+
+**Completion Criteria:** `next build` compiles cleanly with no source-parse errors. — VERIFIED (56/56 static pages).
+
+---
+
+**Current Phase: Phase 33 — Disclaimer Page Update (COMPLETE)**
+
+## Phase 33: Disclaimer Page Update (COMPLETE)
+
+**Completed:**
+- [x] Rewrote `client/app/disclaimer/page.js` with the full 10-section disclaimer (General Information, No Guarantee of Processing Results, File Processing and Device Limitations, User Responsibility and Backups, Third-Party Libraries and Services, Availability and Technical Errors, Limitation of Liability, External Links, Changes to This Disclaimer, Contact Us)
+- [x] Updated `metadata.description` and page description: "Important information about DocFix tools, processing accuracy, and limitations."
+- [x] Contact links: `mailto:hello@docfix.app` + `/contact`
+- [x] ESLint: 0 errors on `app/disclaimer/page.js`
+- [x] `next build`: Compiled successfully — 56/56 static pages prerendered
+
+**Task:** "update disclamber with # Disclaimer …" (full disclaimer content with Last updated: October 12, 2026)
+
+**Completion Criteria:** The Disclaimer page at `/disclaimer` reflects the full 10-section disclaimer with valid JSX and clean builds.
+
+---
+
+**Current Phase: Phase 32 — About Page Content Refresh (COMPLETE)**
+
+## Phase 32: About Page Content Refresh (COMPLETE)
+
+**Completed:**
+- [x] Rewrote `client/app/about/page.js` with new privacy-focused prose (intro, Our Mission, Why Choose DocFix?, How We Build DocFix, Our Approach to Privacy, Built for Everyday File Tasks, Get in Touch)
+- [x] Updated `metadata.description` for SEO
+- [x] Escaped all apostrophes (`&apos;`) for ESLint compliance
+- [x] ESLint: 0 errors on `app/about/page.js`
+- [x] `next build`: Compiled successfully — 56/56 static pages prerendered
+
+**Task:** "update /about page with # About DocFix"
+
+**Completion Criteria:** The About page at `/about` reflects the new DocFix messaging with proper SEO metadata, valid JSX, and clean builds.
+
+---
+
+**Current Phase: Phase 31 — Legal & Compliance + SEO Foundation + Route Flattening (COMPLETE)**
+
+## Phase 31: Legal & Compliance + SEO Foundation + Route Flattening (COMPLETE)
+
+**Completed:**
+- [x] Updated `client/app/layout.js` metadata: title default "DocFix — Free Private File Tools", richer SEO description, `metadataBase`, canonical alternates, OpenGraph (site name, locale, 1200×630 image), Twitter card
+- [x] Rewrote Privacy Policy (`app/privacy/page.js`): Zero Data Collection, Browser-Based Processing (WASM), No Cookies, No Server Storage, GDPR/CCPA rights
+- [x] Expanded Terms of Service (`app/terms/page.js`): 12 sections — usage limits, liability for file processing, indemnification, intellectual property
+- [x] Enhanced About page (`app/about/page.js`): mission statement about 100% privacy, "Why Browser-Based?" stack (WASM/Canvas/Web Workers), "Who We Are" + team; fixed `</strong>strong>` typo
+- [x] Fixed Contact page (`app/contact/page.js`): typos ("youlike" ? "you like", "Were open" ? "We are open"); email contact block above form
+- [x] Expanded FAQ (`app/faq/page.js`): 5 ? 14 questions across 4 accordion sections (Privacy, How It Works, Usage, Troubleshooting)
+- [x] Rewrote `/tools` page: flat searchable index of all individual tools with search input + category filter chips (was categories-only)
+- [x] Created Cookie Policy (`app/cookie-policy/page.js`): 0 tracking cookies, single theme cookie, GDPR/CCPA
+- [x] Created Disclaimer (`app/disclaimer/page.js`): no warranty on processing accuracy, user responsibility
+- [x] Created Copyright/DMCA Policy (`app/dmca/page.js`): designated agent `copyright@docfix.app`, takedown + counter-notice
+- [x] Created How-It-Works (`app/how-it-works/page.js`): 4-step WASM flow, architecture diagram, benefits
+- [x] Created HTML sitemap (`app/site-map/page.js`): all tool categories + legal/support links
+- [x] Created blog (`app/blog/`, `app/blog/posts.js`, `app/blog/[slug]/page.js`): 5 articles + dynamic SSG route
+- [x] Created Pricing (`app/pricing/page.js`): "Free Forever" page
+- [x] **Route flattening**: Moved all 14 pages from `/legal-support/<page>` to top-level `/<page>` (about, contact, faq, privacy, terms, docs, blog, pricing, cookie-policy, disclaimer, dmca, how-it-works, site-map). Removed empty `app/legal-support/` directory. Fixed all import paths (one fewer `../`).
+- [x] Fixed sitemap.xml (`app/sitemap.xml/route.js`): correct direct paths (`/about`, `/faq`, etc.); added all new pages; fixed TOOL_META keys to full routes; added `isToolRoute()` filter
+- [x] Verified robots.txt: `Allow: /`, sitemap pointer correct (not blocked)
+- [x] Updated Footer (`components/Footer/Footer.js`): nav + legal links use direct `/<page>` paths; expanded columns
+- [x] Added sitemap/blog-post CSS to `app/globals.css`
+- [x] `next build`: 56/56 static pages prerendered ?
+- [x] ESLint: 0 errors on all modified/new files ?
+
+**Problem:** Site claimed "Zero Server Uploads" but legal pages didn't back it; sitemap had broken URLs; non-tool pages emitted as fake tool entries; no searchable tools index; missing Cookie Policy/Disclaimer/DMCA/How-It-Works pages; stale footer links; no OG metadata; title just "DocFix"; legal pages nested under non-semantic `/legal-support/` prefix.
+
+**Fix:** Rewrote all legal/trust content with technically accurate, privacy-first language; built a searchable `/tools` master page; fixed sitemap URL correctness + tool filtering; added 4 new legal pages + HTML sitemap + blog with 5 articles; refreshed footer; added OG/Twitter metadata and canonical tags; **flattened all routes from `/legal-support/<page>` to `/<page>`** for SEO-friendly, clean URLs.
+
+**Task:** "Want me to generate the content / code for the 6 critical pages (Privacy, Terms, About, Contact, FAQ, All Tools) in Next.js format for your repo? update them properly"
+
+**Completion Criteria:** All Phase 1 pages (Privacy, Terms, About, Contact, FAQ, All Tools) have proper SEO-optimized, legally compliant content; sitemap and robots.txt are crawlable; footer links are complete; routes are clean top-level paths. — VERIFIED via `next build` (56/56 pages) and ESLint (0 new errors).
+
+---
 
 **Current Phase: Phase 30 — Mobile Carousel Arrow Navigation**
 
@@ -728,3 +840,13 @@ third theme option from "Neon" to "System" (follows OS preference).
 - No `[data-theme="neon"]` selectors remain anywhere in the client codebase
 - All theme tokens still resolve through CSS variables; no hard-coded
   palette colours were introduced in component stylesheets
+
+## Phase 33: Cookie Policy Update (COMPLETE)
+
+**Completed:**
+- [x] Updated client/app/cookie-policy/page.js with Cookie Policy content
+
+**Task:** 'update cookies policy with Cookies...'
+
+**Completion Criteria:** Cookie policy page reflects the provided content.
+

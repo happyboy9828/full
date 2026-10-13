@@ -1,4 +1,3 @@
-/* Commented out: Premium download limit toast feature
 /* Lightweight, dependency-free toast for download-limit warnings.
    Uses the shared .tool-toast class from app/tool.css so it matches the
    rest of the site. Works in both React and imperative-DOM tools. */
@@ -42,4 +41,3 @@ export function hideDownloadLimitToast() {
     }, 300);
   }
 }
-*/
