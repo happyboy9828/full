@@ -1,10 +1,22 @@
 Phase Plan
 
-Last updated: October 12, 2026 | Current: Phase 35 — Theme Colour Update (COMPLETE)
+Last updated: October 14, 2026 | Current: Phase 36 — Production Domain Update (COMPLETE)
 
-**Current Phase: Phase 35 — Theme Colour Update (COMPLETE)**
+**Current Phase: Phase 36 — Production Domain Update (COMPLETE)**
 
-## Phase 35: Theme Colour Update — Warm Light + Slate Dark (COMPLETE)
+## Phase 36: Production Domain Update — localhost:3000 ? docfix-frontend.vercel.app (COMPLETE)
+
+**Completed:**
+- [x] Replaced `localhost:3000` with `https://docfix-frontend.vercel.app` in `backend/config/env.js` (default CORS origin)
+- [x] Updated CORS configuration documentation in `Status.md`
+- [x] Updated dev server URL comments in `README.md` and `client/README.md`
+- [x] Left `client/server.log` untouched (generated log output)
+
+**Task:** "update all localhost:3000 to docfix-frontend.vercel.app because it is my website domain"
+
+**Completion Criteria:** All `localhost:3000` references in source/config/doc files point to the production domain `https://docfix-frontend.vercel.app`. — VERIFIED via grep.
+
+---
 
 **Completed:**
 - [x] Replaced light palette in all light blocks (`:root`, `[data-theme="light"]`): accent `#ABC270` (green primary), secondary `#FEC868` (yellow CTA, fill-only), text `#473C33`, highlight `#FDA769`; warm off-white canvas `#FAF7F0`, white cards, warm borders `#E9E1D3`, muted `#756A5E`

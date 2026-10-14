@@ -39,7 +39,7 @@ npm run dev          # http://localhost:5000
 ```bash
 cd client
 npm install
-npm run dev          # http://localhost:3000
+npm run dev          # https://docfix-frontend.vercel.app
 ```
 
 ## Backend API (Phase 4 Complete)

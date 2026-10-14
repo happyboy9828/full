@@ -51,7 +51,7 @@ The dashboard is powered by a separate Express + MongoDB backend (`../backend/`)
 
 ```bash
 npm install
-npm run dev      # http://localhost:3000
+npm run dev      # https://docfix-frontend.vercel.app
 npm run build    # production build
 npm run start    # serve the production build
 npm run lint     # eslint

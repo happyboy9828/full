@@ -1,6 +1,21 @@
 ﻿# Status.md
 
-Last updated: 2026-10-12
+Last updated: 2026-10-14
+
+## Production Domain Update — localhost:3000 → docfix-frontend.vercel.app (COMPLETE)
+
+Replaced all `localhost:3000` references with `https://docfix-frontend.vercel.app` across the codebase to match the deployed production domain.
+
+### Changes
+| File | Change |
+|------|--------|
+| `backend/config/env.js` | Default CORS origin changed from `http://localhost:3000` to `https://docfix-frontend.vercel.app` |
+| `Status.md` | CORS configuration documentation updated |
+| `README.md` | Dev server URL comment updated |
+| `client/README.md` | Dev server URL comment updated |
+
+### Notes
+- `client/server.log` (generated log output) was intentionally left untouched — it is regenerated on each dev run.
 
 ## Theme Colour Update — Warm Light + Slate Dark (COMPLETE)
 
@@ -293,7 +308,7 @@ The backend was previously a minimal stub (`app.js` only had `/`, `/health`, `/s
 | **App** | `backend/app.js` | CORS with `credentials: true` + `origin` whitelist, cookie-parser, JSON 256kb, request logger, all routes, 404 + error handlers |
 
 ### CORS configuration
-- `Access-Control-Allow-Origin: http://localhost:3000` (configurable via `CORS_ORIGIN`)
+- `Access-Control-Allow-Origin: https://docfix-frontend.vercel.app` (configurable via `CORS_ORIGIN`)
 - `Access-Control-Allow-Credentials: true`
 - `Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS`
 - `Access-Control-Allow-Headers: Content-Type,Authorization`
