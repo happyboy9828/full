@@ -1276,3 +1276,20 @@ Updated FAQ (`client/app/faq/page.js`), Pricing (`client/app/pricing/page.js`), 
 ### Verification
 - `next build` passes
 - ESLint: 0 errors on modified files
+
+## Remove Analytics and Pricing Pages from Frontend (COMPLETE)
+
+Removed the analytics and pricing pages from the frontend as requested, leaving backend untouched.
+
+### Changes
+| File | Change |
+|------|--------|
+| client/lib/pages.js | Removed hardcoded /analytics entry from PAGE_META. |
+| client/app/analytics/ | Deleted entire directory (AnalyticsDashboard.js, page.js). |
+| client/app/pricing/ | Deleted entire directory (page.js). |
+
+### Verification
+- `next build` passes
+- ESLint: 0 errors
+- Confirmed removal of analytics and pricing routes from frontend.
+

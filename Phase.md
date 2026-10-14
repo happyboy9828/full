@@ -878,3 +878,17 @@ third theme option from "Neon" to "System" (follows OS preference).
 **Task:** "update all the pages with current status properly like in faq i see it's  100 % free no limits but actullay it have limits make sure all pages have correct and proper data"
 
 **Completion Criteria:** All pages reflect correct data about limits. — VERIFIED via `next build` and ESLint.
+## Phase 37: Remove Analytics and Pricing Pages from Frontend (COMPLETE)
+
+**Completed:**
+- [x] Removed hardcoded `/analytics` entry from PAGE_META in `client/lib/pages.js`.
+- [x] Deleted the `client/app/analytics/` directory (AnalyticsDashboard.js, page.js).
+- [x] Deleted the `client/app/pricing/` directory (page.js).
+
+**Problem:** The frontend contained analytics and pricing pages that were not needed; the user requested to remove them from frontend only, leaving backend untouched.
+
+**Fix:** Removed the analytics and pricing routes from the frontend by deleting the corresponding directories and cleaning up the PAGE_META entry.
+
+**Task:** "remove /analityics and /price plan but keep in mind do nothing with backend i just want to remove it from frontend"
+
+**Completion Criteria:** Analytics and pricing pages removed from frontend; `next build` passes; ESLint: 0 errors. — VERIFIED.
