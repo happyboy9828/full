@@ -1246,3 +1246,18 @@ Updated client/app/cookie-policy/page.js with Cookie Policy content.
 ### Verification
 - Cookie policy page content matches the provided policy text
 
+
+## Update FAQ and Pricing Pages to Reflect Actual Limits (COMPLETE)
+
+Updated FAQ (`client/app/faq/page.js`), Pricing (`client/app/pricing/page.js`), and Homepage (`client/app/page.js`) to correct claims about "no limits". Changed wording to reflect that while DocFix is 100% free with no subscriptions, processing limits are determined by device memory and browser capabilities.
+
+### Changes
+| File | Change |
+|------|--------|
+| client/app/faq/page.js | Updated answer to "Is it really free?" to mention limits based on device memory and browser capabilities. |
+| client/app/pricing/page.js | Updated metadata description, component description, and paragraph to replace "no limits" with "no artificial limits" and note about device/browser limits. |
+| client/app/page.js | Updated tools subtitle to "Limits are based on device memory and browser capabilities." |
+
+### Verification
+- `next build` passes
+- ESLint: 0 errors on modified files

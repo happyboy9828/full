@@ -100,9 +100,8 @@ export default function Home() {
           <h2 id="popular-heading" className="tools-title">
             Most Popular Tools
           </h2>
-          <p className="tools-subtitle">
-            The six tools our users reach for most. No installs. No uploads.
-            No limits.
+        <p className="tools-subtitle">
+            The six tools our users reach for most. No installs. No uploads. Limits are based on device memory and browser capabilities.
           </p>
         </div>
 

@@ -14,10 +14,10 @@ const faqData = [
         q: "Is my file uploaded to your servers?",
         a: "No. Every tool in DocFix runs entirely in your browser using WebAssembly (WASM) and JavaScript. Your files are read into your browser&apos;s memory, processed on your device, and never sent over the network to any server.",
       },
-      {
-        q: "Is it really free?",
-        a: "Yes — 100% free, forever. There are no subscriptions, no credit card required, and no hidden fees. We make no money from your data because we never see it.",
-      },
+        {
+          q: "Is it really free?",
+          a: "Yes — 100% free to use, with no subscriptions, no credit card required, and no hidden fees. However, processing limits are determined by your device's memory and browser capabilities (e.g., file size and batch count). We make no money from your data because we never see it.",
+        },
       {
         q: "Do you store or log my files?",
         a: "No. DocFix does not store, log, or process files on any server. File contents exist only in your browser&apos;s memory during processing and are gone once you close the tab.",

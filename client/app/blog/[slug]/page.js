@@ -1,4 +1,5 @@
-﻿import Link from "next/link";
+﻿import { notFound } from "next/navigation";
+import Link from "next/link";
 import { blogPosts } from "../posts";
 import ContentPage from "../../../components/ContentPage/ContentPage";
 
@@ -149,14 +150,7 @@ export default function BlogPostPage({ params }) {
   const post = blogPosts.find((p) => p.slug === params.slug);
 
   if (!post) {
-    return (
-      <ContentPage title="Post Not Found" description="This article does not exist." eyebrow="Blog">
-        <div className="prose">
-          <p>The blog post you are looking for could not be found.</p>
-          <Link href="/blog">← Back to all posts</Link>
-        </div>
-      </ContentPage>
-    );
+    notFound();
   }
 
   const content = postContent[post.slug] || { intro: post.excerpt, sections: [] };

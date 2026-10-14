@@ -1,24 +1,25 @@
 import ContentPage from "../../components/ContentPage/ContentPage";
 
 export const metadata = {
-  title: "Pricing — Free Forever",
+  title: "Pricing â€” Free Forever",
   description:
-    "DocFix is 100% free with no limits. No subscriptions, no credit card, no hidden fees. All tools run in your browser.",
+    "DocFix is 100% free with no artificial limits. No subscriptions, no credit card, no hidden fees. All tools run in your browser, with limits determined by your device's memory and browser capabilities.",
 };
 
 export default function PricingPage() {
   return (
     <ContentPage
       title="Pricing"
-      description="All DocFix tools are completely free. No subscriptions. No limits."
+      description="All DocFix tools are completely free. No subscriptions. Limits are based on device memory and browser capabilities."
       eyebrow="Pricing"
     >
       <div className="prose">
         <h2>Free Forever</h2>
         <p>
-          Every tool on DocFix is 100% free to use — forever. No credit card required, no
+          Every tool on DocFix is 100% free to use â€” forever. No credit card required, no
           subscriptions, no hidden fees. Because all processing happens in your browser, there are no
-          server costs to pass on to you.
+          server costs to pass on to you. Processing limits are determined by your device's memory and
+          browser capabilities.
         </p>
 
         <h2>What&apos;s Included</h2>

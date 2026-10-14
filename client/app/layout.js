@@ -70,6 +70,7 @@ export default function RootLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
+        <meta name="monetag" content="00c83d096c767c17643d90b438ee8e19" />
         {/* Utilities */}
         <Script
           src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"

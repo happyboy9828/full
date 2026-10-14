@@ -1,9 +1,15 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function NotFoundPath() {
-  const pathname = usePathname();
+  const [pathname, setPathname] = useState("");
+
+  useEffect(() => {
+    // Use window.location.pathname to get the actual browser URL
+    // Next.js keeps the original invalid URL in the address bar
+    setPathname(window.location.pathname);
+  }, []);
 
   if (!pathname || pathname === "/404") return null;
 
