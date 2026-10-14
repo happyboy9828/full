@@ -4,11 +4,6 @@
 // Tool metadata - single source of truth for tool titles, descriptions, and icons
 export const TOOL_METADATA = {
   // Image Tools
-  "/img/BGRemove": {
-    title: "Remove BG",
-    description: "Remove an image background automatically, then refine it with erase and restore brushes.",
-    icon: "🎭",
-  },
   "/img/FavIcon": {
     title: "Favicon Generator",
     description: "Build favicon.ico, PWA icons and a web manifest from one image, with a ready-made head snippet.",
@@ -166,7 +161,6 @@ export const CATEGORY_ROUTES = [
   {
     name: "Image Tools",
     routes: [
-      "/img/BGRemove",
       "/img/FavIcon",
       "/img/ImageResizer",
       "/img/ImgCompresser",

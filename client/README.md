@@ -13,7 +13,6 @@ Fast, secure image tools that run 100% in your browser. Nothing is uploaded to a
 | --- | --- |
 | `/` | Homepage with hero, featured tools, and full toolkit |
 | `/tools` | Browse every tool in one place |
-| `/img/BGRemove` | Remove an image background automatically, then refine it with erase and restore brushes |
 | `/img/FavIcon` | Build favicon.ico, PWA icons and a web manifest from one image |
 | `/img/ImageResizer` | Resize photos to exact pixel dimensions or crop them to an aspect ratio |
 | `/img/ImgCompresser` | Shrink image file sizes with a quality slider or target size limit, with batch ZIP download |
@@ -77,7 +76,7 @@ app/              Next.js App Router routes and each tool's implementation
 components/       shared React components (Navbar, Footer, pricing, ads, etc.)
 lib/pages.js      route discovery + the single source of truth for titles and descriptions
 utils/shared/     helpers used by every tool (see below)
-utils/img/        image tool utilities (BGRemove, FavIcon, etc.)
+utils/img/        image tool utilities (FavIcon, etc.)
 utils/dev-tools/  dev tool utilities (CSSMinifier, HTMLMinifier, PasswordGenerator, QRCodeGenerator, QRCodeScanner)
 ads/              ad units (banner, popup, push notification, etc.)
 ```

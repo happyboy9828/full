@@ -65,7 +65,7 @@ export default function HeatmapView({ params }) {
           value={path}
           onChange={(e) => setPath(e.target.value)}
           className="tool-input"
-          placeholder="/tools, /BGRemove, etc."
+          placeholder="/tools, /img/ImageResizer, etc."
           style={{ maxWidth: 500 }}
         />
         <p className="tool-muted" style={{ margin: "8px 0 0", fontSize: 12 }}>

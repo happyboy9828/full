@@ -205,7 +205,7 @@ Completion Criteria: The "Core Tool Suites" section no longer exists on the home
 - [x] Fixed `useDownloadProgress()` in `DownloadProgressPopup.js` to carry per-download options (`title`, `description`, `countdownMs`, `durationMs`) into the popup instead of discarding them
 - [x] Created `client/components/ads/DownloadProgressPopup/GlobalDownloadProgress.js` — global popup host component
 - [x] Mounted `<GlobalDownloadProgress />` in `client/app/layout.js` site-wide
-- [x] Routed 10 remaining direct-download tools through the popup: Watermark, ImageResizer, BGRemove, ImgCompresser, FavIcon, JPGtoPDF, CSSMinifier, PasswordGenerator, QRCodeScanner, Paragraph Writer
+- [x] Routed 9 remaining direct-download tools through the popup: Watermark, ImageResizer, ImgCompresser, FavIcon, JPGtoPDF, CSSMinifier, PasswordGenerator, QRCodeScanner, Paragraph Writer
 - [x] Fixed pre-existing crash in QRCodeScanner (`downloadBlob` was called but never imported)
 - [x] Removed unused `downloadBlob` imports across the routed tools
 - [x] Updated Status.md

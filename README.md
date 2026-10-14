@@ -83,7 +83,7 @@ npm run dev          # http://localhost:3000
 
 | Category | Tools |
 |----------|-------|
-| **Image** | BGRemove, FavIcon, ImageResizer, ImgCompresser, ImgToBase64, JpgPngConverter, WebpToPng, Watermark |
+| **Image** | FavIcon, ImageResizer, ImgCompresser, ImgToBase64, JpgPngConverter, WebpToPng, Watermark |
 | **Dev Tools** | CSSMinifier, HTMLMinifier, PasswordGenerator, QRCodeGenerator, QRCodeScanner |
 | **Planned** | PDF Tools, Text Tools |
 

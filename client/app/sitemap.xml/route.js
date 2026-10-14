@@ -26,10 +26,6 @@ const STATIC_PAGES = [
 // Tool-specific metadata for richer sitemap entries.
 // Keys match the full route href returned by getPages().
 const TOOL_META = {
-  "/img/BGRemove": {
-    title: "Remove Image Background — Free Online Tool",
-    desc: "Remove an image background automatically with erase and restore brushes. 100% browser-only.",
-  },
   "/img/FavIcon": {
     title: "Favicon Generator — Create favicon.ico and PWA icons",
     desc: "Build favicon.ico, PWA icons and a web manifest from one image.",

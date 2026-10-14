@@ -12,7 +12,7 @@ export default function FunnelsView({ params }) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [steps, setSteps] = useState("/,/tools,/BGRemove");
+  const [steps, setSteps] = useState("/,/tools,/img/ImageResizer");
 
   useEffect(() => {
     let cancelled = false;
@@ -63,11 +63,11 @@ export default function FunnelsView({ params }) {
           value={steps}
           onChange={(e) => setSteps(e.target.value)}
           className="tool-input"
-          placeholder="/, /tools, /BGRemove"
+          placeholder="/, /tools, /img/ImageResizer"
           style={{ maxWidth: 500 }}
         />
         <p className="tool-muted" style={{ margin: "8px 0 0", fontSize: 12 }}>
-          Define 2-10 steps. Example: <code>/,/tools,/BGRemove</code>
+          Define 2-10 steps. Example: <code>/,/tools,/img/ImageResizer</code>
         </p>
       </div>
 

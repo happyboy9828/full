@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 const TOOL_METADATA = {
-  "/img/BGRemove": { icon: "🎭" },
   "/img/FavIcon": { icon: "🌐" },
   "/img/ImageResizer": { icon: "📐" },
   "/img/ImgCompresser": { icon: "🗜️" },

@@ -321,7 +321,7 @@ Recent activity (Phase 8).
     "activeVisitors": 12,
     "activeSessions": 15,
     "recentEvents": [
-      { "path": "/BGRemove", "timestamp": "2026-10-09T02:50:00Z", "visitorId": "..." }
+      { "path": "/img/ImageResizer", "timestamp": "2026-10-09T02:50:00Z", "visitorId": "..." }
     ]
   }
 }

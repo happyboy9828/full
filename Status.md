@@ -459,7 +459,6 @@ The `DownloadProgressPopup` component existed but was dead code: `triggerDownloa
 |------|------------------|
 | `client/app/img/Watermark/page.js` | Download all (.zip), Download selected photo |
 | `client/app/img/ImageResizer/page.js` | Apply crop & download |
-| `client/app/img/BGRemove/page.js` | Download high-res image |
 | `client/app/img/ImgCompresser/page.js` | Download compressed (.zip), Download selected image |
 | `client/app/img/FavIcon/page.js` | Download favicon package (.zip) |
 | `client/utils/pdf-tools/JPGtoPDF/JPGtoPDF.js` | Convert & Download PDF |
@@ -471,7 +470,7 @@ The `DownloadProgressPopup` component existed but was dead code: `triggerDownloa
 Tools already calling `triggerDownloadProgress` (JpgPngConverter, WebpPngConverter, ImgToBase64, SplitPDF, MergePDFFiles, RotatePDF, CompressPDF, PDFtoJPG, QRCodeGenerator, HTMLMinifier, Sort Text, Remove Duplicate Lines) now actually display the popup with their own titles and timings.
 
 ### Notes
-- Removed the now-unused `downloadBlob` imports (FavIcon.js, CSSMinifier, PasswordGenerator, QRCodeScanner, and the Watermark/ImageResizer/BGRemove/ImgCompresser pages). `utils/shared/download.js` remains as an unused utility.
+- Removed the now-unused `downloadBlob` imports (FavIcon.js, CSSMinifier, PasswordGenerator, QRCodeScanner, and the Watermark/ImageResizer/ImgCompresser pages). `utils/shared/download.js` remains as an unused utility.
 - Each download passes `countdownMs: 3000` and `durationMs: 2000–2500` with a tool-specific title/description; the actual anchor-click runs in `onDownloadStart` after the countdown.
 
 ### Verification

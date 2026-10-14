@@ -103,7 +103,7 @@ const postContent = {
       {
         title: "Step 1: Remove the Background",
         content:
-          "Upload your JPG to an AI background removal tool (like DocFix&apos;s Remove BG) to isolate the subject. The background will be replaced with transparency.",
+          "Upload your JPG to a background removal tool (like DocFix&apos;s Image Resizer) to isolate the subject. The background will be replaced with transparency.",
       },
       {
         title: "Step 2: Convert to PNG",

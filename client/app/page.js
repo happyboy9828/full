@@ -12,12 +12,6 @@ const FEATURED_TOOLS = [
     href: "/img/ImgCompresser",
   },
   {
-    title: "Remove BG",
-    description:
-      "Automatically remove backgrounds, then refine with brushes.",
-    href: "/img/BGRemove",
-  },
-  {
     title: "Image Resizer",
     description:
       "Resize photos to exact pixel dimensions or crop to aspect ratios.",
