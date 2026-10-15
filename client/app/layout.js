@@ -3,7 +3,7 @@ import Script from "next/script";
 import Navbar from "./../components/Navbar/Navbar";
 import Footer from "../components/Footer/Footer";
 import { getPages } from "../lib/pages";
-import Multitag from "../components/ads/Multitag/Multitag";
+// import Multitag from "../components/ads/Multitag/Multitag"; // Disabled — using Monetag script instead
 import GlobalDownloadProgress from "../components/ads/DownloadProgressPopup/GlobalDownloadProgress";
 import ClientProviders from "../components/ClientProviders/ClientProviders";
 import "./globals.css";
@@ -58,9 +58,10 @@ export const metadata = {
 };
 
 // Ad configuration using new formats:
-// 1. In-Page Push (Banner) - appears between content sections
-// 2. Vignette Banner - fullscreen between page transitions
-// 3. Multitag (All-in-one) - manages both formats with session capping
+ // 1. In-Page Push (Banner) - appears between content sections
+ // 2. Vignette Banner - fullscreen between page transitions
+ // 3. Multitag (All-in-one) - manages both formats with session capping
+ // DISABLED: Using Monetag script (tag.min.js) for ad delivery instead
 export default function RootLayout({ children }) {
   const pages = getPages();
 
@@ -71,6 +72,19 @@ export default function RootLayout({ children }) {
     >
       <head>
         <meta name="monetag" content="00c83d096c767c17643d90b438ee8e19" />
+        {/* Monetag Ad Tag - loads once globally, auto-injects ads (In-Page Push, Vignette, Popunder) */}
+        <Script
+          src="https://5gvci.com/act/files/tag.min.js?z=12026779"
+          data-cfasync="false"
+          async
+          strategy="lazyOnload"
+        />
+        <script 
+        src="https://quge5.com/88/tag.min.js"
+         data-zone="295895" 
+         async
+          data-cfasync="false" 
+          />
         {/* Utilities */}
         <Script
           src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"
@@ -116,8 +130,8 @@ export default function RootLayout({ children }) {
           {/* Global download notification popup (countdown + progress) */}
           <GlobalDownloadProgress />
 
-          {/* Multitag manages InPagePush (corner banner) and Vignette (page transition) */}
-          <Multitag
+          {/* Multitag (InPagePush + Vignette) — DISABLED: Using Monetag script for ads */}
+          {/* <Multitag
             slot="multitag"
             label="Advertisement"
             advertiser="PixelForge Pro"
@@ -138,7 +152,7 @@ export default function RootLayout({ children }) {
             // Session
             oncePerSession={true}
             sessionKey="ads:multitag"
-          />
+          /> */}
         </ClientProviders>
       </body>
     </html>

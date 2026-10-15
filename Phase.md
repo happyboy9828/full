@@ -1,6 +1,22 @@
 Phase Plan
 
-Last updated: October 14, 2026 | Current: Phase 36 — Production Domain Update (COMPLETE)
+Last updated: October 14, 2026 | Current: Phase 37 — Monetag Ad Integration (COMPLETE)
+
+## Phase 37: Monetag Ad Integration — Global Script Tag (COMPLETE)
+
+**Completed:**
+- [x] Inspected Next.js project structure — confirmed App Router (`app/layout.js`)
+- [x] Identified existing ad components: `Multitag` (manages `InPagePush` + `VignetteBanner`), `DownloadProgressPopup` — these are custom house ad components with hardcoded "PixelForge Pro" content
+- [x] Verified Monetag script format: basic website tag (`https://5gvci.com/act/files/tag.min.js?z=12026779`) that auto-injects ads (In-Page Push, Vignette, Popunder, etc.) — does NOT support container targeting
+- [x] Integrated exact Monetag script in `client/app/layout.js` `<head>` using Next.js `<Script>` component with `strategy="lazyOnload"`
+- [x] Preserved exact URL, zone ID (12026779), and required attributes (`data-cfasync="false"`, `async`)
+- [x] Existing custom ad components remain unchanged (separate promotional units)
+
+**Task:** "Integrate the exact Monetag script provided by Monetag so ads can display on my website"
+
+**Completion Criteria:** Monetag script loads once globally in `<head>`, auto-injects ads per zone configuration, no duplicate loads on navigation. — VERIFIED via `next build` and served HTML inspection.
+
+---
 
 **Current Phase: Phase 36 — Production Domain Update (COMPLETE)**
 

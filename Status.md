@@ -2,6 +2,28 @@
 
 Last updated: 2026-10-14
 
+## Monetag Ad Integration — Global Script Tag (COMPLETE)
+
+Integrated the exact Monetag ad script provided by Monetag into the Next.js App Router root layout. The script loads once globally and auto-injects ads (In-Page Push, Vignette, Popunder, etc.) based on the zone configuration.
+
+### Changes
+| File | Change |
+|------|--------|
+| `client/app/layout.js` | Added `<Script src="https://5gvci.com/act/files/tag.min.js?z=12026779" data-cfasync="false" async strategy="lazyOnload" />` in `<head>` |
+
+### Notes
+- Uses the **exact script URL, zone ID (12026779), and attributes** provided by Monetag — no modifications
+- Next.js `Script` component with `strategy="lazyOnload"` ensures single global load, no duplicates on client-side navigation
+- Placed in `<head>` as recommended by Monetag for optimal ad performance
+- The existing custom ad components (`Multitag`, `InPagePush`, `VignetteBanner`) remain unchanged — they display house ads ("PixelForge Pro" promotional content) and operate independently
+- Monetag's basic tag **auto-injects ads** and does not support targeting arbitrary HTML containers; the custom components are separate promotional units
+
+### Verification
+- `next build`: Compiled successfully
+- Script tag present in served HTML `<head>` with correct URL and attributes
+
+---
+
 ## Production Domain Update — localhost:3000 → docfix-frontend.vercel.app (COMPLETE)
 
 Replaced all `localhost:3000` references with `https://docfix-frontend.vercel.app` across the codebase to match the deployed production domain.
