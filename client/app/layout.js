@@ -58,10 +58,10 @@ export const metadata = {
 };
 
 // Ad configuration using new formats:
- // 1. In-Page Push (Banner) - appears between content sections
- // 2. Vignette Banner - fullscreen between page transitions
- // 3. Multitag (All-in-one) - manages both formats with session capping
- // DISABLED: Using Monetag script (tag.min.js) for ad delivery instead
+// 1. In-Page Push (Banner) - appears between content sections
+// 2. Vignette Banner - fullscreen between page transitions
+// 3. Multitag (All-in-one) - manages both formats with session capping
+// DISABLED: Using Monetag script (tag.min.js) for ad delivery instead
 export default function RootLayout({ children }) {
   const pages = getPages();
 
@@ -79,12 +79,22 @@ export default function RootLayout({ children }) {
           async
           strategy="lazyOnload"
         />
-        <script 
-        src="https://quge5.com/88/tag.min.js"
-         data-zone="295895" 
-         async
-          data-cfasync="false" 
-          />
+        <Script
+          src="https://quge5.com/88/tag.min.js"
+          data-zone="295895"
+          async
+          data-cfasync="false"
+        />
+        <Script
+          src="https://5gvci.com/act/files/tag.min.js?z=12026895"
+          data-cfasync="false"
+          async
+        />
+        <Script
+          src="https://5gvci.com/act/files/tag.min.js?z=12026779"
+          data-cfasync="false"
+          async
+        />
         {/* Utilities */}
         <Script
           src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"
