@@ -72,7 +72,7 @@ export default function RootLayout({ children }) {
     >
       <head>
         <meta name="monetag" content="00c83d096c767c17643d90b438ee8e19" />
-        {/* Monetag Ad Tag - loads once globally, auto-injects ads (In-Page Push, Vignette, Popunder) */}
+        {/* Monetag Ad Tag - loads once globally, auto-injects ads (In-Page Push, Vignette, Popunder) 
         <Script
           src="https://5gvci.com/act/files/tag.min.js?z=12026779"
           data-cfasync="false"
@@ -94,7 +94,9 @@ export default function RootLayout({ children }) {
           src="https://5gvci.com/act/files/tag.min.js?z=12026779"
           data-cfasync="false"
           async
-        />
+        /> */}
+        <Script 
+        src="https://pl31855651.profitableratecpmnetwork.com/8c/59/de/8c59de258ee336d48118c79bc8c749fe.js"/>
         {/* Utilities */}
         <Script
           src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"
