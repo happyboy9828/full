@@ -47,6 +47,24 @@ const config = {
     from: process.env.EMAIL_FROM || "noreply@docfix.app",
     to: process.env.EMAIL_TO || "",
   },
+
+  sms: {
+    provider: process.env.SMS_PROVIDER || "mock",
+    twilio: {
+      accountSid: process.env.TWILIO_ACCOUNT_SID || "",
+      authToken: process.env.TWILIO_AUTH_TOKEN || "",
+      fromNumber: process.env.TWILIO_FROM_NUMBER || "",
+    },
+  },
+
+  otp: {
+    codeLength: Number(process.env.OTP_CODE_LENGTH) || 6,
+    ttlMs: Number(process.env.OTP_TTL_MINUTES || 10) * 60 * 1000,
+    maxAttempts: Number(process.env.OTP_MAX_ATTEMPTS) || 5,
+  },
+
+  recoveryRateLimit: Number(process.env.RECOVERY_RATE_LIMIT) || 5,
+  recoveryRateWindowMs: Number(process.env.RECOVERY_RATE_WINDOW_MS) || 15 * 60_000,
 };
 
 export default config;

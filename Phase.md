@@ -2,6 +2,8 @@ Phase Plan
 
 Last updated: October 14, 2026 | Current: Phase 37 — Monetag Ad Integration (COMPLETE)
 
+**Additional task completed:** Image Resizer — made crop stage flexible with screen size (replaced fixed 60vh height with responsive width/maxHeight + aspect-ratio; added responsive CSS breakpoints; dimension fields go single-column on ?768px).
+
 ## Phase 37: Monetag Ad Integration — Global Script Tag (COMPLETE)
 
 **Completed:**
@@ -927,3 +929,77 @@ third theme option from "Neon" to "System" (follows OS preference).
 **Task:** "add a full profectional dashboard on rout /kingdome/dashboard which is a full profectional dashboard for trafice managment of this site" + "update the client and backend and make admin default password as kingdom"
 
 **Completion Criteria:** Dashboard accessible at `/kingdome/dashboard` after login with default password `kingdom`; traffic metrics, charts, tables, and live data all rendering from real backend API; route protected by middleware; build passes cleanly.
+
+## Phase 39: Admin Password Recovery — SMS-based OTP (COMPLETE)
+
+**Completed:**
+- [x] Added SMS/OTP config to `backend/config/env.js` (`sms.provider`, `sms.twilio.*`, `otp.*`, recovery rate-limit knobs)
+- [x] Created `backend/utils/sms.js` — pluggable SMS sender (`mock` provider logs OTP to server logs for local dev; `twilio` calls the Twilio REST API)
+- [x] Created `backend/utils/password.js` — shared scrypt password hashing/verification helpers (matches `authController.js` params)
+- [x] Created `backend/models/Admin.js` — admin account record with `email`, `passwordHash`, `recoveryPhone` (E.164), `isActive`
+- [x] Created `backend/models/AdminOtp.js` — OTP records with `otpHash`, `expiresAt` (TTL index), `attempts`/`maxAttempts`, `verifiedAt`/`consumedAt`, auto-expire via TTL index
+- [x] Exported `Admin` and `AdminOtp` from `backend/models/index.js`
+- [x] Created `backend/controllers/otpController.js`:
+  - `requestPasswordRecovery` — looks up admin by email, retrieves registered recovery phone, generates a 6-digit OTP, stores a hashed OTP with TTL, invalidates prior unredeemed OTPs, sends OTP via SMS, returns a generic success message (no user enumeration)
+  - `verifyOtpAndResetPassword` — validates OTP against the stored hash, enforces expiry and max-attempt limits, marks OTP verified/consumed (single-use), rotates the password hash, revokes all existing admin sessions
+- [x] Created `backend/routes/recovery.js` — `POST /api/auth/password-recovery/request` and `POST /api/auth/password-recovery/verify`, both rate-limited per IP; mounted under `/api/auth` in `backend/routes/index.js`
+- [x] Added SMS/OTP env vars (with mocked defaults) to `backend/.env`
+- [x] Verified `node --check` passes on all backend source files
+
+**Workflow:**
+1. Client calls `POST /api/auth/password-recovery/request` with `{ email }`.
+2. Backend loads the `Admin` record and reads its registered `recoveryPhone` from the database.
+3. A random numeric OTP is generated, SHA-256 hashed, and stored in `adminOtps` with a 10-minute TTL; prior unredeemed OTPs for the admin are invalidated.
+4. The OTP is sent to the recovery phone via SMS (`sendSms`). In dev (`SMS_PROVIDER=mock`) the OTP is written to server logs.
+5. Client calls `POST /api/auth/password-recovery/verify` with `{ email, otp, newPassword }`.
+6. Backend verifies the OTP (timing-safe hash compare), checks expiry and attempt limits, then rotates the password hash and revokes all active admin sessions.
+
+**Task:** "Develop a backend workflow for an admin password recovery system that utilizes SMS-based OTP verification — retrieve the administrator's registered recovery phone number from the database, generate and send a one-time password (OTP) to that number, and provide a secure mechanism to verify the OTP before allowing the user to update their password."
+
+**Completion Criteria:** Request ? send OTP ? verify ? reset password flow implemented end-to-end with rate limiting, TTL expiry, single-use OTPs, no user enumeration, and session revocation on reset. Backend syntax verified.
+
+## Phase 40: Kingdome Dashboard Sidebar + Coming Soon Pages (COMPLETE)
+
+**Completed:**
+- [x] Redesigned `client/components/Sidebar/Sidebar.js` — deep navy (`#081426`) premium sidebar with brand header (`/logo.svg` + "DocFix"), navigation, active/hover states, responsive collapse + mobile drawer
+- [x] Created `client/components/Sidebar/Sidebar.css` — sidebar styles with blue-gray border, 240px desktop width, 220ms transitions, focus-visible rings
+- [x] Created `client/components/ComingSoon/ComingSoonClient.js` — shared "Coming soon" page client component (Sidebar + feature card)
+- [x] Created `client/components/ComingSoon/ComingSoon.css` — coming soon page styles
+- [x] Created page.js routes for all 6 navigation items: `/kingdome/pages`, `/kingdome/traffic-sources`, `/kingdome/devices`, `/kingdome/live-visitors`, `/kingdome/events`, `/kingdome/settings`
+- [x] Installed `lucide-react` (no icon library was previously installed)
+- [x] Modified `client/app/kingdome/dashboard/DashboardClient.js` — wrapped shell in `.dashboard-layout` with `<Sidebar />` + `.dashboard-main`; single `shellContent` return; all existing functionality preserved
+- [x] Sidebar NAV_ITEMS use actual hrefs (not null placeholders) — Dashboard routes to live dashboard; all others route to their Coming soon page
+- [x] "Coming soon" badge shown on all non-Dashboard nav items
+- [x] Active state driven by `usePathname()` — exact or nested-route match, blue/indigo gradient active background, no hardcoded active item
+- [x] Responsive: desktop fixed 240px sidebar; tablet collapsible icon-only; mobile slide-in drawer with hamburger, backdrop, Escape-to-close, auto-close on selection
+
+**Problem:** The `/kingdome/dashboard` analytics dashboard had navigation items for Pages, Traffic Sources, Devices, Live Visitors, Events, and Settings that pointed to no actual routes (disabled "Coming soon" placeholders). The user requested these be turned into real "Coming soon" pages.
+
+**Fix:** Created a shared `ComingSoonClient` component and 6 page.js routes, one per navigation item, each rendering the Sidebar + a "Coming soon" feature card. Updated the Sidebar to link to these routes instead of using disabled placeholders.
+
+**Task:** "update ui and add these comming soon pages Navigation — Dashboard, Pages Coming soon, Traffic Sources Coming soon, Devices Coming soon, Live Visitors Coming soon, Events Coming soon, Settings Coming soon"
+
+**Completion Criteria:** Sidebar renders on `/kingdome/dashboard` with all 7 nav items linking to real routes; clicking any non-Dashboard item navigates to its Coming soon page; `next build` passes (all 8 kingdome routes prerendered); ESLint clean on new/modified files.
+
+
+## Phase 40: Kingdome Dashboard Sidebar Redesign (COMPLETE)
+
+**Completed:**
+- [x] Created `client/components/Sidebar/Sidebar.js` — reusable sidebar component (brand header, 7 navigation items, active/hover states, responsive collapse + mobile drawer)
+- [x] Created `client/components/Sidebar/Sidebar.css` — deep navy (`#081426`) theme, blue-gray border, 240px desktop width, 220ms transitions, focus-visible styles
+- [x] Installed `lucide-react` (no icon library was previously installed) and added to `client/package.json` / `package-lock.json`
+- [x] Modified `client/app/kingdome/dashboard/DashboardClient.js` — wrapped shell in `.dashboard-layout` with `<Sidebar />` + `.dashboard-main`; single `shellContent` return so the sidebar renders on all dashboard states; all existing metrics, charts, tables, auth, date-range picker, domain filter, and refresh logic preserved unchanged
+- [x] Navigation items in required order with Lucide icons at 20px: Dashboard (`LayoutDashboard` ? `/kingdome/dashboard`), Pages (`FileText`), Traffic Sources (`ChartNoAxesCombined`), Devices (`MonitorSmartphone`), Live Visitors (`Users`), Events (`MousePointerClick`), Settings (`Settings`)
+- [x] Active state driven by `usePathname()` (exact or nested-route match); blue/indigo gradient active background, muted blue-gray inactive text, hover brightening, `aria-current="page"`, focus-visible rings
+- [x] Pages, Traffic Sources, Devices, Live Visitors, Events, Settings have no frontend routes — rendered as clearly marked disabled "Coming soon" placeholders (no fake routes invented)
+- [x] Responsive behavior: desktop fixed 240px sidebar (main content `margin-left`, no overlap); tablet collapsible icon-only sidebar with tooltips and collapse/expand toggle; mobile slide-in drawer with hamburger, accessible backdrop, Escape-to-close, auto-close on selection, no horizontal overflow
+- [x] Brand header preserves existing identity: `/logo.svg` + "DocFix", subtle divider below
+
+**Problem:** The `/kingdome/dashboard` analytics dashboard had no navigation sidebar; the task required a modern premium dark-themed sidebar matched to the existing dashboard without creating a new project or replacing existing functionality.
+
+**Fix:** Extracted a reusable `Sidebar` component and integrated it into `DashboardClient.js`, keeping every existing dashboard feature intact.
+
+**Task:** "Redesign My Existing Analytics Dashboard Sidebar" — premium dark sidebar for the existing analytics dashboard.
+
+**Completion Criteria:** Sidebar renders on `/kingdome/dashboard` with deep navy theme, correct icon set and item order, active state tracking the actual route, working tablet collapse and mobile drawer, `next build` passes, ESLint clean on new/modified files.
+

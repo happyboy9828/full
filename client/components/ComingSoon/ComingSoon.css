@@ -1,0 +1,63 @@
+/* ComingSoon.css — Premium "Coming soon" state pages for Kingdome dashboard
+   Mirrors the dashboard shell layout so the sidebar stays consistent. */
+
+.coming-soon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.coming-soon-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
+  padding: 48px 32px;
+  border-radius: var(--tool-radius-md);
+  background: rgba(8, 20, 38, 0.6);
+  border: 1px solid var(--sidebar-border);
+  backdrop-filter: blur(8px);
+}
+
+.coming-soon-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  background: #143054;
+  color: #3B82F6;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+.coming-soon-icon svg {
+  width: 48px;
+  height: 48px;
+}
+
+.coming-soon-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--sidebar-text);
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+}
+
+.coming-soon-description {
+  font-size: 16px;
+  color: var(--sidebar-text-muted);
+  margin: 0 0 0;
+  line-height: 1.5;
+}
+
+/* Respect mobile drawer body scroll lock */
+.coming-soon-wrapper {
+  touch-action: none;
+}

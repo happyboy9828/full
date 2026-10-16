@@ -1368,4 +1368,136 @@ A full professional traffic management dashboard built at `client/app/kingdome/d
 - All backend JavaScript files pass syntax check (`node --check`)
 - No remaining `admin123` references in source code
 
+---
+
+## Admin Password Recovery — SMS-based OTP Verification (COMPLETE)
+
+Built a backend workflow for admin password recovery that uses SMS-delivered OTP verification: retrieve the admin's registered recovery phone number from the database, generate and send a one-time password, and verify the OTP before allowing a password update.
+
+### Files
+| File | Purpose |
+|------|---------|
+| `backend/config/env.js` | Added `sms` (provider + Twilio creds), `otp` (code length, TTL, max attempts), and recovery rate-limit config |
+| `backend/utils/sms.js` | Pluggable SMS sender — `mock` provider logs OTP to server logs for local dev; `twilio` calls the Twilio REST API |
+| `backend/utils/password.js` | Shared scrypt hash/verify helpers matching `authController.js` params |
+| `backend/models/Admin.js` | Admin account: `email`, `passwordHash`, `recoveryPhone` (E.164), `isActive` |
+| `backend/models/AdminOtp.js` | OTP record: `otpHash`, `expiresAt` (TTL index, auto-removal), `attempts`/`maxAttempts`, `verifiedAt`/`consumedAt` |
+| `backend/models/index.js` | Exports `Admin` and `AdminOtp` |
+| `backend/controllers/otpController.js` | `requestPasswordRecovery` + `verifyOtpAndResetPassword` |
+| `backend/routes/recovery.js` | `POST /api/auth/password-recovery/request` and `POST /api/auth/password-recovery/verify`, both IP rate-limited |
+| `backend/routes/index.js` | Mounts recovery routes under `/api/auth` |
+| `backend/.env` | SMS/OTP env vars (mock defaults) |
+
+### Security properties
+- **No user enumeration**: `request` returns the same generic success message whether or not the email exists.
+- **Single-use OTP**: OTP is marked verified + consumed on success; prior unredeemed OTPs are invalidated when a new one is requested.
+- **Expiry + lockout**: OTPs expire (default 10 min) via a MongoDB TTL index; verification is rejected after `maxAttempts` (default 5) failures.
+- **Timing-safe comparison**: OTP verified with `crypto.timingSafeEqual` against a SHA-256 hash (OTP never stored in plaintext).
+- **Password rotation + session revocation**: On success the `passwordHash` is rotated (scrypt) and all existing `AdminSession` records are revoked, forcing re-login with the new password.
+- **Rate limiting**: Both recovery endpoints are rate-limited per IP (default 5 per 15 min) to prevent brute force and SMS pumping.
+
+### API contract
+- `POST /api/auth/password-recovery/request` body `{ email }` → generic success; OTP sent to the admin's registered `recoveryPhone`.
+- `POST /api/auth/password-recovery/verify` body `{ email, otp, newPassword }` → verifies OTP, resets password, revokes sessions.
+
+### Verification
+- `node --check` passes on all backend source files (including new `otpController.js`, `recovery.js`, `sms.js`, `password.js`, `Admin.js`, `AdminOtp.js`)
+- `backend/.env` documents SMS provider (`mock` default), Twilio credentials, OTP TTL/length/attempts, and recovery rate limits
+
+---
+
+## Image Resizer — Flexible Stage with Screen Size (COMPLETE)
+
+Made the Image Resizer crop stage flex with screen size instead of locking height to a fixed viewport fraction.
+
+### Changes
+
+| File | Change |
+|------|--------|
+| `client/app/img/ImageResizer/page.js` | Replaced fixed `width: min(100%, calc(60vh * aspect))` with responsive `width: 100%, maxHeight: 70vh` + `aspect-ratio`, so the preview scales up/down with the screen; removed now-unused `aspect` variable |
+| `client/utils/img/ImageResizer/ImageResizer.css` | `.ir-dims` now uses `repeat(2, minmax(0, 1fr))` for flexible columns; added `.ir-dim { min-width: 0 }`; added responsive breakpoints at 768px (single-column dims, tighter padding, 2-col presets/stats) and 520px |
+
+### Behavior after fix
+- Crop preview scales with viewport width, capped at 70vh height — no longer fixed to 60vh
+- Dimension input fields wrap to a single column on screens ≤768px
+- Stage padding tightens on smaller screens
+- Aspect ratio lock, presets, grid overlay, rotate/flip, and export all unchanged
+
+### Verification
+- `next build`: Compiled successfully — 56/56 static pages prerendered
+- ESLint: 0 errors on `page.js` and `ImageResizer.js`
+
+---
+
+## README Refresh — Production-Level Documentation (COMPLETE)
+
+Refreshed both README files (`README.md` root and `client/README.md`) as production-level website documentation, removing all development-phase tracking and backend/dashboard references.
+
+### Changes
+
+| File | Change |
+|------|--------|
+| `README.md` | Retitled to "DocFix"; production-focused copy; live site URL `https://docfix-frontend.vercel.app`; 24 tools across Image/PDF/Dev/Text categories with descriptions; Privacy section (zero uploads, no sign-up, no server storage, no third-party cookies); Getting Started and Support sections; removed all Phase tracking, backend API, quick-start dev commands, architecture and Ads/Download Progress internals |
+| `client/README.md` | Production-focused copy; live site URL; all 24 tool routes listed by category; Privacy section; Using the Tools steps (visit → open → pick file → configure → download); removed all dev conventions, project structure internals, shared helpers, theme internals, Ads internals, Download Progress internals, Phase references and backend references |
+
+### Notes
+- No `localhost` references remain in either README
+- No backend or dashboard references remain (removed in Phase 11)
+- Tone is user-facing and production-ready rather than developer-tracking
+
+---
+
+## README Update — Both README Files Refreshed (COMPLETE)
+
+Updated `README.md` (root) and `client/README.md` to reflect the current project state after backend/dashboard removal and all completed phases.
+
+### Changes
+
+| File | Change |
+|------|--------|
+| `README.md` | Retitled from "DocFix Analytics Platform" to "DocFix"; removed architecture/backend quick-start/Backend API sections; set Current Phase to Phase 37 (Monetag Ad Integration); updated tool table to 24 tools across 4 categories (Image, PDF, Dev, Text); removed Analytics Dashboard section; updated themes to warm green/amber light + slate dark palette; added Monetag/DownloadProgressPopup ads docs; updated Download Progress Popup to `triggerDownloadProgress` registry |
+| `client/README.md` | Added missing PDF Tools and Text Tools routes to the tool table (all 24 tools listed); removed "Planned tools" (all categories complete); updated theme section (light `#ABC270`/`#FEC868`/`#473C33`, dark `#0D1F23`/`#B9CC82`); updated Ads section (Monetag active, Multitag disabled); updated Download Progress Popup to `triggerDownloadProgress` registry; updated project structure to include `utils/pdf-tools/`, `utils/writing-tool/`, `utils/image-tools/` |
+
+### Notes
+- Root `README.md` dev server URL already pointed to `https://docfix-frontend.vercel.app` (Phase 36)
+- No backend references remain in either README (backend/dashboard removed in Phase 11)
+
+
+## Kingdome Dashboard Sidebar + Coming Soon Pages (COMPLETE)
+
+Redesigned the navigation sidebar of the existing `/kingdome/dashboard` analytics dashboard to a modern, premium dark SaaS style, and added real "Coming soon" page routes for every navigation item. The existing dashboard page and all backend/API functionality are untouched; only the dashboard shell layout was updated to include the new sidebar.
+
+### Files Created
+| File | Purpose |
+|------|---------|
+| `client/components/Sidebar/Sidebar.js` | Reusable sidebar component: brand header, navigation, active/hover states, responsive collapse + mobile drawer |
+| `client/components/Sidebar/Sidebar.css` | Sidebar-specific styles (deep navy theme, tokens, transitions) |
+| `client/components/ComingSoon/ComingSoonClient.js` | Shared "Coming soon" page client component (Sidebar + feature card) |
+| `client/components/ComingSoon/ComingSoon.css` | Coming soon page styles |
+| `client/app/kingdome/pages/page.js` | Pages route — Coming soon page with Sidebar |
+| `client/app/kingdome/traffic-sources/page.js` | Traffic Sources route — Coming soon page with Sidebar |
+| `client/app/kingdome/devices/page.js` | Devices route — Coming soon page with Sidebar |
+| `client/app/kingdome/live-visitors/page.js` | Live Visitors route — Coming soon page with Sidebar |
+| `client/app/kingdome/events/page.js` | Events route — Coming soon page with Sidebar |
+| `client/app/kingdome/settings/page.js` | Settings route — Coming soon page with Sidebar |
+
+### Files Modified
+| File | Change |
+|------|--------|
+| `client/app/kingdome/dashboard/DashboardClient.js` | Wrapped dashboard shell in `.dashboard-layout` with `<Sidebar />` + `.dashboard-main`; converted multiple early returns into a single `shellContent` return so the sidebar renders on all dashboard states (auth required, loading, error, metrics). All existing metrics, charts, tables, auth, date-range, and refresh logic preserved unchanged. |
+| `client/package.json` / `client/package-lock.json` | Added `lucide-react` (icon library was not previously installed) |
+
+### Design
+- **Sidebar**: deep navy `#081426`, subtle blue-gray right border (`#243954`), fixed 240px width on desktop, smooth 220ms transitions
+- **Brand header**: existing `/logo.svg` + "DocFix" wordmark (brand identity preserved), subtle divider below
+- **Navigation (exact order)**: Dashboard (`/kingdome/dashboard`), Pages (`/kingdome/pages`), Traffic Sources (`/kingdome/traffic-sources`), Devices (`/kingdome/devices`), Live Visitors (`/kingdome/live-visitors`), Events (`/kingdome/events`), Settings (`/kingdome/settings`) — Lucide icons (`LayoutDashboard`, `FileText`, `ChartNoAxesCombined`, `MonitorSmartphone`, `Users`, `MousePointerClick`, `Settings`) at 20px, 44px item height, rounded corners, hover + focus-visible styles
+- **"Coming soon" badges**: Shown on all non-Dashboard nav items; clicking navigates to the corresponding Coming soon page
+- **Active state**: determined via `usePathname()` (exact or nested-route match); blue/indigo gradient background, high-contrast white text/icon; inactive items muted blue-gray; no hardcoded active item
+- **Responsive**: desktop = fixed 240px sidebar with `margin-left` on main content; tablet (768–1023px) = collapsible icon-only sidebar with tooltips and collapse/expand toggle; mobile (<768px) = slide-in drawer with hamburger button, accessible backdrop, Escape-to-close, closes after navigation selection, `overflow: hidden` on body
+
+### Verification
+- `next build`: passes (exit code 0) — all 8 kingdome routes prerendered (dashboard + 6 coming soon + login)
+- ESLint: 0 errors on new/modified Sidebar/ComingSoon files (remaining project-wide errors are pre-existing in unrelated files)
+- Note: `/analytics` does not exist in the current frontend (removed in Phase 37); the dashboard route remains `/kingdome/dashboard`
+
 

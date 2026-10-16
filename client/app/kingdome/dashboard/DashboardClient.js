@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { useAuth } from "@/components/AuthProvider/AuthProvider";
+import Sidebar from "@/components/Sidebar/Sidebar";
 
 const REPORT_BASE = "/api/analytics/reports";
 
@@ -266,8 +267,10 @@ export default function DashboardClient() {
     fetchAllData();
   };
 
+  let shellContent;
+
   if (!authenticated) {
-    return (
+    shellContent = (
       <div className="dashboard-shell">
         <div className="auth-required">
           <h2>🔒 Admin Access Required</h2>
@@ -275,10 +278,8 @@ export default function DashboardClient() {
         </div>
       </div>
     );
-  }
-
-  if (loading && !overview) {
-    return (
+  } else if (loading && !overview) {
+    shellContent = (
       <div className="dashboard-shell">
         <div className="dashboard-loading">
           <div className="loading-spinner"></div>
@@ -286,10 +287,8 @@ export default function DashboardClient() {
         </div>
       </div>
     );
-  }
-
-  if (error) {
-    return (
+  } else if (error) {
+    shellContent = (
       <div className="dashboard-shell">
         <div className="dashboard-error">
           <h3>Failed to load dashboard</h3>
@@ -298,153 +297,159 @@ export default function DashboardClient() {
         </div>
       </div>
     );
+  } else {
+    const metrics = [
+      {
+        title: "Page Views",
+        value: formatNumber(overview?.pageViews || 0),
+        change: overview?.pageViews ? "+12.5%" : null,
+        icon: "📊",
+        trend: "up"
+      },
+      {
+        title: "Unique Visitors",
+        value: formatNumber(overview?.uniqueVisitors || 0),
+        change: overview?.uniqueVisitors ? "+8.2%" : null,
+        icon: "👥",
+        trend: "up"
+      },
+      {
+        title: "Sessions",
+        value: formatNumber(overview?.sessions || 0),
+        change: overview?.sessions ? "+5.1%" : null,
+        icon: "🔄",
+        trend: "up"
+      },
+      {
+        title: "Bounce Rate",
+        value: overview?.bounceRate ? `${overview.bounceRate}%` : "0%",
+        change: overview?.bounceRate ? "-2.3%" : null,
+        icon: "📉",
+        trend: "down"
+      },
+      {
+        title: "Avg Session Duration",
+        value: formatDuration(overview?.avgSessionDuration || 0),
+        change: overview?.avgSessionDuration ? "+15s" : null,
+        icon: "⏱️",
+        trend: "up"
+      },
+      {
+        title: "Pages / Session",
+        value: overview?.avgPagesPerSession ? overview.avgPagesPerSession.toFixed(1) : "0",
+        change: overview?.avgPagesPerSession ? "+0.2" : null,
+        icon: "📄",
+        trend: "up"
+      }
+    ];
+    shellContent = (
+      <div className="dashboard-shell">
+        <header className="dashboard-header">
+          <div className="header-left">
+            <h1 className="dashboard-title">Traffic Dashboard</h1>
+            <p className="dashboard-subtitle">Real-time traffic management & analytics</p>
+          </div>
+          <div className="header-right">
+            <div className="date-range-picker">
+              <label>
+                <span>From</span>
+                <input 
+                  type="date" 
+                  value={dateRange.startDate}
+                  onChange={(e) => setDateRange({...dateRange, startDate: e.target.value})}
+                  max={dateRange.endDate}
+                />
+              </label>
+              <label>
+                <span>To</span>
+                <input 
+                  type="date" 
+                  value={dateRange.endDate}
+                  onChange={(e) => setDateRange({...dateRange, endDate: e.target.value})}
+                  min={dateRange.startDate}
+                  max={new Date().toISOString().split("T")[0]}
+                />
+              </label>
+            </div>
+            <div className="domain-filter">
+              <label>
+                <span>Domain</span>
+                <input 
+                  type="text" 
+                  placeholder="All domains"
+                  value={domain}
+                  onChange={(e) => setDomain(e.target.value)}
+                />
+              </label>
+            </div>
+            <button className="btn btn-secondary" onClick={handleRefresh}>
+              <span>↻</span> Refresh
+            </button>
+          </div>
+        </header>
+
+        <div className="dashboard-grid">
+          <section className="metrics-section" aria-label="Key metrics">
+            {metrics.map((metric, i) => (
+              <MetricCard key={i} {...metric} />
+            ))}
+          </section>
+
+          <section className="chart-section main-chart" aria-label="Traffic over time">
+            <div className="section-header">
+              <h2>Traffic Overview</h2>
+              <select 
+                className="granularity-select"
+                defaultValue="day"
+                onChange={(e) => fetchReport("time-series", { ...params, granularity: e.target.value })
+                  .then(setTimeSeries)
+                  .catch(console.error)}
+              >
+                <option value="day">Daily</option>
+                <option value="hour">Hourly</option>
+              </select>
+            </div>
+            <div className="time-series-chart">
+              <TimeSeriesChart data={timeSeries} />
+            </div>
+          </section>
+
+          <section className="chart-section top-pages" aria-label="Top pages">
+            <div className="section-header">
+              <h2>Top Pages</h2>
+            </div>
+            <TopPagesTable pages={topPages} />
+          </section>
+
+          <section className="chart-section sources" aria-label="Traffic sources">
+            <div className="section-header">
+              <h2>Traffic Sources</h2>
+            </div>
+            <SourcesChart sources={sources} />
+          </section>
+
+          <section className="chart-section devices" aria-label="Devices">
+            <div className="section-header">
+              <h2>Devices</h2>
+            </div>
+            <DevicesChart devices={devices} />
+          </section>
+
+          <section className="chart-section live" aria-label="Live visitors">
+            <div className="section-header">
+              <h2>Live Visitors</h2>
+            </div>
+            <LiveVisitors liveData={liveData} />
+          </section>
+        </div>
+      </div>
+    );
   }
 
-  const metrics = [
-    {
-      title: "Page Views",
-      value: formatNumber(overview?.pageViews || 0),
-      change: overview?.pageViews ? "+12.5%" : null,
-      icon: "📊",
-      trend: "up"
-    },
-    {
-      title: "Unique Visitors",
-      value: formatNumber(overview?.uniqueVisitors || 0),
-      change: overview?.uniqueVisitors ? "+8.2%" : null,
-      icon: "👥",
-      trend: "up"
-    },
-    {
-      title: "Sessions",
-      value: formatNumber(overview?.sessions || 0),
-      change: overview?.sessions ? "+5.1%" : null,
-      icon: "🔄",
-      trend: "up"
-    },
-    {
-      title: "Bounce Rate",
-      value: overview?.bounceRate ? `${overview.bounceRate}%` : "0%",
-      change: overview?.bounceRate ? "-2.3%" : null,
-      icon: "📉",
-      trend: "down"
-    },
-    {
-      title: "Avg Session Duration",
-      value: formatDuration(overview?.avgSessionDuration || 0),
-      change: overview?.avgSessionDuration ? "+15s" : null,
-      icon: "⏱️",
-      trend: "up"
-    },
-    {
-      title: "Pages / Session",
-      value: overview?.avgPagesPerSession ? overview.avgPagesPerSession.toFixed(1) : "0",
-      change: overview?.avgPagesPerSession ? "+0.2" : null,
-      icon: "📄",
-      trend: "up"
-    }
-  ];
-
   return (
-    <div className="dashboard-shell">
-      <header className="dashboard-header">
-        <div className="header-left">
-          <h1 className="dashboard-title">Traffic Dashboard</h1>
-          <p className="dashboard-subtitle">Real-time traffic management & analytics</p>
-        </div>
-        <div className="header-right">
-          <div className="date-range-picker">
-            <label>
-              <span>From</span>
-              <input 
-                type="date" 
-                value={dateRange.startDate}
-                onChange={(e) => setDateRange({...dateRange, startDate: e.target.value})}
-                max={dateRange.endDate}
-              />
-            </label>
-            <label>
-              <span>To</span>
-              <input 
-                type="date" 
-                value={dateRange.endDate}
-                onChange={(e) => setDateRange({...dateRange, endDate: e.target.value})}
-                min={dateRange.startDate}
-                max={new Date().toISOString().split("T")[0]}
-              />
-            </label>
-          </div>
-          <div className="domain-filter">
-            <label>
-              <span>Domain</span>
-              <input 
-                type="text" 
-                placeholder="All domains"
-                value={domain}
-                onChange={(e) => setDomain(e.target.value)}
-              />
-            </label>
-          </div>
-          <button className="btn btn-secondary" onClick={handleRefresh}>
-            <span>↻</span> Refresh
-          </button>
-        </div>
-      </header>
-
-      <div className="dashboard-grid">
-        <section className="metrics-section" aria-label="Key metrics">
-          {metrics.map((metric, i) => (
-            <MetricCard key={i} {...metric} />
-          ))}
-        </section>
-
-        <section className="chart-section main-chart" aria-label="Traffic over time">
-          <div className="section-header">
-            <h2>Traffic Overview</h2>
-            <select 
-              className="granularity-select"
-              defaultValue="day"
-              onChange={(e) => fetchReport("time-series", { ...params, granularity: e.target.value })
-                .then(setTimeSeries)
-                .catch(console.error)}
-            >
-              <option value="day">Daily</option>
-              <option value="hour">Hourly</option>
-            </select>
-          </div>
-          <div className="time-series-chart">
-            <TimeSeriesChart data={timeSeries} />
-          </div>
-        </section>
-
-        <section className="chart-section top-pages" aria-label="Top pages">
-          <div className="section-header">
-            <h2>Top Pages</h2>
-          </div>
-          <TopPagesTable pages={topPages} />
-        </section>
-
-        <section className="chart-section sources" aria-label="Traffic sources">
-          <div className="section-header">
-            <h2>Traffic Sources</h2>
-          </div>
-          <SourcesChart sources={sources} />
-        </section>
-
-        <section className="chart-section devices" aria-label="Devices">
-          <div className="section-header">
-            <h2>Devices</h2>
-          </div>
-          <DevicesChart devices={devices} />
-        </section>
-
-        <section className="chart-section live" aria-label="Live visitors">
-          <div className="section-header">
-            <h2>Live Visitors</h2>
-          </div>
-          <LiveVisitors liveData={liveData} />
-        </section>
-      </div>
+    <div className="dashboard-layout">
+      <Sidebar />
+      <main className="dashboard-main">{shellContent}</main>
     </div>
   );
 }

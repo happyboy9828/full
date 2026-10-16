@@ -224,7 +224,6 @@ export default function ImageResizerPage() {
     onDrop: (e) => { e.preventDefault(); setDragging(false); const f = e.dataTransfer.files[0]; if (f) handleFile(f); },
   };
 
-  const aspect = work ? work.W / work.H : 1;
   const frameStyle = work && {
     left: (crop.x / work.W) * 100 + "%", top: (crop.y / work.H) * 100 + "%",
     width: (crop.w / work.W) * 100 + "%", height: (crop.h / work.H) * 100 + "%",
@@ -269,7 +268,7 @@ export default function ImageResizerPage() {
                 <div
                   ref={stageRef}
                   className="ir-stage"
-                  style={{ aspectRatio: work.W + " / " + work.H, width: "min(100%, calc(60vh * " + aspect + "))" }}
+                  style={{ aspectRatio: work.W + " / " + work.H, width: "100%", maxHeight: "70vh" }}
                 >
                   <div className="ir-clip">
                     <canvas ref={previewRef} className="ir-preview" />

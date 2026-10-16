@@ -126,7 +126,36 @@ Precomputed daily aggregates for performance.
 - `updatedAt` (Date, default: Date.now)
 
 Compound index: { domain: 1, date: -1 } (unique per domain/date)
-```
+
+### 6. `admins` Collection (Phase 39 — Admin Password Recovery)
+Administrator account records used for password recovery.
+- `_id` (ObjectId)
+- `email` (String, required, unique) — admin login email (lowercased)
+- `passwordHash` (String, required) — scrypt hash (`salt:keyHex`)
+- `recoveryPhone` (String, required) — registered recovery phone number (E.164, e.g. `+14155552671`) to which recovery OTPs are sent
+- `isActive` (Boolean, default: true)
+- `createdAt` (Date, default: Date.now)
+- `updatedAt` (Date, default: Date.now)
+
+Index: { email: 1 } (unique)
+
+### 7. `adminOtps` Collection (Phase 39 — Admin Password Recovery)
+One-time password records for admin password recovery. Single-use, short-lived.
+- `_id` (ObjectId)
+- `admin` (ObjectId, ref: 'admins', required) — the admin record this OTP belongs to
+- `phone` (String, required) — recovery phone number the OTP was sent to
+- `otpHash` (String, required) — SHA-256 hash of the numeric OTP
+- `purpose` (String, enum: ['password_recovery'], default: 'password_recovery')
+- `attempts` (Number, default: 0) — failed verification attempts
+- `maxAttempts` (Number, default: 5) — lockout threshold
+- `verifiedAt` (Date, nullable) — set when OTP is successfully verified
+- `consumedAt` (Date, nullable) — set when OTP is used, expired, or locked out
+- `expiresAt` (Date, required) — TTL index (`expireAfterSeconds: 0`), auto-removed by MongoDB
+- `createdAt` (Date, default: Date.now)
+- `updatedAt` (Date, default: Date.now)
+
+Indexes: { expiresAt: 1 } (TTL), { admin: 1, createdAt: -1 }
+
 
 
 ## API Contract
@@ -230,6 +259,44 @@ Response: `200 OK` `{ "success": true }`
 #### GET `/api/auth/me`
 Check auth status.
 Response: `200 OK` `{ "authenticated": true }` or `401` `{ "authenticated": false }`
+
+### 2.1 Password Recovery — SMS OTP (Public, Rate Limited)
+
+SMS-based OTP flow for an administrator to reset their password when they no longer remember it.
+
+#### POST `/api/auth/password-recovery/request`
+Initiate recovery. Body:
+```json
+{
+  "email": "admin@docfix.app"
+}
+```
+Response: `200 OK` `{ "success": true, "message": "If an active account with a registered recovery phone exists, an OTP has been sent to that number." }` — always generic to prevent user enumeration. `400` if email is missing.
+
+Behavior:
+1. Load the `Admin` record by email and read its registered `recoveryPhone`.
+2. Generate a random numeric OTP (default 6 digits), SHA-256 hash it, and store it in `adminOtps` with a TTL (default 10 minutes).
+3. Invalidate any prior unredeemed OTPs for the same admin.
+4. Send the OTP to `recoveryPhone` via SMS (provider configurable; `mock` writes to server logs in dev).
+5. Rate-limited per IP (default 5 requests per 15 min).
+
+#### POST `/api/auth/password-recovery/verify`
+Verify OTP and reset password. Body:
+```json
+{
+  "email": "admin@docfix.app",
+  "otp": "123456",
+  "newPassword": "NewStrongPass123"
+}
+```
+Response: `200 OK` `{ "success": true, "message": "Password updated successfully. Please log in again." }`. `400` on missing fields, weak password (< 8 chars), invalid/expired OTP, or too many attempts. `500` on server error.
+
+Behavior:
+1. Load the active `Admin` record by email.
+2. Find the latest unredeemed, unverified OTP for that admin and phone.
+3. Reject if expired (`expiresAt` passed) or if `attempts >= maxAttempts`.
+4. Compare the submitted OTP against `otpHash` using a timing-safe comparison; increment attempts on each check.
+5. On success, mark the OTP verified + consumed (single-use), rotate `admin.passwordHash` with scrypt, and revoke all existing `AdminSession` records so the admin must log in again with the new password.
 
 ### 3. Analytics Reporting (Protected - Requires Auth)
 

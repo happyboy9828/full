@@ -1,179 +1,66 @@
 # DocFix
 
-Fast, secure image tools that run 100% in your browser. Nothing is uploaded to a server — every tool reads your file with the File API and writes the result back with a Blob URL.
+Fast, secure browser-based file tools. Nothing is uploaded to a server — every tool reads your file with the File API and writes the result back with a Blob URL. Zero uploads, no sign-up, free.
 
-- **Next.js 16** · **React 19** · **Tailwind CSS v4**
-- **Zero uploads** · **No sign-up** · **Free**
-
----
+**Live site:** https://docfix-frontend.vercel.app
 
 ## Tools
 
-| Route | What it does |
-| --- | --- |
-| `/` | Homepage with hero, featured tools, and full toolkit |
-| `/tools` | Browse every tool in one place |
-| `/img/FavIcon` | Build favicon.ico, PWA icons and a web manifest from one image |
-| `/img/ImageResizer` | Resize photos to exact pixel dimensions or crop them to an aspect ratio |
-| `/img/ImgCompresser` | Shrink image file sizes with a quality slider or target size limit, with batch ZIP download |
-| `/img/ImgToBase64` | Encode an image as a data URL, HTML tag, CSS background or raw Base64 |
-| `/img/JpgPngConverter` | Two-way JPEG ⇄ PNG converter with batch processing, quality control and transparency handling |
-| `/img/WebpPngConverter` | Two-way WebP ⇄ PNG converter with batch processing, quality control and transparency handling |
-| `/img/Watermark` | Protect your images with custom text or image watermarks |
-| `/dev-tools/CSSMinifier` | Compress CSS by stripping comments, whitespace and redundant code |
-| `/dev-tools/HTMLMinifier` | Minify HTML markup by removing comments, collapsing whitespace and optimising inline CSS and JavaScript |
-| `/dev-tools/PasswordGenerator` | Generate cryptographically secure random passwords and memorable passphrases |
-| `/dev-tools/QRCodeGenerator` | Create custom high-resolution QR codes with logos and colour gradients |
-| `/dev-tools/QRCodeScanner` | Scan QR codes from your camera or uploaded images |
+### Image Tools (7)
+| Route | Tool |
+|-------|------|
+| `/img/FavIcon` | Favicon Generator — favicon.ico, PWA icons and web manifest from one image |
+| `/img/ImageResizer` | Image Resizer — exact pixel dimensions or aspect-ratio crop |
+| `/img/ImgCompresser` | Compress Image — quality slider, target size limit, batch ZIP download |
+| `/img/ImgToBase64` | Image to Base64 — data URL, HTML tag, CSS background or raw Base64 |
+| `/img/JpgPngConverter` | JPG ⇄ PNG Converter — two-way conversion, quality control, transparency handling |
+| `/img/WebpPngConverter` | WebP ⇄ PNG Converter — two-way conversion, quality control, transparency handling |
+| `/img/Watermark` | Watermark — text or image watermarks with visual 9-point alignment grid |
 
-### Planned tools
+### PDF Tools (6)
+| Route | Tool |
+|-------|------|
+| `/pdf-tools/SplitPDF` | Split PDF — by pages, ranges or bookmarks |
+| `/pdf-tools/MergePDFFiles` | Merge PDF — combine, reorder, rotate and merge pages |
+| `/pdf-tools/CompressPDF` | Compress PDF — reduce file size maintaining quality |
+| `/pdf-tools/PDFtoJPG` | PDF to JPG — high-quality JPG conversion, customizable DPI |
+| `/pdf-tools/RotatePDF` | Rotate PDF — 90°, 180° or 270° rotation |
+| `/pdf-tools/JPGtoPDF` | JPG to PDF — combine multiple images into one PDF |
 
-| Category | Status |
-| --- | --- |
-| PDF Tools | Under build |
-| Text Tools | Under build |
+### Dev Tools (5)
+| Route | Tool |
+|-------|------|
+| `/dev-tools/CSSMinifier` | CSS Minifier — strip comments, whitespace and redundant code |
+| `/dev-tools/HTMLMinifier` | HTML Minifier — remove comments, collapse whitespace, optimise inline CSS/JS |
+| `/dev-tools/PasswordGenerator` | Strong Password Generator — secure passwords and passphrases |
+| `/dev-tools/QRCodeGenerator` | QR Code Generator — logos, colour gradients, PNG/SVG/EPS export |
+| `/dev-tools/QRCodeScanner` | QR Code Scanner — camera or uploaded images with scan history |
 
----
+### Text Tools (6)
+| Route | Tool |
+|-------|------|
+| `/writing-tool/CaseConverter` | Case Converter — uppercase, lowercase, title case, camelCase, snake_case and more |
+| `/writing-tool/LoremIpsum` | Lorem Ipsum Generator — placeholder text for designs |
+| `/writing-tool/ParagraphWriter` | Paragraph Writer — AI-powered paragraph generation |
+| `/writing-tool/RemoveDuplicateLines` | Remove Duplicate Lines — preserve order, case-sensitive/insensitive modes |
+| `/writing-tool/SortText` | Sort Text — alphabetical, numerical, by length, reverse order |
+| `/writing-tool/WordCounter` | Word Counter — words, characters, sentences, paragraphs, reading time |
 
-## Analytics Dashboard (Phase 5-7)
+## Privacy
 
-**`/analytics`** — Private analytics dashboard for site owners (in development).
+- **Zero uploads** — all processing happens in your browser; files never leave your device
+- **No sign-up** — no accounts, no email, no personal data collected
+- **No server storage** — results are returned as local Blob URLs only
+- **No third-party cookies** or tracking beyond the ad delivery tag
 
-- **Phase 5**: Tracking client (page loads, navigation, clicks, heartbeats, dedupe, consent)
-- **Phase 6**: Admin authentication (login, HttpOnly cookies, session management)
-- **Phase 7**: Dashboard UI (overview, sources, pages, devices, events, live, time-series, CSV export)
+## Using the Tools
 
-The dashboard is powered by a separate Express + MongoDB backend (`../backend/`) with privacy-first design: no raw IPs, URL sanitization, PII scrubbing, consent support.
+1. Visit https://docfix-frontend.vercel.app
+2. Open any tool from the homepage or the full toolkit at `/tools`
+3. Drag and drop files or use the file picker
+4. Configure your options
+5. Download the result — everything happens in your browser
 
----
+## Contributing
 
-## Getting started
-
-```bash
-npm install
-npm run dev      # https://docfix-frontend.vercel.app
-npm run build    # production build
-npm run start    # serve the production build
-npm run lint     # eslint
-```
-
-**Known build issue**: `client/utils/shared/download.js` is currently commented out (pre-existing). Fix required for `npm run build` to pass.
-
----
-
-## Adding a tool
-
-1. Create `app/img/<ToolName>/page.js`. The route folder **must** use the same casing as the tool folder — on a case-sensitive filesystem a mismatch breaks the build.
-2. Add the tool's title and description to `PAGE_META` in `lib/pages.js`. Routes are discovered from the filesystem, so the nav and home page pick it up automatically, but this is what gives it a readable name.
-3. Add `app/img/<ToolName>/layout.js` exporting `metadata` from `toolMetadata`. Tool pages are client components and cannot export metadata themselves.
-
----
-
-## Project structure
-
-```
-app/              Next.js App Router routes and each tool's implementation
-components/       shared React components (Navbar, Footer, pricing, ads, etc.)
-lib/pages.js      route discovery + the single source of truth for titles and descriptions
-utils/shared/     helpers used by every tool (see below)
-utils/img/        image tool utilities (FavIcon, etc.)
-utils/dev-tools/  dev tool utilities (CSSMinifier, HTMLMinifier, PasswordGenerator, QRCodeGenerator, QRCodeScanner)
-ads/              ad units (banner, popup, push notification, etc.)
-```
-
-### Shared helpers
-
-`utils/shared/` exists so the tools do not each grow their own copy of the same utilities. Import from here rather than re-implementing:
-
-- `download.js` — `downloadBlob(blob, filename)`
-- `format.js` — `formatBytes`, `savingsPercent`, `clamp`, `baseName`, `withExtension`, `MAX_FILES`, `nextFrame`, `sleep`
-- `imageFile.js` — `kindOf`, `isAcceptedFile`, `ACCEPT_ATTR`, `loadImage`, `canvasToBlob`, `canvasToBytes`, `canEncode`
-- `zip.js` — `createZip`, `createZipFromBlobs`, `crc32`, `deflate`, `encodeText`
-
-### Conventions
-
-- **React components use JSX.** Plain-DOM helpers inside `utils/` use a local `h`/`el` helper. Do not use `createElement` for components: the React Compiler lint rules cannot see through it and will reject every ref.
-- **Two component styles are intentional.** New tools should be React with hooks. The imperative tools (`ImgToBase64` in `utils/img/`, `JpgPngConverter` and `WebpPngConverter` in `utils/image-tools/`, and `CSSMinifier`, `HTMLMinifier`, `PasswordGenerator`, `QRCodeGenerator`, `QRCodeScanner` in `utils/dev-tools/`) build their DOM in an `init*` or `create*` function that returns a cleanup; their pages just call it from a `useEffect`. Keep new tools on the React side.
-- **Double quotes** in JS and CSS.
-- **Own your root element.** `app/layout.js` renders the single `<main>`, so a page renders a `<div class="<prefix>-page">`, never another `<main>`.
-- **CSS custom property prefixes.** Each tool scopes its styles (`rb-`, `fg-`, `ci-`, `itb-`, `j2p-`, `p2j-`, `w2p-`, `cm-`, `hm-`, `pg-`, `qrt-`, `qrs-`) but reads the shared `--tool-width`, `--tool-font` and `--tool-mono` from `app/globals.css` so all tools line up.
-
----
-
-## Themes
-
-The site supports three colour schemes via CSS custom properties on `:root`:
-
-- **Light** — Soft off-white canvas, white cards, indigo primary (#5E5CE6) and coral highlight (#FF6B6B)
-- **Dark** — Deep navy background, slate surface cards, lavender accent (#818CF8) and rose highlight (#F87171)
-- **System** — Follows the OS `prefers-color-scheme` preference, switching between Light and Dark automatically
-
-Theme preference is persisted in `localStorage` and applied with the `data-theme` attribute on `<html>`.
-
----
-
-## Ads & monetisation
-
-Ad units live under `ads/` and are mounted once in `app/layout.js` so triggers are configured in a single place:
-
-- **AdBanner** — leaderboard banner
-- **AdInArticle** — sponsored content block
-- **AdPopup** — timed modal popup
-- **AdOnClick** — triggers after a deliberate number of clicks
-- **AdPagePushBanner** — corner banner that auto-hides
-- **AdPushNotification** — browser push-request consent card
-
----
-
-## Download Progress Popup
-
-The `DownloadProgressPopup` is mounted globally in `layout.js`. Tools trigger it via the `useDownloadProgress` hook:
-
-```javascript
-// In your tool component (client-side)
-import { useDownloadProgress } from '@/components/ads/DownloadProgressPopup/DownloadProgressPopup';
-
-function MyTool() {
-  const { trigger, DownloadProgressPopup } = useDownloadProgress();
-
-  const handleDownload = () => {
-    const blob = await generateFile();
-    const url = URL.createObjectURL(blob);
-    const filename = 'output.pdf';
-
-    trigger({
-      countdownMs: 5000,
-      durationMs: 3000,
-      title: 'Preparing your PDF',
-      description: 'Your merged document is being generated.',
-      onDownloadStart: () => {
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-        a.click();
-        URL.revokeObjectURL(url);
-      },
-    });
-  };
-
-  return (
-    <>
-      <button onClick={handleDownload}>Download</button>
-      <DownloadProgressPopup />
-    </>
-  );
-}
-```
-
-**Features:**
-- 5-second countdown (configurable via `countdownMs`) before download starts
-- Progress animation (configurable via `durationMs`) simulates 0→100%
-- Auto-closes after completion (configurable via `autoCloseMs`)
-- Accessible with ARIA live regions for countdown announcements
-- Theme-aware uses CSS variables (light/dark/system)
-
----
-
-## License
-
-Private. All rights reserved.
+DocFix is a private project. All rights reserved.

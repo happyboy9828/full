@@ -1,100 +1,68 @@
-# DocFix Analytics Platform
+# DocFix
 
-A privacy-first analytics platform for the **DocFix** browser-based image/document tool suite. Tracks visitor behavior without collecting PII — no raw IPs, no uploaded data, no third-party cookies.
+Free, private file tools that run entirely in your browser. Nothing is uploaded to a server — every tool reads your file with the File API and returns the result as a Blob URL. No sign-up, no tracking, no installation.
 
-## Architecture
+**Live site:** https://docfix-frontend.vercel.app
 
-```
-docfix-analytics/
-├── client/          # Next.js 16 + React 19 + Tailwind v4 (DocFix tools + analytics dashboard)
-├── backend/         # Express 5 + Mongoose 9 + MongoDB Atlas (analytics API)
-└── DESIGN.md        # API contract & data model (367 lines)
-```
+## Tools
 
-## Current Phase: Phase 5 — Build the Tracking Client
+24 browser-only tools across four categories:
 
-| Phase | Status | Description |
-|-------|--------|-------------|
-| 1 | ✅ Complete | Project inspection & documentation |
-| 2 | ✅ Complete | API design & MongoDB data model |
-| 3 | ✅ Complete | MongoDB Atlas setup & Mongoose models |
-| 4 | ✅ Complete | Express backend (ingestion, reports, auth, tests) |
-| **5** | 🟢 **In Progress** | **Tracking client (page loads, navigation, clicks, heartbeats, dedupe, consent)** |
-| 6 | ⏳ Pending | Protect `/analytics` with admin auth |
-| 7 | ⏳ Pending | Dashboard UI (overview, sources, pages, devices, events, live, time-series) |
-| 8 | ⏳ Pending | Live activity & optimization |
-| 9 | ⏳ Pending | Advanced analytics (funnels, retention, heatmaps) |
-| 10 | ⏳ Pending | Test, deploy, maintain |
+### Image Tools (7)
+| Tool | What it does |
+|------|--------------|
+| Favicon Generator | Build favicon.ico, PWA icons and a web manifest from one image |
+| Image Resizer | Resize photos to exact dimensions or crop to an aspect ratio |
+| Compress Image | Shrink file sizes with quality slider or target size limit, batch ZIP download |
+| Image to Base64 | Encode images as data URLs, HTML tags, CSS backgrounds or raw Base64 |
+| JPG ⇄ PNG Converter | Two-way JPEG/PNG conversion with batch processing, quality control and transparency handling |
+| WebP ⇄ PNG Converter | Two-way WebP/PNG conversion with batch processing, quality control and transparency handling |
+| Watermark | Protect images with custom text or image watermarks, visual 9-point alignment grid |
 
-## Quick Start
+### PDF Tools (6)
+| Tool | What it does |
+|------|--------------|
+| Split PDF | Split by pages, ranges or bookmarks; extract pages into new PDFs |
+| Merge PDF | Combine multiple PDFs, reorder, rotate and merge pages |
+| Compress PDF | Reduce file size while maintaining quality |
+| PDF to JPG | Convert PDF pages to high-quality JPG images |
+| Rotate PDF | Rotate pages by 90°, 180° or 270° |
+| JPG to PDF | Convert JPG images to PDF documents |
 
-### Backend (API)
-```bash
-cd backend
-npm install
-npm run dev          # http://localhost:5000
-```
+### Dev Tools (5)
+| Tool | What it does |
+|------|--------------|
+| CSS Minifier | Strip comments, whitespace and redundant code |
+| HTML Minifier | Remove comments, collapse whitespace, optimise inline CSS and JavaScript |
+| Strong Password Generator | Cryptographically secure passwords and passphrases with live strength meter |
+| QR Code Generator | High-resolution QR codes with logos, colour gradients, PNG/SVG/EPS export |
+| QR Code Scanner | Scan QR codes from camera or uploaded images with smart payload actions |
 
-### Client (DocFix + Dashboard)
-```bash
-cd client
-npm install
-npm run dev          # https://docfix-frontend.vercel.app
-```
+### Text Tools (6)
+| Tool | What it does |
+|------|--------------|
+| Case Converter | Convert between uppercase, lowercase, title case, sentence case, camelCase, snake_case and more |
+| Lorem Ipsum Generator | Placeholder text for designs and layouts |
+| Paragraph Writer | AI-powered paragraph generation on any topic |
+| Remove Duplicate Lines | Remove duplicate lines preserving order, case-sensitive or insensitive modes |
+| Sort Text | Sort lines alphabetically, numerically, by length or reverse order |
+| Word Counter | Count words, characters, sentences, paragraphs and reading time in real time |
 
-## Backend API (Phase 4 Complete)
+## Privacy
 
-**Health**: `GET /`, `/health`, `/status`, `/api/analytics/health`
+- **Zero uploads** — all processing happens in your browser using the File API and Web Workers
+- **No sign-up required** — no accounts, no email, no personal data collected
+- **No server storage** — files never leave your device
+- **No third-party cookies** or tracking scripts beyond the ad delivery tag
 
-**Event Ingestion** (public, rate-limited 100 req/min):
-- `POST /api/analytics/track` — generic event (pageview, click, navigation, heartbeat, outbound, custom)
-- `POST /api/analytics/pageview` — convenience pageview
-- `POST /api/analytics/sessions/start` — create/resume session
-- `POST /api/analytics/sessions/heartbeat` — update engagement
-- `POST /api/analytics/sessions/end` — end session
+## Getting Started
 
-**Auth** (admin only):
-- `POST /api/auth/login` — sets HttpOnly Secure SameSite=Lax cookie
-- `POST /api/auth/logout` — revoke session
-- `GET /api/auth/me` — check auth status
+Visit https://docfix-frontend.vercel.app and open any tool from the homepage or the full toolkit at `/tools`. Drag and drop files or use the file picker, configure your options, then download the result — all within your browser.
 
-**Reports** (protected, admin session required):
-- `GET /api/analytics/reports/overview` — high-level metrics
-- `GET /api/analytics/reports/sources` — traffic sources (UTM + referrer)
-- `GET /api/analytics/reports/pages` — top pages
-- `GET /api/analytics/reports/devices` — device/browser/OS breakdown
-- `GET /api/analytics/reports/events` — event type counts
-- `GET /api/analytics/reports/live` — active visitors/sessions
-- `GET /api/analytics/reports/time-series` — metrics over time
+## Support
 
-**Tests**: `cd backend && node test/api.test.js` (37/37 passing)
+For questions or issues, visit the Contact page on the site or view the Disclaimer and Terms of Service pages for full details on service limitations and liability.
 
-## Privacy by Design
+---
 
-- **No raw IPs stored** — only SHA-256 hashes (`ipHash`) for deduplication
-- **URL sanitization** — strips `token`, `password`, `email`, `auth`, `session`, etc. before persisting
-- **Custom data scrubbing** — recursive PII removal from custom events
-- **Consent-ready** — tracking client respects `localStorage` consent flags
-- **No third-party cookies** — server-side admin sessions only
-
-## Client Features (DocFix)
-
-29+ browser-only tools — **zero uploads, no sign-up, free**:
-
-| Category | Tools |
-|----------|-------|
-| **Image** | FavIcon, ImageResizer, ImgCompresser, ImgToBase64, JpgPngConverter, WebpToPng, Watermark |
-| **Dev Tools** | CSSMinifier, HTMLMinifier, PasswordGenerator, QRCodeGenerator, QRCodeScanner |
-| **Planned** | PDF Tools, Text Tools |
-
-## Documentation
-
-- **Phase Plan**: [`Phase.md`](Phase.md) — 10-phase roadmap with completion criteria
-- **Status**: [`Status.md`](Status.md) — detailed implementation checklist
-- **API Design**: [`DESIGN.md`](DESIGN.md) — full contract, schemas, privacy rules
-- **Backend README**: [`backend/README.md`](backend/README.md)
-- **Client README**: [`client/README.md`](client/README.md)
-
-## License
-
-Private. All rights reserved.
+DocFix — Simple, fast, and privacy-conscious file tools for everyone.

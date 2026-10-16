@@ -73,8 +73,8 @@
 .ir-preset:focus-visible { outline: 2px solid var(--tool-accent-text); outline-offset: 2px; }
 
 /* ---------- dimension fields ---------- */
-.ir-dims { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 6px 0 10px; }
-.ir-dim { display: flex; flex-direction: column; gap: 6px; }
+.ir-dims { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 6px 0 10px; }
+.ir-dim { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .ir-inline { display: flex; align-items: center; gap: 8px; }
 .ir-num {
   flex: 1; min-width: 0; padding: 9px 10px; border-radius: var(--tool-radius-sm);
@@ -94,10 +94,18 @@
 @media (max-width: 900px) {
   .ir-stage-wrap { padding: 16px; }
 }
-@media (max-width: 520px) {
-  .ir-dims { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 768px) {
+  .ir-stage-wrap { padding: 12px; }
+  .ir-dims { grid-template-columns: 1fr; }
+  .ir-presets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ir-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ir-stat-v { font-size: 16px; }
   .ir-stat-main .ir-stat-v { font-size: 18px; }
+}
+@media (max-width: 520px) {
+  .ir-stage-wrap { padding: 10px; }
+  .ir-stat-v { font-size: 15px; }
+  .ir-stat-main .ir-stat-v { font-size: 17px; }
   .ir-presets { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .ir-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

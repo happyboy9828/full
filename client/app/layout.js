@@ -72,29 +72,26 @@ export default function RootLayout({ children }) {
     >
       <head>
         <meta name="monetag" content="00c83d096c767c17643d90b438ee8e19" />
-        {/* Monetag Ad Tag - loads once globally, auto-injects ads (In-Page Push, Vignette, Popunder) 
-        <Script
-          src="https://5gvci.com/act/files/tag.min.js?z=12026779"
-          data-cfasync="false"
-          async
-          strategy="lazyOnload"
-        />
-        <Script
-          src="https://quge5.com/88/tag.min.js"
-          data-zone="295895"
-          async
-          data-cfasync="false"
-        />
-        <Script
-          src="https://5gvci.com/act/files/tag.min.js?z=12026895"
-          data-cfasync="false"
-          async
-        />
-        <Script
-          src="https://5gvci.com/act/files/tag.min.js?z=12026779"
-          data-cfasync="false"
-          async
-        /> */}
+        {/* Monetag Ad Tag - loads once globally, auto-injects ads (In-Page Push, Vignette, Popunder)
+         */}
+         {/** Multitag 
+         <script src="https://quge5.com/88/tag.min.js" data-zone="295895" async data-cfasync="false"></script>*/}
+         {/** Push Notification */}
+         <script src="https://5gvci.com/act/files/tag.min.js?z=12026895" data-cfasync="false" async></script>
+         {/** Vignette Banner 
+         <script>(function(s){s.dataset.zone='12043027',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+          */}
+
+         {/** */}
+         {/** */}
+         {/** */}
+         {/** */}
+         {/** */}
+         {/** */}
+         {/** */}
+         {/** */}
+
+         {/** */}
         <Script 
         src="https://pl31855651.profitableratecpmnetwork.com/8c/59/de/8c59de258ee336d48118c79bc8c749fe.js"/>
         {/* Utilities */}
