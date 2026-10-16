@@ -1131,7 +1131,7 @@ function MyTool() {
 - **Fixed**: Event model was missing its `timestamp` field (indexed but undefined); removed duplicate Session sessionId index warning
 - **Tests**: `backend/test/api.test.js` — 37/37 passing (health, ingestion, validation, auth, all 7 reports, rate limit, 404). Run with `node test/api.test.js` (cleans collections, then exercises the live server)
 - **Privacy verified in DB**: raw IP never stored (ipHash only), `token`/`email` query params stripped from URLs, sensitive keys removed from customData
-- **Login**: `POST /api/auth/login` with `{"password":"admin123"}` (dev default from ADMIN_PASSWORD env) → sets `admin_session` cookie (HttpOnly, Secure in production, SameSite=Lax, 7-day TTL)
+- **Login**: `POST /api/auth/login` with `{"password":"kingdom"}` (dev default from ADMIN_PASSWORD env) → sets `admin_session` cookie (HttpOnly, Secure in production, SameSite=Lax, 7-day TTL)
 
 ## Phase 7 — Build the Dashboard UI (COMPLETE)
 
@@ -1314,4 +1314,58 @@ Removed the analytics and pricing pages from the frontend as requested, leaving 
 - `next build` passes
 - ESLint: 0 errors
 - Confirmed removal of analytics and pricing routes from frontend.
+
+## Kingdome Traffic Dashboard + Admin Password Fix (COMPLETE)
+
+### Dashboard Route: /kingdome/dashboard
+
+A full professional traffic management dashboard built at `client/app/kingdome/dashboard/` with:
+
+**Files Created:**
+| File | Purpose |
+|------|---------|
+| `client/app/kingdome/dashboard/page.js` | Server page with Suspense wrapper |
+| `client/app/kingdome/dashboard/DashboardClient.js` | Client dashboard component |
+| `client/app/kingdome/login/page.js` | Secure admin login page |
+| `client/components/AuthProvider/AuthProvider.js` | Auth context (checkAuth/login/logout) |
+| `client/middleware.js` | Route protection middleware |
+
+**Dashboard Features:**
+- 6 metric cards: Page Views, Unique Visitors, Sessions, Bounce Rate, Avg Session Duration, Pages/Session (with trend indicators)
+- SVG Time-series traffic chart (day/hour granularity, page views + sessions, data points)
+- Top pages table with ranking badges, views, visitors, avg time
+- Traffic sources horizontal bar chart with percentages
+- Device breakdown (mobile/desktop/tablet) bar chart
+- Live visitors section with real-time active count + recent events feed
+- Date range picker + domain filter + refresh button
+- Responsive grid layout using shared CSS design tokens
+
+**Route Protection:**
+- `middleware.js` redirects unauthenticated users to `/kingdome/login`
+- Authenticated users redirected away from login page
+- All dashboard data fetched from backend `/api/analytics/reports/*` endpoints with `credentials: "include"`
+
+### Admin Password Changed to `kingdom`
+
+| File | Change |
+|------|--------|
+| `backend/config/env.js` | `ADMIN_PASSWORD` default changed from `admin123` → `kingdom` |
+| `backend/.env` | `ADMIN_PASSWORD` changed from `tes` → `kingdom` |
+| `connect.md` | All `admin123` references → `kingdom` |
+| `Status.md` | Login credential reference updated to `kingdom` |
+
+### API Base URL Fix
+
+| File | Change |
+|------|--------|
+| `client/.env` | `NEXT_PUBLIC_TRACKING_API` changed from `http://localhost:5000/api/analytics` → `http://localhost:5000/api` |
+| `client/.env.example` | Same change |
+
+**Root Cause:** Auth routes are mounted at `/api/auth` and reports at `/api/analytics/reports`. The `API_BASE` env var was incorrectly set to `/api/analytics`, causing auth requests to hit `/api/analytics/auth/me` (404) instead of `/api/auth/me`, and report URLs to become `/api/analytics/analytics/reports/*` (double segment).
+
+### Verification
+- `next build`: Compiled successfully — 56/56 static pages prerendered
+- All backend JavaScript files pass syntax check (`node --check`)
+- No remaining `admin123` references in source code
+
 

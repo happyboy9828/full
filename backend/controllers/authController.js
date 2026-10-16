@@ -21,8 +21,9 @@ export function hashPassword(password) {
 }
 
 function getStoredHash() {
-  if (cachedHash) return cachedHash;
-  cachedHash = config.adminPasswordHash || hashPassword(config.adminPassword);
+  if (!cachedHash) {
+    cachedHash = config.adminPasswordHash || hashPassword(config.adminPassword);
+  }
   return cachedHash;
 }
 

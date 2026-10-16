@@ -37,7 +37,7 @@ The API uses **cookie-based session authentication** with the `admin_session` co
 ```bash
 POST /api/auth/login
 Content-Type: application/json
-{ "password": "admin123" }
+{ "password": "kingdom" }
 ```
 
 **Response:** Sets `admin_session` cookie (HttpOnly, Secure, SameSite=Lax)
@@ -53,7 +53,7 @@ Cookie: admin_session=<token_from_login>
 
 | Setting | Value | Environment Variable |
 |---------|-------|---------------------|
-| Admin Password | `admin123` | `ADMIN_PASSWORD` |
+| Admin Password | `kingdom` | `ADMIN_PASSWORD` |
 | Session TTL | 7 days | `ADMIN_SESSION_TTL_DAYS` |
 | Password Hash | (auto-generated) | `ADMIN_PASSWORD_HASH` |
 
@@ -64,7 +64,7 @@ Cookie: admin_session=<token_from_login>
 # 1. Login and save cookies
 curl -X POST http://localhost:5000/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"password":"admin123"}' \
+  -d '{"password":"kingdom"}' \
   -c cookies.txt
 
 # 2. Fetch analytics data using saved cookies
@@ -83,7 +83,7 @@ const loginRes = await fetch('http://localhost:5000/api/auth/login', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   credentials: 'include', // Important: includes cookies
-  body: JSON.stringify({ password: 'admin123' })
+  body: JSON.stringify({ password: 'kingdom' })
 });
 
 // 2. Fetch analytics (cookies sent automatically with credentials: 'include')

@@ -29,7 +29,7 @@ const config = {
     maxAge: ONE_DAY,
   },
 
-  adminPassword: process.env.ADMIN_PASSWORD || "admin123",
+  adminPassword: process.env.ADMIN_PASSWORD || "kingdom",
   adminPasswordHash: process.env.ADMIN_PASSWORD_HASH || "",
   adminSessionTtlMs: Number(process.env.ADMIN_SESSION_TTL_DAYS || 7) * ONE_DAY,
 
