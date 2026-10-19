@@ -32,8 +32,14 @@ export const metadata = {
   description:
     "Compress, convert, and edit images, PDFs, and text entirely in your browser. 100% private — no uploads, no cookies, no server storage.",
   icons: {
-    icon: "/logo.jpeg",
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/apple-touch-icon.png",
   },
+  manifest: "/site.webmanifest",
   metadataBase: "https://docstools.app",
   alternates: {
     canonical: "https://docstools.app",
