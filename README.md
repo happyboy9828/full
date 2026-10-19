@@ -1,8 +1,8 @@
-# DocFix
+# Docstools
 
 Free, private file tools that run entirely in your browser. Nothing is uploaded to a server — every tool reads your file with the File API and returns the result as a Blob URL. No sign-up, no tracking, no installation.
 
-**Live site:** https://docfix-frontend.vercel.app
+**Live site:** https://docstools-frontend.vercel.app
 
 ## Tools
 
@@ -57,7 +57,7 @@ Free, private file tools that run entirely in your browser. Nothing is uploaded 
 
 ## Getting Started
 
-Visit https://docfix-frontend.vercel.app and open any tool from the homepage or the full toolkit at `/tools`. Drag and drop files or use the file picker, configure your options, then download the result — all within your browser.
+Visit https://docstools-frontend.vercel.app and open any tool from the homepage or the full toolkit at `/tools`. Drag and drop files or use the file picker, configure your options, then download the result — all within your browser.
 
 ## Support
 
@@ -65,4 +65,4 @@ For questions or issues, visit the Contact page on the site or view the Disclaim
 
 ---
 
-DocFix — Simple, fast, and privacy-conscious file tools for everyone.
+Docstools — Simple, fast, and privacy-conscious file tools for everyone.

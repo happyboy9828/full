@@ -22,7 +22,7 @@ const config = {
   dbRetryDelayMs: Number(process.env.DB_RETRY_DELAY_MS) || 5000,
 
   cors: {
-    origin: parseOrigins(process.env.CORS_ORIGIN) || ["https://docfix-frontend.vercel.app"],
+    origin: parseOrigins(process.env.CORS_ORIGIN) || ["https://docstools-frontend.vercel.app"],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -44,7 +44,7 @@ const config = {
     secure: process.env.EMAIL_SECURE === "true",
     user: process.env.EMAIL_USER || "",
     pass: process.env.EMAIL_PASS || "",
-    from: process.env.EMAIL_FROM || "noreply@docfix.app",
+    from: process.env.EMAIL_FROM || "noreply@docstools.app",
     to: process.env.EMAIL_TO || "",
   },
 

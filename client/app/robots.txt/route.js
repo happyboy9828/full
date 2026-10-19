@@ -10,7 +10,7 @@ Disallow: /_next/static/chunks/
 Disallow: /api/
 
 # Point crawlers at the dynamic sitemap.
-Sitemap: https://docfix.app/sitemap.xml
+Sitemap: https://docstools.app/sitemap.xml
 `;
 
   return new Response(body, {

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useRef } from 'react';
+import Logo from "../Logo/Logo";
 /* Commented out: Premium pricing modal import
 import PricingModal from "../PricingModal/PricingModal";
 */
@@ -195,7 +196,7 @@ export default function Navbar() {
     <>
       <nav className="navbar">
         <div className="navbar-logo">
-          <a href="/">DocFix</a>
+          <a href="/"><Logo className="navbar-logo-mark" /> Docstools</a>
         </div>
 
         <ul className="navbar-links">
@@ -222,7 +223,7 @@ export default function Navbar() {
         <aside className="drawer">
           <div className="drawer-header">
             <div className="navbar-logo">
-              <a href="/">DocFix</a>
+              <a href="/">Docstools</a>
             </div>
             <button className="hamburger active" onClick={closeMobileMenu} aria-label="Close menu">
               &#10005;

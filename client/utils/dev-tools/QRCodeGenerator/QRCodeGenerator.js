@@ -1,5 +1,5 @@
 /* =============================================================================
-   DocFix — QR Code Generator (plain JS, zero dependencies)
+   Docstools — QR Code Generator (plain JS, zero dependencies)
    Usage:  const tool = mountQrCodeGenerator(domElement);  ...  tool.destroy();
    Safe for CRA and Next.js: nothing touches `document` / `window` until mount.
    ============================================================================= */
@@ -541,7 +541,7 @@ function buildEps(qr, s, px) {
   const rgb = (hex) => hexToRgb(hex).map((v) => (v / 255).toFixed(4)).join(' ');
   const out = [];
 
-  out.push('%!PS-Adobe-3.0 EPSF-3.0', `%%BoundingBox: 0 0 ${px} ${px}`, '%%Title: QR Code', '%%Creator: DocFix QR Code Generator', '%%EndComments');
+  out.push('%!PS-Adobe-3.0 EPSF-3.0', `%%BoundingBox: 0 0 ${px} ${px}`, '%%Title: QR Code', '%%Creator: Docstools QR Code Generator', '%%EndComments');
   out.push('gsave', `0 ${px} translate`, `${(px / total).toFixed(6)} ${(-px / total).toFixed(6)} scale`);
   if (!s.transparent) out.push(`${rgb(bg)} setrgbcolor`, `0 0 ${total} ${total} rectfill`);
   out.push(`${rgb(fg)} setrgbcolor`);

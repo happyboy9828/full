@@ -1,8 +1,8 @@
-# DocFix
+# Docstools
 
 Fast, secure browser-based file tools. Nothing is uploaded to a server — every tool reads your file with the File API and writes the result back with a Blob URL. Zero uploads, no sign-up, free.
 
-**Live site:** https://docfix-frontend.vercel.app
+**Live site:** https://docstools-frontend.vercel.app
 
 ## Tools
 
@@ -55,7 +55,7 @@ Fast, secure browser-based file tools. Nothing is uploaded to a server — every
 
 ## Using the Tools
 
-1. Visit https://docfix-frontend.vercel.app
+1. Visit https://docstools-frontend.vercel.app
 2. Open any tool from the homepage or the full toolkit at `/tools`
 3. Drag and drop files or use the file picker
 4. Configure your options
@@ -63,4 +63,4 @@ Fast, secure browser-based file tools. Nothing is uploaded to a server — every
 
 ## Contributing
 
-DocFix is a private project. All rights reserved.
+Docstools is a private project. All rights reserved.

@@ -1,21 +1,21 @@
-﻿import ContentPage from "../../components/ContentPage/ContentPage";
+import ContentPage from "../../components/ContentPage/ContentPage";
 
 export const metadata = {
   title: "Documentation",
-  description: "Technical documentation and guides for DocFix tools.",
+  description: "Technical documentation and guides for Docstools tools.",
 };
 
 export default function DocsPage() {
   return (
     <ContentPage
       title="Documentation"
-      description="Learn how to use DocFix tools effectively."
+      description="Learn how to use Docstools tools effectively."
       eyebrow="Docs"
     >
       <div className="prose">
         <h2>Getting Started</h2>
         <p>
-          DocFix is a suite of browser-based file tools. No installation required — just open a tool
+          Docstools is a suite of browser-based file tools. No installation required — just open a tool
           and start working. Everything runs locally in your browser using WebAssembly.
         </p>
 

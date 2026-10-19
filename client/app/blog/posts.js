@@ -4,7 +4,7 @@ export const blogPosts = [
     title: "How to Compress an Image Without Losing Quality",
     date: "2026-10-10",
     excerpt:
-      "Learn the difference between lossy and lossless compression, how to pick the right quality settings, and why browser-based tools like DocFix keep your files private.",
+      "Learn the difference between lossy and lossless compression, how to pick the right quality settings, and why browser-based tools like Docstools keep your files private.",
     readingTime: "5 min",
   },
   {
@@ -28,7 +28,7 @@ export const blogPosts = [
     title: "How to Convert JPG to PNG with a Transparent Background",
     date: "2026-09-20",
     excerpt:
-      "JPG does not support transparency. If you need a PNG with a transparent background, here is the step-by-step workflow using DocFix's free browser-based converter.",
+      "JPG does not support transparency. If you need a PNG with a transparent background, here is the step-by-step workflow using Docstools' free browser-based converter.",
     readingTime: "3 min",
   },
   {

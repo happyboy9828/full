@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" width="240" height="60">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 60" width="300" height="60">
   <defs>
     <!-- Brand Gradient for the Icon -->
     <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -18,9 +18,7 @@
   <!-- Checkmark / Fix symbol inside document -->
   <path d="M20 28l3 3 7-7" fill="none" stroke="url(#brandGrad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
 
-  <!-- Brand Typography: "Doc" -->
+  <!-- Brand Typography: "Docstools" ("Doc" in ink, "stools" in primary accent) -->
   <text x="64" y="37" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-weight="700" font-size="24" fill="#0F172A">Doc</text>
-
-  <!-- Brand Typography: "Fix" (Using Primary Accent Color) -->
-  <text x="109" y="37" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-weight="700" font-size="24" fill="#2563EB">Fix</text>
+  <text x="104" y="37" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-weight="700" font-size="24" fill="#2563EB">stools</text>
 </svg>

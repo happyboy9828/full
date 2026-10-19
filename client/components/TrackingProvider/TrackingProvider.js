@@ -12,11 +12,11 @@ export default function TrackingProvider({ children }) {
       const handleConsent = (event) => {
         if (event.detail?.consent === true || event.detail?.consent === false) {
           setConsent(event.detail.consent);
-          window.removeEventListener("docfix:consent", handleConsent);
+          window.removeEventListener("docstools:consent", handleConsent);
         }
       };
-      window.addEventListener("docfix:consent", handleConsent);
-      return () => window.removeEventListener("docfix:consent", handleConsent);
+      window.addEventListener("docstools:consent", handleConsent);
+      return () => window.removeEventListener("docstools:consent", handleConsent);
     }
   }, [getConsent, setConsent]);
 

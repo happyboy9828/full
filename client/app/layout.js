@@ -26,34 +26,34 @@ export const viewport = {
 
 export const metadata = {
   title: {
-    default: "DocFix — Free Private File Tools",
-    template: "%s · DocFix",
+    default: "Docstools — Free Private File Tools",
+    template: "%s · Docstools",
   },
   description:
     "Compress, convert, and edit images, PDFs, and text entirely in your browser. 100% private — no uploads, no cookies, no server storage.",
   icons: {
-    icon: "/logo.svg",
+    icon: "/logo.jpeg",
   },
-  metadataBase: "https://docfix.app",
+  metadataBase: "https://docstools.app",
   alternates: {
-    canonical: "https://docfix.app",
+    canonical: "https://docstools.app",
   },
   openGraph: {
     type: "website",
-    siteName: "DocFix",
+    siteName: "Docstools",
     locale: "en-US",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "DocFix — browser-only file tools",
+        alt: "Docstools — browser-only file tools",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    creator: "@docfix",
+    creator: "@docstools",
   },
 };
 

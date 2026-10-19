@@ -21,7 +21,7 @@ function hashOtp(otp) {
 }
 
 function recoveryMessage(otp, ttlMinutes) {
-  return `Your DocFix admin password recovery code is ${otp}. It expires in ${ttlMinutes} minutes. Do not share this code with anyone.`;
+  return `Your Docstools admin password recovery code is ${otp}. It expires in ${ttlMinutes} minutes. Do not share this code with anyone.`;
 }
 
 const genericSuccess = {

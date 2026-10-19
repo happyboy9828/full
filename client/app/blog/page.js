@@ -1,10 +1,10 @@
-﻿import Link from "next/link";
+import Link from "next/link";
 import ContentPage from "../../components/ContentPage/ContentPage";
 import { blogPosts } from "./posts";
 
 export const metadata = {
   title: "Blog",
-  description: "Latest tutorials, tips, and updates from the DocFix team. All about browser-based file processing.",
+  description: "Latest tutorials, tips, and updates from the Docstools team. All about browser-based file processing.",
 };
 
 export default function BlogPage() {

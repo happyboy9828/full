@@ -11,12 +11,12 @@ const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 1000;
 
 const STORAGE_KEYS = {
-  visitorId: "docfix_visitor_id",
-  sessionId: "docfix_session_id",
-  sessionStart: "docfix_session_start",
-  lastActivity: "docfix_last_activity",
-  consent: "docfix_consent",
-  pendingEvents: "docfix_pending_events",
+  visitorId: "docstools_visitor_id",
+  sessionId: "docstools_session_id",
+  sessionStart: "docstools_session_start",
+  lastActivity: "docstools_last_activity",
+  consent: "docstools_consent",
+  pendingEvents: "docstools_pending_events",
 };
 
 const EVENT_TYPES = {

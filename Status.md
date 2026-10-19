@@ -1,6 +1,51 @@
-﻿# Status.md
+# Status.md
 
-Last updated: 2026-10-14
+Last updated: 2026-10-19
+
+## Brand Rename — DocFix → Docstools (COMPLETE)
+
+Renamed the product from **DocFix** to **Docstools** across the entire codebase — brand copy, metadata, SEO URLs, emails, storage keys, event names, package name, docs and the SVG wordmark.
+
+### Changes
+| Area | Before | After |
+|------|--------|-------|
+| Brand name | `DocFix` | `Docstools` (possessive → `Docstools'`) |
+| Primary domain | `https://docfix.app` | `https://docstools.app` |
+| Deployment URL | `https://docfix-frontend.vercel.app` | `https://docstools-frontend.vercel.app` |
+| Email addresses | `hello@` / `admin@` / `copyright@` / `noreply@docfix.app` | `…@docstools.app` |
+| Twitter creator | `@docfix` | `@docstools` |
+| npm package | `"name": "DocFix"` | `"name": "Docstools"` (`client/package.json` + `client/package-lock.json`) |
+| LocalStorage keys | `docfix_visitor_id`, `docfix_session_id`, `docfix_session_start`, `docfix_last_activity`, `docfix_consent`, `docfix_pending_events`, `docfix_dl_limit`, `docfix-theme` | `docstools_*` / `docstools-theme` |
+| Custom events | `docfix:consent`, `docfix:downloadLimitChange` | `docstools:consent`, `docstools:downloadLimitChange` |
+| DOM element id | `docfix-dl-toast` | `docstools-dl-toast` |
+| EPS metadata | `%%Creator: DocFix QR Code Generator` | `%%Creator: Docstools QR Code Generator` |
+| SVG wordmark | `client/public/logo.svg` — "Doc" + "Fix" | "Doc" + "stools" (viewBox widened to 300×60) |
+
+### Files changed (40 renamed + 1 SVG wordmark)
+- **Client app**: `app/layout.js` (title, template, `metadataBase`, canonical, `siteName`, OG alt, twitter creator), `app/page.js`, `app/about`, `app/blog` (+ `blog/[slug]`, `blog/posts.js`), `app/contact`, `app/cookie-policy`, `app/disclaimer`, `app/dmca`, `app/docs`, `app/faq`, `app/how-it-works`, `app/privacy`, `app/site-map`, `app/terms`, `app/tools`, `app/sitemap.xml/route.js`, `app/robots.txt/route.js`, `app/globals.css`
+- **Client components**: `components/Navbar`, `components/Footer`, `components/Sidebar`, `components/Logo`, `components/TrackingProvider`
+- **Client utils/lib**: `lib/tracking.js`, `utils/shared/downloadLimit.js`, `utils/shared/downloadToast.js`, `utils/dev-tools/QRCodeGenerator/QRCodeGenerator.js`
+- **Backend**: `config/env.js` (CORS origin + `EMAIL_FROM`), `controllers/otpController.js`, `routes/health.js`
+- **Docs/meta**: `README.md`, `client/README.md`, `DESIGN.md`, `Status.md`, `Phase.md`, `Phase.md.bak`, `.kilo/plans/1791823336607-missing-root-pages-plan.md`, `client/package.json`, `client/package-lock.json`, `client/server.log`
+
+### Notes
+- Rename was applied byte-safely: UTF-8 files were re-encoded as UTF-8, and the CP1252-encoded `Phase.md` / `Phase.md.bak` were edited in place so their existing encoding is preserved.
+- `client/app/favicon.ico` is binary and contains no brand text — left untouched.
+- Storage-key and event-name renames are **not** backward compatible: existing visitors' saved theme, download-limit counter, and consent value under the old `docfix*` keys are orphaned (consent falls back to default; the daily limit counter resets once). The theme cookie itself is named `theme` and is unaffected.
+
+### External follow-ups required (not in the repo)
+- Rename the Vercel project to `docstools-frontend` (or point the domain at the existing deployment) — the code now references `https://docstools-frontend.vercel.app`.
+- Point `docstools.app` DNS at the deployment and update the `metadataBase` / canonical if a different domain is used.
+- Create / migrate the mailboxes `hello@docstools.app`, `admin@docstools.app`, `copyright@docstools.app`, `noreply@docstools.app`.
+- Update the Twitter/X handle to `@docstools`.
+- `client/public/og-image.png` and `client/app/favicon.ico` are binary artwork and may still show the old wordmark.
+
+### Verification
+- `next build`: ✅ Compiled successfully — all routes prerendered
+- ESLint on all 29 touched client source files: 26 errors / 3 warnings — **identical count to `HEAD`** (pre-existing `react/no-unescaped-entities`, `react-hooks/set-state-in-effect`, `no-html-link-for-pages`, `rules-of-hooks`); no new errors introduced
+- Repo-wide case-insensitive search for `docfix`: **0 matches** (excluding `node_modules` / `.git` / `.next`)
+
+---
 
 ## Monetag Ad Integration — Global Script Tag (COMPLETE)
 
@@ -24,14 +69,14 @@ Integrated the exact Monetag ad script provided by Monetag into the Next.js App 
 
 ---
 
-## Production Domain Update — localhost:3000 → docfix-frontend.vercel.app (COMPLETE)
+## Production Domain Update — localhost:3000 → docstools-frontend.vercel.app (COMPLETE)
 
-Replaced all `localhost:3000` references with `https://docfix-frontend.vercel.app` across the codebase to match the deployed production domain.
+Replaced all `localhost:3000` references with `https://docstools-frontend.vercel.app` across the codebase to match the deployed production domain.
 
 ### Changes
 | File | Change |
 |------|--------|
-| `backend/config/env.js` | Default CORS origin changed from `http://localhost:3000` to `https://docfix-frontend.vercel.app` |
+| `backend/config/env.js` | Default CORS origin changed from `http://localhost:3000` to `https://docstools-frontend.vercel.app` |
 | `Status.md` | CORS configuration documentation updated |
 | `README.md` | Dev server URL comment updated |
 | `client/README.md` | Dev server URL comment updated |
@@ -119,7 +164,7 @@ Rewrote `client/app/disclaimer/page.js` with the full 10-section disclaimer cove
 ### Changes
 | File | Change |
 |------|--------|
-| `client/app/disclaimer/page.js` | Replaced 6-section disclaimer with the full 10-section version: 1. General Information, 2. No Guarantee of Processing Results, 3. File Processing and Device Limitations, 4. User Responsibility and Backups (5-point recommended list), 5. Third-Party Libraries and Services, 6. Availability and Technical Errors, 7. Limitation of Liability (with pointer to Terms of Service), 8. External Links, 9. Changes to This Disclaimer, 10. Contact Us (email + contact page links); updated `metadata.description` and page description to "Important information about DocFix tools, processing accuracy, and limitations." |
+| `client/app/disclaimer/page.js` | Replaced 6-section disclaimer with the full 10-section version: 1. General Information, 2. No Guarantee of Processing Results, 3. File Processing and Device Limitations, 4. User Responsibility and Backups (5-point recommended list), 5. Third-Party Libraries and Services, 6. Availability and Technical Errors, 7. Limitation of Liability (with pointer to Terms of Service), 8. External Links, 9. Changes to This Disclaimer, 10. Contact Us (email + contact page links); updated `metadata.description` and page description to "Important information about Docstools tools, processing accuracy, and limitations." |
 
 ### Verification
 - ESLint: 0 errors on `app/disclaimer/page.js`
@@ -134,7 +179,7 @@ Rewrote `client/app/about/page.js` with fresh, privacy-focused prose. Replaced t
 ### Changes
 | File | Change |
 |------|--------|
-| `client/app/about/page.js` | Rewrote all prose: intro tagline, "Our Mission", "Why Choose DocFix?" (4 subsections: Privacy by Design, Fast and Convenient, Simple to Use, Accessible When You Need It), "How We Build DocFix" (WASM/JS/Canvas/Web Workers), "Our Approach to Privacy", "Built for Everyday File Tasks" (bullet list), "Get in Touch" with contact email, and footer tagline; updated `metadata.description`; escaped all apostrophes (`&apos;`) for ESLint compliance |
+| `client/app/about/page.js` | Rewrote all prose: intro tagline, "Our Mission", "Why Choose Docstools?" (4 subsections: Privacy by Design, Fast and Convenient, Simple to Use, Accessible When You Need It), "How We Build Docstools" (WASM/JS/Canvas/Web Workers), "Our Approach to Privacy", "Built for Everyday File Tasks" (bullet list), "Get in Touch" with contact email, and footer tagline; updated `metadata.description`; escaped all apostrophes (`&apos;`) for ESLint compliance |
 
 ### Verification
 - ESLint: 0 errors on `app/about/page.js`
@@ -147,12 +192,12 @@ Rewrote `client/app/about/page.js` with fresh, privacy-focused prose. Replaced t
 Implemented the Phase 1 legal, trust, and SEO-critical pages plus the supporting sitemap/robots/footer infrastructure. All changes verified with `next build` (56/56 static pages) and ESLint (0 new errors on modified files).
 
 ### Problem
-The site claimed "No Data Logging" / "Zero Server Uploads" on the homepage but the legal pages didn't back that up. The sitemap listed broken static URLs (`/about` instead of `/legal-support/about`), `getPages()` dumped non-tool routes into the sitemap as fake "tool" entries, there was no Cookie Policy / Disclaimer / DMCA / How-It-Works page, the FAQ had only 5 questions, the `/tools` page only showed category cards (no searchable tool index), the footer links were stale, the site title was just "DocFix", and there was no OG/Twitter metadata. Legal pages were also nested under the non-semantic `/legal-support/` prefix.
+The site claimed "No Data Logging" / "Zero Server Uploads" on the homepage but the legal pages didn't back that up. The sitemap listed broken static URLs (`/about` instead of `/legal-support/about`), `getPages()` dumped non-tool routes into the sitemap as fake "tool" entries, there was no Cookie Policy / Disclaimer / DMCA / How-It-Works page, the FAQ had only 5 questions, the `/tools` page only showed category cards (no searchable tool index), the footer links were stale, the site title was just "Docstools", and there was no OG/Twitter metadata. Legal pages were also nested under the non-semantic `/legal-support/` prefix.
 
 ### Changes
 | File | Change |
 |------|--------|
-| `client/app/layout.js` | Updated `metadata`: title default → "DocFix — Free Private File Tools"; richer description; added `metadataBase`, `alternates.canonical`, `openGraph` (site name, locale, 1200×630 image), `twitter.card` |
+| `client/app/layout.js` | Updated `metadata`: title default → "Docstools — Free Private File Tools"; richer description; added `metadataBase`, `alternates.canonical`, `openGraph` (site name, locale, 1200×630 image), `twitter.card` |
 | `app/privacy/page.js` (was `legal-support/`) | Rewrote: Zero Data Collection, Browser-Based Processing (WASM), No Cookies, No Server Storage, GDPR/CCPA rights |
 | `app/terms/page.js` (was `legal-support/`) | Expanded to 12 sections: usage limits, liability for file processing, indemnification, IP |
 | `app/about/page.js` (was `legal-support/`) | Added mission statement, "Why Browser-Based?" (WASM/Canvas/Web Workers), "Who We Are" + team; fixed `</strong>strong>` typo |
@@ -160,7 +205,7 @@ The site claimed "No Data Logging" / "Zero Server Uploads" on the homepage but t
 | `app/faq/page.js` (was `legal-support/`) | Expanded 5→14 questions across 4 accordion sections (Privacy, How It Works, Usage, Troubleshooting) |
 | `app/cookie-policy/page.js` (**new**) | 0 tracking cookies, single theme cookie, GDPR/CCPA compliance |
 | `app/disclaimer/page.js` (**new**) | No warranty on processing accuracy, user responsibility, limitation of liability |
-| `app/dmca/page.js` (**new**) | Copyright/DMCA policy with designated agent (`copyright@docfix.app`) |
+| `app/dmca/page.js` (**new**) | Copyright/DMCA policy with designated agent (`copyright@docstools.app`) |
 | `app/how-it-works/page.js` (**new**) | 4-step WASM flow, architecture diagram, benefits |
 | `app/site-map/page.js` (**new**) | HTML sitemap — all tool categories + legal/support links |
 | `app/blog/page.js` + `blog/posts.js` + `blog/[slug]/page.js` (**new**) | Blog listing + 5 starter articles via dynamic SSG route |
@@ -253,7 +298,7 @@ Opening `https://testing-api-backend.vercel.app` in a new tab showed "loading" f
 | `backend/index.js` | Default export is now a real `handler(req, res)` function that lazily builds the Express app once and forwards every request to it. DB connection is kicked off in the background on first invocation. `startServer()` retained for local dev / `npm start`. |
 
 ### Verification (24/24 endpoints pass against live MongoDB Atlas)
-- `GET /` → 200 `{"success":true,"message":"DocFix backend running"}`
+- `GET /` → 200 `{"success":true,"message":"Docstools backend running"}`
 - `GET /health` → 200 `{"success":true,"status":"ok","database":"connected"}`
 - `GET /api/analytics/health` → 200
 - `POST /api/analytics/{pageview,track,sessions/start,sessions/heartbeat,sessions/end}` → 200
@@ -273,7 +318,7 @@ Redeploy the backend on Vercel after this change for the fix to take effect live
 
 ## Frontend + Backend Connected to Database (COMPLETE)
 
-The frontend (`https://docfix-frontend.vercel.app`) and backend (`https://testing-api-backend.vercel.app`) are now both connected to MongoDB Atlas and can store/retrieve analytics data end-to-end.
+The frontend (`https://docstools-frontend.vercel.app`) and backend (`https://testing-api-backend.vercel.app`) are now both connected to MongoDB Atlas and can store/retrieve analytics data end-to-end.
 
 ### Root Causes Fixed
 1. **Backend never started on Vercel** — the previous agent changed `backend/index.js` to export `startServer()` without calling it, so the serverless function received requests but never listened. Fixed by re-adding the direct-run boot check.
@@ -289,7 +334,7 @@ The frontend (`https://docfix-frontend.vercel.app`) and backend (`https://testin
 | `client/.env.example` | Updated with production comment for `https://testing-api-backend.vercel.app/api/analytics` |
 
 ### Verification (live against MongoDB Atlas)
-- `GET /` → 200 `{"success":true,"message":"DocFix backend running"}`
+- `GET /` → 200 `{"success":true,"message":"Docstools backend running"}`
 - `GET /health` → 200 `{"success":true,"status":"ok","database":"connected"}`
 - `GET /api/analytics/health` → 200 `{"success":true,"status":"ok","database":"connected","service":"analytics"}`
 - `POST /api/analytics/pageview` → 200 (event persisted in `events` collection)
@@ -330,14 +375,14 @@ The backend was previously a minimal stub (`app.js` only had `/`, `/health`, `/s
 | **App** | `backend/app.js` | CORS with `credentials: true` + `origin` whitelist, cookie-parser, JSON 256kb, request logger, all routes, 404 + error handlers |
 
 ### CORS configuration
-- `Access-Control-Allow-Origin: https://docfix-frontend.vercel.app` (configurable via `CORS_ORIGIN`)
+- `Access-Control-Allow-Origin: https://docstools-frontend.vercel.app` (configurable via `CORS_ORIGIN`)
 - `Access-Control-Allow-Credentials: true`
 - `Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS`
 - `Access-Control-Allow-Headers: Content-Type,Authorization`
 - `Access-Control-Max-Age: 86400000`
 
 ### Verification (live against MongoDB Atlas)
-- `GET /` → 200 `{"success":true,"message":"DocFix backend running"}`
+- `GET /` → 200 `{"success":true,"message":"Docstools backend running"}`
 - `GET /health` → 200 `{"success":true,"status":"ok","database":"connected","dbName":"analytics"}`
 - `GET /api/analytics/health` → 200 `{"success":true,"status":"ok","database":"connected","service":"analytics"}`
 - `POST /api/analytics/sessions/start` → 200 with valid UUIDs
@@ -397,7 +442,7 @@ The backend now starts the HTTP server immediately and serves the welcome messag
 
 ### Behavior
 - Server listens on port 5000 immediately on startup
-- `GET /` always returns `{"success":true,"message":"DocFix backend running"}` (welcome message)
+- `GET /` always returns `{"success":true,"message":"Docstools backend running"}` (welcome message)
 - `GET /health` reports current database state (`connected`, `connecting`, `disconnected`)
 - MongoDB connection retries in the background every 5s (`DB_RETRY_DELAY_MS`) until successful
 - No fatal exit if DB is unreachable — server stays up and continues retrying
@@ -933,7 +978,7 @@ Standardized all 6 MS Office tool CSS files for consistent layout, boxing, and s
 ## Phase 1 â€” Project Inspection (COMPLETE)
 
 ### Project Overview
-- **Name**: DocFix â€” browser-only image/document tools
+- **Name**: Docstools â€” browser-only image/document tools
 - **Stack**: Next.js 16.3.8 (App Router) + React 19.2.8 + Tailwind CSS v4 (client) | Express 5 + Mongoose 9 + MongoDB Atlas (backend)
 - **Root layout**: `client/app/layout.js` â€” shared Navbar, Footer, ad units (Multitag, DownloadProgressPopup), Geist fonts, theme system (light/dark/system)
 
@@ -1286,7 +1331,7 @@ Updated client/app/cookie-policy/page.js with Cookie Policy content.
 
 ## Update FAQ and Pricing Pages to Reflect Actual Limits (COMPLETE)
 
-Updated FAQ (`client/app/faq/page.js`), Pricing (`client/app/pricing/page.js`), and Homepage (`client/app/page.js`) to correct claims about "no limits". Changed wording to reflect that while DocFix is 100% free with no subscriptions, processing limits are determined by device memory and browser capabilities.
+Updated FAQ (`client/app/faq/page.js`), Pricing (`client/app/pricing/page.js`), and Homepage (`client/app/page.js`) to correct claims about "no limits". Changed wording to reflect that while Docstools is 100% free with no subscriptions, processing limits are determined by device memory and browser capabilities.
 
 ### Changes
 | File | Change |
@@ -1437,7 +1482,7 @@ Refreshed both README files (`README.md` root and `client/README.md`) as product
 
 | File | Change |
 |------|--------|
-| `README.md` | Retitled to "DocFix"; production-focused copy; live site URL `https://docfix-frontend.vercel.app`; 24 tools across Image/PDF/Dev/Text categories with descriptions; Privacy section (zero uploads, no sign-up, no server storage, no third-party cookies); Getting Started and Support sections; removed all Phase tracking, backend API, quick-start dev commands, architecture and Ads/Download Progress internals |
+| `README.md` | Retitled to "Docstools"; production-focused copy; live site URL `https://docstools-frontend.vercel.app`; 24 tools across Image/PDF/Dev/Text categories with descriptions; Privacy section (zero uploads, no sign-up, no server storage, no third-party cookies); Getting Started and Support sections; removed all Phase tracking, backend API, quick-start dev commands, architecture and Ads/Download Progress internals |
 | `client/README.md` | Production-focused copy; live site URL; all 24 tool routes listed by category; Privacy section; Using the Tools steps (visit → open → pick file → configure → download); removed all dev conventions, project structure internals, shared helpers, theme internals, Ads internals, Download Progress internals, Phase references and backend references |
 
 ### Notes
@@ -1455,11 +1500,11 @@ Updated `README.md` (root) and `client/README.md` to reflect the current project
 
 | File | Change |
 |------|--------|
-| `README.md` | Retitled from "DocFix Analytics Platform" to "DocFix"; removed architecture/backend quick-start/Backend API sections; set Current Phase to Phase 37 (Monetag Ad Integration); updated tool table to 24 tools across 4 categories (Image, PDF, Dev, Text); removed Analytics Dashboard section; updated themes to warm green/amber light + slate dark palette; added Monetag/DownloadProgressPopup ads docs; updated Download Progress Popup to `triggerDownloadProgress` registry |
+| `README.md` | Retitled from "Docstools Analytics Platform" to "Docstools"; removed architecture/backend quick-start/Backend API sections; set Current Phase to Phase 37 (Monetag Ad Integration); updated tool table to 24 tools across 4 categories (Image, PDF, Dev, Text); removed Analytics Dashboard section; updated themes to warm green/amber light + slate dark palette; added Monetag/DownloadProgressPopup ads docs; updated Download Progress Popup to `triggerDownloadProgress` registry |
 | `client/README.md` | Added missing PDF Tools and Text Tools routes to the tool table (all 24 tools listed); removed "Planned tools" (all categories complete); updated theme section (light `#ABC270`/`#FEC868`/`#473C33`, dark `#0D1F23`/`#B9CC82`); updated Ads section (Monetag active, Multitag disabled); updated Download Progress Popup to `triggerDownloadProgress` registry; updated project structure to include `utils/pdf-tools/`, `utils/writing-tool/`, `utils/image-tools/` |
 
 ### Notes
-- Root `README.md` dev server URL already pointed to `https://docfix-frontend.vercel.app` (Phase 36)
+- Root `README.md` dev server URL already pointed to `https://docstools-frontend.vercel.app` (Phase 36)
 - No backend references remain in either README (backend/dashboard removed in Phase 11)
 
 
@@ -1489,7 +1534,7 @@ Redesigned the navigation sidebar of the existing `/kingdome/dashboard` analytic
 
 ### Design
 - **Sidebar**: deep navy `#081426`, subtle blue-gray right border (`#243954`), fixed 240px width on desktop, smooth 220ms transitions
-- **Brand header**: existing `/logo.svg` + "DocFix" wordmark (brand identity preserved), subtle divider below
+- **Brand header**: existing `/logo.svg` + "Docstools" wordmark (brand identity preserved), subtle divider below
 - **Navigation (exact order)**: Dashboard (`/kingdome/dashboard`), Pages (`/kingdome/pages`), Traffic Sources (`/kingdome/traffic-sources`), Devices (`/kingdome/devices`), Live Visitors (`/kingdome/live-visitors`), Events (`/kingdome/events`), Settings (`/kingdome/settings`) — Lucide icons (`LayoutDashboard`, `FileText`, `ChartNoAxesCombined`, `MonitorSmartphone`, `Users`, `MousePointerClick`, `Settings`) at 20px, 44px item height, rounded corners, hover + focus-visible styles
 - **"Coming soon" badges**: Shown on all non-Dashboard nav items; clicking navigates to the corresponding Coming soon page
 - **Active state**: determined via `usePathname()` (exact or nested-route match); blue/indigo gradient background, high-contrast white text/icon; inactive items muted blue-gray; no hardcoded active item

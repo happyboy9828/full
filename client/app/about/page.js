@@ -1,28 +1,28 @@
-﻿import ContentPage from "../../components/ContentPage/ContentPage";
+import ContentPage from "../../components/ContentPage/ContentPage";
 
 export const metadata = {
-  title: "About DocFix",
+  title: "About Docstools",
   description:
-    "Simple, fast, and privacy-conscious file tools for everyone. DocFix makes working with documents and files easier without unnecessary complexity.",
+    "Simple, fast, and privacy-conscious file tools for everyone. Docstools makes working with documents and files easier without unnecessary complexity.",
 };
 
 export default function AboutPage() {
   return (
     <ContentPage
-      title="About DocFix"
+      title="About Docstools"
       description="Simple, fast, and privacy-conscious file tools for everyone."
       eyebrow="About"
     >
       <div className="prose">
         <p>
-          DocFix makes working with documents and files easier. Our goal is to
+          Docstools makes working with documents and files easier. Our goal is to
           provide useful, accessible tools that help people process their files
           without unnecessary complexity.
         </p>
 
         <p>
           Whether you&apos;re preparing a document, working with a PDF, or handling an
-          image, DocFix aims to make everyday file tasks simpler, faster, and
+          image, Docstools aims to make everyday file tasks simpler, faster, and
           more convenient.
         </p>
 
@@ -38,12 +38,12 @@ export default function AboutPage() {
           are processed.
         </p>
         <p>
-          We&apos;re building DocFix to make everyday file tasks easier without
+          We&apos;re building Docstools to make everyday file tasks easier without
           making users navigate complicated workflows or create an account just
           to get started.
         </p>
 
-        <h2>Why Choose DocFix?</h2>
+        <h2>Why Choose Docstools?</h2>
 
         <h3>Privacy by Design</h3>
         <p>
@@ -73,11 +73,11 @@ export default function AboutPage() {
 
         <h3>Accessible When You Need It</h3>
         <p>
-          Use DocFix directly from your browser, without installing desktop
+          Use Docstools directly from your browser, without installing desktop
           software. Account requirements may vary as the platform evolves.
         </p>
 
-        <h2>How We Build DocFix</h2>
+        <h2>How We Build Docstools</h2>
         <p>
           We use modern web technologies to build tools that are responsive,
           practical, and easy to use.
@@ -94,7 +94,7 @@ export default function AboutPage() {
 
         <h2>Our Approach to Privacy</h2>
         <p>
-          Privacy is an important part of how we think about DocFix.
+          Privacy is an important part of how we think about Docstools.
         </p>
         <p>
           We aim to collect only the information needed to operate and improve
@@ -115,7 +115,7 @@ export default function AboutPage() {
           <li>Individuals looking for convenient browser-based utilities.</li>
         </ul>
         <p>
-          Whatever your workflow, we want DocFix to help you spend less time
+          Whatever your workflow, we want Docstools to help you spend less time
           managing files and more time getting things done.
         </p>
 
@@ -124,21 +124,21 @@ export default function AboutPage() {
           Have a question, found an issue, or have an idea for a new tool?
         </p>
         <p>
-          We&apos;d love to hear from you. Your feedback helps us improve DocFix and
+          We&apos;d love to hear from you. Your feedback helps us improve Docstools and
           build tools that better serve your needs.
         </p>
         <p>
           Contact us:{" "}
-          <a href="mailto:hello@docfix.app">hello@docfix.app</a>
+          <a href="mailto:hello@docstools.app">hello@docstools.app</a>
         </p>
         <p>
-          Explore DocFix and discover a simpler way to work with your files.
+          Explore Docstools and discover a simpler way to work with your files.
         </p>
 
         <hr />
 
         <p>
-          <em>DocFix — Practical file tools, designed with privacy in mind.</em>
+          <em>Docstools — Practical file tools, designed with privacy in mind.</em>
         </p>
       </div>
     </ContentPage>

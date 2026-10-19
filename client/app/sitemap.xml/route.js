@@ -3,18 +3,18 @@
 // change frequency. No external packages required.
 import { getPages, toolMetadata } from "../../lib/pages";
 
-const BASE = "https://docfix.app";
+const BASE = "https://docstools.app";
 
 const STATIC_PAGES = [
-  { path: "", changefreq: "weekly", priority: 1.0, title: "DocFix — Free Private File Tools" },
+  { path: "", changefreq: "weekly", priority: 1.0, title: "Docstools — Free Private File Tools" },
   { path: "/tools", changefreq: "weekly", priority: 0.9, title: "All Tools — Browser-only image, PDF, dev and text utilities" },
-  { path: "/about", changefreq: "monthly", priority: 0.8, title: "About DocFix — Mission & Team" },
+  { path: "/about", changefreq: "monthly", priority: 0.8, title: "About Docstools — Mission & Team" },
   { path: "/how-it-works", changefreq: "monthly", priority: 0.8, title: "How It Works — 100% Browser-Based Processing" },
   { path: "/faq", changefreq: "weekly", priority: 0.8, title: "FAQ — Privacy, pricing and browser support" },
-  { path: "/site-map", changefreq: "monthly", priority: 0.6, title: "Site Map — All DocFix tools and pages" },
-  { path: "/blog", changefreq: "weekly", priority: 0.7, title: "DocFix Blog — Tutorials and updates" },
+  { path: "/site-map", changefreq: "monthly", priority: 0.6, title: "Site Map — All Docstools tools and pages" },
+  { path: "/blog", changefreq: "weekly", priority: 0.7, title: "Docstools Blog — Tutorials and updates" },
   { path: "/docs", changefreq: "monthly", priority: 0.7, title: "Documentation — Guides and best practices" },
-  { path: "/contact", changefreq: "monthly", priority: 0.6, title: "Contact DocFix" },
+  { path: "/contact", changefreq: "monthly", priority: 0.6, title: "Contact Docstools" },
   { path: "/pricing", changefreq: "monthly", priority: 0.6, title: "Pricing — Free Forever, No Limits" },
   { path: "/privacy", changefreq: "yearly", priority: 0.5, title: "Privacy Policy — No Data Logging" },
   { path: "/terms", changefreq: "yearly", priority: 0.4, title: "Terms of Service" },

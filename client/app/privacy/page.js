@@ -1,9 +1,9 @@
-﻿import ContentPage from "../../components/ContentPage/ContentPage";
+import ContentPage from "../../components/ContentPage/ContentPage";
 
 export const metadata = {
   title: "Privacy Policy",
   description:
-    "How DocFix handles information when you visit and use our tools — browser-based processing, cookies, download limits, analytics, security, and your privacy rights.",
+    "How Docstools handles information when you visit and use our tools — browser-based processing, cookies, download limits, analytics, security, and your privacy rights.",
 };
 
 export default function PrivacyPage() {
@@ -15,7 +15,7 @@ export default function PrivacyPage() {
     >
       <div className="prose">
         <p>
-          At DocFix, we believe your files deserve privacy. This policy
+          At Docstools, we believe your files deserve privacy. This policy
           explains how we handle information when you visit our website and
           use our tools.
         </p>
@@ -26,12 +26,12 @@ export default function PrivacyPage() {
 
         <h2>1. File Privacy and Processing</h2>
         <p>
-          DocFix aims to make file processing simple while minimizing
+          Docstools aims to make file processing simple while minimizing
           unnecessary access to your data.
         </p>
         <p>
           For tools that process files entirely in your browser, your files
-          remain on your device and are not uploaded to DocFix servers for
+          remain on your device and are not uploaded to Docstools servers for
           processing. These tools use browser technologies such as
           JavaScript, WebAssembly (WASM), and HTML5 Canvas, where applicable.
         </p>
@@ -47,7 +47,7 @@ export default function PrivacyPage() {
 
         <h2>2. Browser-Based Processing</h2>
         <p>
-          Where supported, DocFix processes files locally in your browser.
+          Where supported, Docstools processes files locally in your browser.
           Your files are read into browser memory, processed, and made
           available for download without requiring a file upload to our
           servers.
@@ -65,7 +65,7 @@ export default function PrivacyPage() {
 
         <h2>3. Information We May Collect</h2>
         <p>
-          Depending on how you use DocFix and which features are enabled, we
+          Depending on how you use Docstools and which features are enabled, we
           may process limited technical or operational information, such as:
         </p>
         <ul>
@@ -79,7 +79,7 @@ export default function PrivacyPage() {
         </ul>
         <p>
           We aim to collect only information necessary to operate, maintain,
-          secure, and improve DocFix.
+          secure, and improve Docstools.
         </p>
         <p>
           We do not intentionally collect the contents of files processed
@@ -88,7 +88,7 @@ export default function PrivacyPage() {
 
         <h2>4. Cookies and Browser Storage</h2>
         <p>
-          DocFix may use essential browser storage or cookies to remember
+          Docstools may use essential browser storage or cookies to remember
           your preferences, maintain necessary functionality, or enforce
           usage limits.
         </p>
@@ -110,7 +110,7 @@ export default function PrivacyPage() {
 
         <h2>5. Daily Download Limits</h2>
         <p>
-          DocFix may apply a daily download limit to help maintain fair and
+          Docstools may apply a daily download limit to help maintain fair and
           reliable access to its tools.
         </p>
         <p>
@@ -144,12 +144,12 @@ export default function PrivacyPage() {
         </p>
         <p>
           The actual information collected depends on the analytics, hosting,
-          security, and monitoring services configured for DocFix.
+          security, and monitoring services configured for Docstools.
         </p>
 
         <h2>7. Third-Party Services</h2>
         <p>
-          DocFix may rely on third-party providers for website hosting,
+          Docstools may rely on third-party providers for website hosting,
           content delivery, analytics, email communications, or security.
         </p>
         <p>
@@ -179,7 +179,7 @@ export default function PrivacyPage() {
         </p>
         <p>
           We use reasonable measures designed to protect information handled
-          through DocFix. However, no website or internet transmission can be
+          through Docstools. However, no website or internet transmission can be
           guaranteed to be completely secure.
         </p>
 
@@ -196,7 +196,7 @@ export default function PrivacyPage() {
           preferences or usage limits.
         </p>
         <p>
-          For tools that process files entirely in your browser, DocFix
+          For tools that process files entirely in your browser, Docstools
           generally does not receive the file contents and therefore may not
           have a copy to retrieve or delete.
         </p>
@@ -207,7 +207,7 @@ export default function PrivacyPage() {
 
         <h2>10. Children&apos;s Privacy</h2>
         <p>
-          DocFix is not intended to knowingly collect personal information
+          Docstools is not intended to knowingly collect personal information
           from children in circumstances where parental consent is legally
           required. If you believe a child has provided personal information
           to us inappropriately, please contact us so we can review the
@@ -216,7 +216,7 @@ export default function PrivacyPage() {
 
         <h2>11. Changes to This Policy</h2>
         <p>
-          We may update this Privacy Policy as DocFix&apos;s features,
+          We may update this Privacy Policy as Docstools&apos; features,
           technology, and legal requirements change.
         </p>
         <p>
@@ -227,12 +227,12 @@ export default function PrivacyPage() {
 
         <h2>12. Contact Us</h2>
         <p>
-          If you have questions about this Privacy Policy or how DocFix
+          If you have questions about this Privacy Policy or how Docstools
           handles information, please contact us:
         </p>
         <p>
           <strong>Email:</strong>{" "}
-          <a href="mailto:hello@docfix.app">hello@docfix.app</a>
+          <a href="mailto:hello@docstools.app">hello@docstools.app</a>
         </p>
         <p>
           <strong>Contact page:</strong>{" "}

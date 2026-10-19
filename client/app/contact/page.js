@@ -1,22 +1,22 @@
-﻿import ContentPage from "../../components/ContentPage/ContentPage";
+import ContentPage from "../../components/ContentPage/ContentPage";
 import FeedbackFormWrapper from "../../components/FeedbackForm/FeedbackFormWrapper";
 import "./contact.css";
 
 export const metadata = {
   title: "Contact",
-  description: "Get in touch with the DocFix team for support, feedback, or business inquiries.",
+  description: "Get in touch with the Docstools team for support, feedback, or business inquiries.",
 };
 
 export default function ContactPage() {
   return (
     <ContentPage
-      title="Contact DocFix"
+      title="Contact Docstools"
       description="We'd love to hear from you."
       eyebrow="Contact"
     >
       <div className="prose contact-page">
         <p>
-          Have a question, feedback, or an idea for improving DocFix? We'd love to hear from you.
+          Have a question, feedback, or an idea for improving Docstools? We'd love to hear from you.
         </p>
         <p>
           For general inquiries and support requests, email us or use the contact form below. We aim to respond within <strong>1–2 business days</strong>.
@@ -27,8 +27,8 @@ export default function ContactPage() {
           <h3>Email Support</h3>
           <p>
             For general questions, technical support, suggestions, or other inquiries, contact us at{" "}
-            <a href="mailto:hello@docfix.app" className="contact-email">
-              hello@docfix.app
+            <a href="mailto:hello@docstools.app" className="contact-email">
+              hello@docstools.app
             </a>.
           </p>
         </div>
@@ -36,7 +36,7 @@ export default function ContactPage() {
         <div className="contact-section">
           <h2>Send Us a Message</h2>
           <p>
-            Found a bug, have a feature request, or want to share your experience with DocFix? Send us a message using the form below.
+            Found a bug, have a feature request, or want to share your experience with Docstools? Send us a message using the form below.
           </p>
           <p>No account is required.</p>
           <div className="contact-form-wrapper">
@@ -60,7 +60,7 @@ export default function ContactPage() {
               <strong>Business &amp; Partnerships:</strong> Contact us to discuss potential collaborations, business opportunities, or licensing.
             </li>
             <li>
-              <strong>Press &amp; Media:</strong> Reach out for information about DocFix, approved brand assets, or media inquiries.
+              <strong>Press &amp; Media:</strong> Reach out for information about Docstools, approved brand assets, or media inquiries.
             </li>
           </ul>
         </div>
@@ -68,17 +68,17 @@ export default function ContactPage() {
         <div className="contact-section">
           <h2>Need a Quick Answer?</h2>
           <p>
-            Before contacting us, visit our <a href="/faq" className="contact-faq-link">FAQ</a> for answers to common questions about DocFix and its tools.
+            Before contacting us, visit our <a href="/faq" className="contact-faq-link">FAQ</a> for answers to common questions about Docstools and its tools.
           </p>
           <p>
-            We're always looking for ways to make DocFix better. Thank you for being part of our journey.
+            We're always looking for ways to make Docstools better. Thank you for being part of our journey.
           </p>
           <p className="contact-signoff">
-            <strong>The DocFix Team</strong>
+            <strong>The Docstools Team</strong>
           </p>
           <p className="contact-signoff-email">
-            <a href="mailto:hello@docfix.app" className="contact-email">
-              hello@docfix.app
+            <a href="mailto:hello@docstools.app" className="contact-email">
+              hello@docstools.app
             </a>
           </p>
         </div>

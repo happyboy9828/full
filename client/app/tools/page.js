@@ -5,7 +5,7 @@ import ToolsClient from "./ToolsClient";
 export const metadata = {
   title: "All Tools",
   description:
-    "Browse and search every DocFix tool — image, PDF, dev, and text utilities. All run 100% in your browser. No uploads, no install, no sign-up.",
+    "Browse and search every Docstools tool — image, PDF, dev, and text utilities. All run 100% in your browser. No uploads, no install, no sign-up.",
 };
 
 export default function ToolsPage() {

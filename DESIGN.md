@@ -268,7 +268,7 @@ SMS-based OTP flow for an administrator to reset their password when they no lon
 Initiate recovery. Body:
 ```json
 {
-  "email": "admin@docfix.app"
+  "email": "admin@docstools.app"
 }
 ```
 Response: `200 OK` `{ "success": true, "message": "If an active account with a registered recovery phone exists, an OTP has been sent to that number." }` — always generic to prevent user enumeration. `400` if email is missing.
@@ -284,7 +284,7 @@ Behavior:
 Verify OTP and reset password. Body:
 ```json
 {
-  "email": "admin@docfix.app",
+  "email": "admin@docstools.app",
   "otp": "123456",
   "newPassword": "NewStrongPass123"
 }

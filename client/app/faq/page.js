@@ -1,9 +1,9 @@
-﻿import ContentPage from "../../components/ContentPage/ContentPage";
+import ContentPage from "../../components/ContentPage/ContentPage";
 
 export const metadata = {
   title: "FAQ",
   description:
-    "Frequently asked questions about DocFix tools, privacy, and usage. All processes run in your browser.",
+    "Frequently asked questions about Docstools tools, privacy, and usage. All processes run in your browser.",
 };
 
 const faqData = [
@@ -12,7 +12,7 @@ const faqData = [
     items: [
       {
         q: "Is my file uploaded to your servers?",
-        a: "No. Every tool in DocFix runs entirely in your browser using WebAssembly (WASM) and JavaScript. Your files are read into your browser&apos;s memory, processed on your device, and never sent over the network to any server.",
+        a: "No. Every tool in Docstools runs entirely in your browser using WebAssembly (WASM) and JavaScript. Your files are read into your browser&apos;s memory, processed on your device, and never sent over the network to any server.",
       },
         {
           q: "Is it really free?",
@@ -20,7 +20,7 @@ const faqData = [
         },
       {
         q: "Do you store or log my files?",
-        a: "No. DocFix does not store, log, or process files on any server. File contents exist only in your browser&apos;s memory during processing and are gone once you close the tab.",
+        a: "No. Docstools does not store, log, or process files on any server. File contents exist only in your browser&apos;s memory during processing and are gone once you close the tab.",
       },
       {
         q: "Do you use cookies?",
@@ -33,15 +33,15 @@ const faqData = [
     items: [
       {
         q: "What is WebAssembly (WASM) and why does it matter?",
-        a: "WebAssembly (WASM) is a low-level binary format that runs in your browser at near-native speed. DocFix uses WASM to perform complex file processing — image encoding, PDF manipulation, compression — directly on your device without any server round-trips.",
+        a: "WebAssembly (WASM) is a low-level binary format that runs in your browser at near-native speed. Docstools uses WASM to perform complex file processing — image encoding, PDF manipulation, compression — directly on your device without any server round-trips.",
       },
       {
-        q: "Can I use DocFix offline?",
+        q: "Can I use Docstools offline?",
         a: "Once a tool has fully loaded in your browser, most processing works offline without an internet connection. You only need connectivity to initially open the page.",
       },
       {
         q: "Which browsers are supported?",
-        a: "DocFix works in all modern browsers: Chrome, Firefox, Safari, Edge, and their mobile equivalents. Some advanced features (like WebP encoding) may be limited in older browser versions.",
+        a: "Docstools works in all modern browsers: Chrome, Firefox, Safari, Edge, and their mobile equivalents. Some advanced features (like WebP encoding) may be limited in older browser versions.",
       },
     ],
   },
@@ -75,11 +75,11 @@ const faqData = [
       },
       {
         q: "The tool isn&apos;t working. What should I do?",
-        a: "Try refreshing the page first. If the issue persists, clear your browser cache and ensure you&apos;re using an up-to-date browser. Still stuck? Email hello@docfix.app with your browser version and a description of the issue.",
+        a: "Try refreshing the page first. If the issue persists, clear your browser cache and ensure you&apos;re using an up-to-date browser. Still stuck? Email hello@docstools.app with your browser version and a description of the issue.",
       },
       {
         q: "Can I report a bug or suggest a feature?",
-        a: "Absolutely. We welcome feedback (and even feature requests for new tools). Use our contact form or email hello@docfix.app — we read every message.",
+        a: "Absolutely. We welcome feedback (and even feature requests for new tools). Use our contact form or email hello@docstools.app — we read every message.",
       },
     ],
   },
@@ -89,7 +89,7 @@ export default function FAQPage() {
   return (
     <ContentPage
       title="Frequently Asked Questions"
-      description="Quick answers to common questions about DocFix tools and privacy."
+      description="Quick answers to common questions about Docstools tools and privacy."
       eyebrow="FAQ"
     >
       <div className="prose">

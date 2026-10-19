@@ -2,7 +2,7 @@
    Uses the shared .tool-toast class from app/tool.css so it matches the
    rest of the site. Works in both React and imperative-DOM tools. */
 
-const TOAST_ID = "docfix-dl-toast";
+const TOAST_ID = "docstools-dl-toast";
 
 function ensureToast() {
   let toast = document.getElementById(TOAST_ID);

@@ -120,7 +120,7 @@ export default function Home() {
         </ul>
       </section>
 
-      {/* Section 3: Why Choose DocFix? — feature/benefit highlights */}
+      {/* Section 3: Why Choose Docstools? — feature/benefit highlights */}
       <section
         id="why"
         className="why-section"
@@ -128,7 +128,7 @@ export default function Home() {
       >
         <div className="why-header">
           <h2 id="why-heading" className="why-title">
-            Why Developers & Designers Choose DocFix
+            Why Developers & Designers Choose Docstools
           </h2>
           <p className="why-subtitle">
             Built for people who care about their data and their time.

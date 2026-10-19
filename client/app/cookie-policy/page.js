@@ -3,14 +3,14 @@ import ContentPage from "../../components/ContentPage/ContentPage";
 export const metadata = {
   title: "Cookie Policy",
   description:
-    "DocFix uses minimal cookies. We only store a theme preference cookie — no tracking, no advertising cookies.",
+    "Docstools uses minimal cookies. We only store a theme preference cookie — no tracking, no advertising cookies.",
 };
 
 export default function CookiePolicyPage() {
   return (
     <ContentPage
       title="Cookie Policy"
-      description="How DocFix uses (and does not use) cookies."
+      description="How Docstools uses (and does not use) cookies."
       eyebrow="Cookies"
     >
       <div className="prose">
@@ -20,7 +20,7 @@ export default function CookiePolicyPage() {
 
         <h2>Overview</h2>
         <p>
-          DocFix is committed to transparency about how we use cookies and similar tracking
+          Docstools is committed to transparency about how we use cookies and similar tracking
           technologies. Because all of our tools run entirely in your browser, we use very few
           cookies — and none for tracking or advertising.
         </p>
@@ -45,7 +45,7 @@ export default function CookiePolicyPage() {
           </thead>
           <tbody>
             <tr>
-              <td>docfix-theme</td>
+              <td>docstools-theme</td>
               <td>Remembers your color scheme preference (light, dark, or system)</td>
               <td>Essential</td>
               <td>Persistent (until changed)</td>
@@ -55,7 +55,7 @@ export default function CookiePolicyPage() {
 
         <h2>Local Storage & Session Storage</h2>
         <p>
-          DocFix does <strong>not</strong> use local storage or session storage to persist any
+          Docstools does <strong>not</strong> use local storage or session storage to persist any
           personal data or file information. Any in-memory state (such as your current theme or
           tool settings) is reset when you close the browser tab.
         </p>
@@ -70,7 +70,7 @@ export default function CookiePolicyPage() {
 
         <h2>GDPR &amp; CCPA Compliance</h2>
         <p>
-          For users in the EU, UK, and California: DocFix is fully compliant with GDPR and CCPA
+          For users in the EU, UK, and California: Docstools is fully compliant with GDPR and CCPA
           requirements. We process no personal data, serve no tracking cookies, and do not sell any
           information. The only data we collect is anonymized, aggregated analytics (page views,
           browser type) that cannot be linked to an individual.
@@ -84,7 +84,7 @@ export default function CookiePolicyPage() {
 
         <h2>Contact</h2>
         <p>
-          Questions about cookies? Email <a href="mailto:hello@docfix.app">hello@docfix.app</a>.
+          Questions about cookies? Email <a href="mailto:hello@docstools.app">hello@docstools.app</a>.
         </p>
       </div>
     </ContentPage>

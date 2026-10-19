@@ -1,10 +1,10 @@
-﻿import ContentPage from "../../components/ContentPage/ContentPage";
+import ContentPage from "../../components/ContentPage/ContentPage";
 import { getCategories } from "../../lib/pages";
 import Link from "next/link";
 
 export const metadata = {
   title: "Site Map",
-  description: "Complete HTML sitemap of all DocFix tools and pages. Find every tool in one place.",
+  description: "Complete HTML sitemap of all Docstools tools and pages. Find every tool in one place.",
 };
 
 export default function SiteMapPage() {
@@ -14,7 +14,7 @@ export default function SiteMapPage() {
   return (
     <ContentPage
       title="Site Map"
-      description="A complete overview of every tool and page on DocFix."
+      description="A complete overview of every tool and page on Docstools."
       eyebrow="Sitemap"
     >
       <div className="prose">
@@ -48,7 +48,7 @@ export default function SiteMapPage() {
 
         <h2 style={{ marginTop: "2rem" }}>Support &amp; Legal</h2>
         <ul className="sitemap-support-list">
-          <li><Link href="/about">About DocFix</Link></li>
+          <li><Link href="/about">About Docstools</Link></li>
           <li><Link href="/how-it-works">How It Works</Link></li>
           <li><Link href="/faq">FAQ</Link></li>
           <li><Link href="/contact">Contact</Link></li>

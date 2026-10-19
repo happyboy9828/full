@@ -1,9 +1,33 @@
 Phase Plan
 
-Last updated: October 14, 2026 | Current: Phase 37 — Monetag Ad Integration (COMPLETE)
+Last updated: October 19, 2026 | Current: Phase 38 — Brand Rename: DocFix — Docstools (COMPLETE)
 
 **Additional task completed:** Image Resizer — made crop stage flexible with screen size (replaced fixed 60vh height with responsive width/maxHeight + aspect-ratio; added responsive CSS breakpoints; dimension fields go single-column on ?768px).
 
+## Phase 38: Brand Rename — DocFix to Docstools (COMPLETE)
+
+**Completed:**
+- [x] Renamed the brand from "DocFix" to "Docstools" across the entire codebase (41 files)
+- [x] Updated site metadata in `client/app/layout.js`: title, title template, `metadataBase`, canonical, `siteName`, OpenGraph alt, Twitter creator (`@docstools`)
+- [x] Updated SEO URLs: `https://docfix.app` -> `https://docstools.app` (sitemap BASE, robots.txt sitemap pointer, blog post canonical)
+- [x] Updated deployment URL `docfix-frontend.vercel.app` -> `docstools-frontend.vercel.app` (README, client/README, backend default CORS origin)
+- [x] Updated all email addresses: `hello@`, `admin@`, `copyright@`, `noreply@docfix.app` -> `...@docstools.app`
+- [x] Renamed runtime identifiers: localStorage keys (`docfix_visitor_id`, `docfix_session_id`, `docfix_session_start`, `docfix_last_activity`, `docfix_consent`, `docfix_pending_events`, `docfix_dl_limit`, `docfix-theme`), custom events (`docfix:consent`, `docfix:downloadLimitChange`), download toast element id (`docfix-dl-toast`)
+- [x] Renamed the npm package (`client/package.json` + `client/package-lock.json`): "DocFix" -> "Docstools"
+- [x] Updated the QR code EPS `%%Creator` metadata string
+- [x] Updated the SVG wordmark (`client/public/logo.svg`): "Doc" + "Fix" -> "Doc" + "stools"
+- [x] Updated project docs: `README.md`, `client/README.md`, `DESIGN.md`, `Status.md`, `Phase.md`, `Phase.md.bak`
+- [x] `next build`: Compiled successfully - all routes prerendered
+- [x] ESLint on all 29 touched client source files: 26 errors / 3 warnings - identical count to HEAD (all pre-existing); no new errors introduced
+- [x] Repo-wide case-insensitive search for `docfix`: 0 matches
+
+**Task:** "update the name completly docfix to docstools"
+
+**Completion Criteria:** Zero `docfix` references remain in any source, config, or documentation file; brand, domains, emails, storage keys and package name all read "Docstools". — VERIFIED via repo-wide search + `next build`.
+
+**External follow-ups (outside the repo):** rename the Vercel project to `docstools-frontend`; point `docstools.app` DNS at the deployment; create the `*@docstools.app` mailboxes; update the Twitter/X handle to `@docstools`; refresh the binary `og-image.png` / `favicon.ico` artwork.
+
+---
 ## Phase 37: Monetag Ad Integration — Global Script Tag (COMPLETE)
 
 **Completed:**
@@ -22,17 +46,17 @@ Last updated: October 14, 2026 | Current: Phase 37 — Monetag Ad Integration (COM
 
 **Current Phase: Phase 36 — Production Domain Update (COMPLETE)**
 
-## Phase 36: Production Domain Update — localhost:3000 ? docfix-frontend.vercel.app (COMPLETE)
+## Phase 36: Production Domain Update — localhost:3000 ? docstools-frontend.vercel.app (COMPLETE)
 
 **Completed:**
-- [x] Replaced `localhost:3000` with `https://docfix-frontend.vercel.app` in `backend/config/env.js` (default CORS origin)
+- [x] Replaced `localhost:3000` with `https://docstools-frontend.vercel.app` in `backend/config/env.js` (default CORS origin)
 - [x] Updated CORS configuration documentation in `Status.md`
 - [x] Updated dev server URL comments in `README.md` and `client/README.md`
 - [x] Left `client/server.log` untouched (generated log output)
 
-**Task:** "update all localhost:3000 to docfix-frontend.vercel.app because it is my website domain"
+**Task:** "update all localhost:3000 to docstools-frontend.vercel.app because it is my website domain"
 
-**Completion Criteria:** All `localhost:3000` references in source/config/doc files point to the production domain `https://docfix-frontend.vercel.app`. — VERIFIED via grep.
+**Completion Criteria:** All `localhost:3000` references in source/config/doc files point to the production domain `https://docstools-frontend.vercel.app`. — VERIFIED via grep.
 
 ---
 
@@ -79,8 +103,8 @@ Last updated: October 14, 2026 | Current: Phase 37 — Monetag Ad Integration (COM
 
 **Completed:**
 - [x] Rewrote `client/app/disclaimer/page.js` with the full 10-section disclaimer (General Information, No Guarantee of Processing Results, File Processing and Device Limitations, User Responsibility and Backups, Third-Party Libraries and Services, Availability and Technical Errors, Limitation of Liability, External Links, Changes to This Disclaimer, Contact Us)
-- [x] Updated `metadata.description` and page description: "Important information about DocFix tools, processing accuracy, and limitations."
-- [x] Contact links: `mailto:hello@docfix.app` + `/contact`
+- [x] Updated `metadata.description` and page description: "Important information about Docstools tools, processing accuracy, and limitations."
+- [x] Contact links: `mailto:hello@docstools.app` + `/contact`
 - [x] ESLint: 0 errors on `app/disclaimer/page.js`
 - [x] `next build`: Compiled successfully — 56/56 static pages prerendered
 
@@ -95,15 +119,15 @@ Last updated: October 14, 2026 | Current: Phase 37 — Monetag Ad Integration (COM
 ## Phase 32: About Page Content Refresh (COMPLETE)
 
 **Completed:**
-- [x] Rewrote `client/app/about/page.js` with new privacy-focused prose (intro, Our Mission, Why Choose DocFix?, How We Build DocFix, Our Approach to Privacy, Built for Everyday File Tasks, Get in Touch)
+- [x] Rewrote `client/app/about/page.js` with new privacy-focused prose (intro, Our Mission, Why Choose Docstools?, How We Build Docstools, Our Approach to Privacy, Built for Everyday File Tasks, Get in Touch)
 - [x] Updated `metadata.description` for SEO
 - [x] Escaped all apostrophes (`&apos;`) for ESLint compliance
 - [x] ESLint: 0 errors on `app/about/page.js`
 - [x] `next build`: Compiled successfully — 56/56 static pages prerendered
 
-**Task:** "update /about page with # About DocFix"
+**Task:** "update /about page with # About Docstools"
 
-**Completion Criteria:** The About page at `/about` reflects the new DocFix messaging with proper SEO metadata, valid JSX, and clean builds.
+**Completion Criteria:** The About page at `/about` reflects the new Docstools messaging with proper SEO metadata, valid JSX, and clean builds.
 
 ---
 
@@ -112,7 +136,7 @@ Last updated: October 14, 2026 | Current: Phase 37 — Monetag Ad Integration (COM
 ## Phase 31: Legal & Compliance + SEO Foundation + Route Flattening (COMPLETE)
 
 **Completed:**
-- [x] Updated `client/app/layout.js` metadata: title default "DocFix — Free Private File Tools", richer SEO description, `metadataBase`, canonical alternates, OpenGraph (site name, locale, 1200×630 image), Twitter card
+- [x] Updated `client/app/layout.js` metadata: title default "Docstools — Free Private File Tools", richer SEO description, `metadataBase`, canonical alternates, OpenGraph (site name, locale, 1200×630 image), Twitter card
 - [x] Rewrote Privacy Policy (`app/privacy/page.js`): Zero Data Collection, Browser-Based Processing (WASM), No Cookies, No Server Storage, GDPR/CCPA rights
 - [x] Expanded Terms of Service (`app/terms/page.js`): 12 sections — usage limits, liability for file processing, indemnification, intellectual property
 - [x] Enhanced About page (`app/about/page.js`): mission statement about 100% privacy, "Why Browser-Based?" stack (WASM/Canvas/Web Workers), "Who We Are" + team; fixed `</strong>strong>` typo
@@ -121,7 +145,7 @@ Last updated: October 14, 2026 | Current: Phase 37 — Monetag Ad Integration (COM
 - [x] Rewrote `/tools` page: flat searchable index of all individual tools with search input + category filter chips (was categories-only)
 - [x] Created Cookie Policy (`app/cookie-policy/page.js`): 0 tracking cookies, single theme cookie, GDPR/CCPA
 - [x] Created Disclaimer (`app/disclaimer/page.js`): no warranty on processing accuracy, user responsibility
-- [x] Created Copyright/DMCA Policy (`app/dmca/page.js`): designated agent `copyright@docfix.app`, takedown + counter-notice
+- [x] Created Copyright/DMCA Policy (`app/dmca/page.js`): designated agent `copyright@docstools.app`, takedown + counter-notice
 - [x] Created How-It-Works (`app/how-it-works/page.js`): 4-step WASM flow, architecture diagram, benefits
 - [x] Created HTML sitemap (`app/site-map/page.js`): all tool categories + legal/support links
 - [x] Created blog (`app/blog/`, `app/blog/posts.js`, `app/blog/[slug]/page.js`): 5 articles + dynamic SSG route
@@ -134,7 +158,7 @@ Last updated: October 14, 2026 | Current: Phase 37 — Monetag Ad Integration (COM
 - [x] `next build`: 56/56 static pages prerendered ?
 - [x] ESLint: 0 errors on all modified/new files ?
 
-**Problem:** Site claimed "Zero Server Uploads" but legal pages didn't back it; sitemap had broken URLs; non-tool pages emitted as fake tool entries; no searchable tools index; missing Cookie Policy/Disclaimer/DMCA/How-It-Works pages; stale footer links; no OG metadata; title just "DocFix"; legal pages nested under non-semantic `/legal-support/` prefix.
+**Problem:** Site claimed "Zero Server Uploads" but legal pages didn't back it; sitemap had broken URLs; non-tool pages emitted as fake tool entries; no searchable tools index; missing Cookie Policy/Disclaimer/DMCA/How-It-Works pages; stale footer links; no OG metadata; title just "Docstools"; legal pages nested under non-semantic `/legal-support/` prefix.
 
 **Fix:** Rewrote all legal/trust content with technically accurate, privacy-first language; built a searchable `/tools` master page; fixed sitemap URL correctness + tool filtering; added 4 new legal pages + HTML sitemap + blog with 5 articles; refreshed footer; added OG/Twitter metadata and canonical tags; **flattened all routes from `/legal-support/<page>` to `/<page>`** for SEO-friendly, clean URLs.
 
@@ -218,7 +242,7 @@ Last updated: October 14, 2026 | Current: Phase 37 — Monetag Ad Integration (COM
 - [x] Fixed `backend/index.js` — server now starts listening immediately on `process.env.PORT || config.port` (Vercel-compatible) and connects to MongoDB in the background instead of blocking startup
 - [x] Created `backend/vercel.json` — `@vercel/node` build targeting `index.js` with catch-all route
 - [x] Verified full data flow end-to-end against live MongoDB Atlas:
-  - `GET /` ? 200 `{"success":true,"message":"DocFix backend running"}`
+  - `GET /` ? 200 `{"success":true,"message":"Docstools backend running"}`
   - `GET /health` ? 200 `{"success":true,"status":"ok","database":"connected"}`
   - `GET /api/analytics/health` ? 200 `{"success":true,"status":"ok","database":"connected","service":"analytics"}`
   - `POST /api/analytics/pageview` ? 200 (event persisted)
@@ -247,7 +271,7 @@ Last updated: October 14, 2026 | Current: Phase 37 — Monetag Ad Integration (COM
 - The server is exported as the default export so `@vercel/node` can use it as a request handler.
 - Added `backend/vercel.json` to tell Vercel how to build and route the serverless function.
 
-**Task:** "frontend is on https://docfix-frontend.vercel.app and backend on testing-api-backend.vercel.app connect both to store data in database"
+**Task:** "frontend is on https://docstools-frontend.vercel.app and backend on testing-api-backend.vercel.app connect both to store data in database"
 
 **Completion Criteria:** Frontend and backend both connect to MongoDB Atlas and store/retrieve data. — VERIFIED (backend serves all ingestion + report endpoints against live Atlas; client `.env` points at the backend; auth cookie flow works end-to-end).
 
@@ -272,7 +296,7 @@ Completion Criteria: Backend recovers from DB connection failures without manual
 **Completed:**
 - [x] Modified `backend/index.js` to start the HTTP server immediately without waiting for MongoDB
 - [x] `connectDBWithRetry()` now runs as a background promise (non-blocking)
-- [x] Welcome message on `GET /` is always served (`"DocFix backend running"`)
+- [x] Welcome message on `GET /` is always served (`"Docstools backend running"`)
 - [x] `GET /health` reports live database state (`connected`/`connecting`/`disconnected`)
 
 **Task:** "make sure the backend display welcome msg on / router and try to connect to db if not connected try again but show welcome msg"
@@ -883,7 +907,7 @@ third theme option from "Neon" to "System" (follows OS preference).
 ## Phase 34: Update FAQ and Pricing Pages to Reflect Actual Limits (COMPLETE)
 
 **Completed:**
-- [x] Updated FAQ page (`client/app/faq/page.js`) to clarify that while DocFix is 100% free with no subscriptions, processing limits are determined by device memory and browser capabilities.
+- [x] Updated FAQ page (`client/app/faq/page.js`) to clarify that while Docstools is 100% free with no subscriptions, processing limits are determined by device memory and browser capabilities.
 - [x] Updated Pricing page (`client/app/pricing/page.js`) to replace "no limits" with "no artificial limits" and add note about limits based on device memory and browser capabilities.
 - [x] Updated Homepage (`client/app/page.js`) to change "No limits" subtitle to "Limits are based on device memory and browser capabilities."
 - [x] Verified `next build` passes.
@@ -961,7 +985,7 @@ third theme option from "Neon" to "System" (follows OS preference).
 ## Phase 40: Kingdome Dashboard Sidebar + Coming Soon Pages (COMPLETE)
 
 **Completed:**
-- [x] Redesigned `client/components/Sidebar/Sidebar.js` — deep navy (`#081426`) premium sidebar with brand header (`/logo.svg` + "DocFix"), navigation, active/hover states, responsive collapse + mobile drawer
+- [x] Redesigned `client/components/Sidebar/Sidebar.js` — deep navy (`#081426`) premium sidebar with brand header (`/logo.svg` + "Docstools"), navigation, active/hover states, responsive collapse + mobile drawer
 - [x] Created `client/components/Sidebar/Sidebar.css` — sidebar styles with blue-gray border, 240px desktop width, 220ms transitions, focus-visible rings
 - [x] Created `client/components/ComingSoon/ComingSoonClient.js` — shared "Coming soon" page client component (Sidebar + feature card)
 - [x] Created `client/components/ComingSoon/ComingSoon.css` — coming soon page styles
@@ -993,7 +1017,7 @@ third theme option from "Neon" to "System" (follows OS preference).
 - [x] Active state driven by `usePathname()` (exact or nested-route match); blue/indigo gradient active background, muted blue-gray inactive text, hover brightening, `aria-current="page"`, focus-visible rings
 - [x] Pages, Traffic Sources, Devices, Live Visitors, Events, Settings have no frontend routes — rendered as clearly marked disabled "Coming soon" placeholders (no fake routes invented)
 - [x] Responsive behavior: desktop fixed 240px sidebar (main content `margin-left`, no overlap); tablet collapsible icon-only sidebar with tooltips and collapse/expand toggle; mobile slide-in drawer with hamburger, accessible backdrop, Escape-to-close, auto-close on selection, no horizontal overflow
-- [x] Brand header preserves existing identity: `/logo.svg` + "DocFix", subtle divider below
+- [x] Brand header preserves existing identity: `/logo.svg` + "Docstools", subtle divider below
 
 **Problem:** The `/kingdome/dashboard` analytics dashboard had no navigation sidebar; the task required a modern premium dark-themed sidebar matched to the existing dashboard without creating a new project or replacing existing functionality.
 

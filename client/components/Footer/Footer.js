@@ -62,7 +62,7 @@ export default function Footer() {
     <footer className="tool-footer" role="contentinfo">
       <div className="tool-footer-inner">
         <div className="tool-footer-brand">
-          <Link href="/" className="tool-footer-logo" aria-label="DocFix — home">
+          <Link href="/" className="tool-footer-logo" aria-label="Docstools — home">
             <Logo className="tool-footer-logo-mark" />
           </Link>
           <p className="tool-footer-tag">
@@ -117,7 +117,7 @@ export default function Footer() {
       </div>
 
       <div className="tool-footer-meta">
-        <span>© {year} DocFix</span>
+        <span>© {year} Docstools</span>
         <span className="tool-footer-sep" aria-hidden="true">
           •
         </span>

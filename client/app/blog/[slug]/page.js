@@ -1,4 +1,4 @@
-﻿import { notFound } from "next/navigation";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import { blogPosts } from "../posts";
 import ContentPage from "../../../components/ContentPage/ContentPage";
@@ -16,7 +16,7 @@ export function generateMetadata({ params }) {
     title: post.title,
     description: post.excerpt,
     alternates: {
-      canonical: `https://docfix.app/blog/${post.slug}`,
+      canonical: `https://docstools.app/blog/${post.slug}`,
     },
     openGraph: {
       title: post.title,
@@ -51,7 +51,7 @@ const postContent = {
       {
         title: "Why Browser-Based Matters",
         content:
-          "Tools like DocFix process your image entirely in your browser using WebAssembly. Your file never touches a server, which means it is both faster (no upload wait) and more private (no one can see your data).",
+          "Tools like Docstools process your image entirely in your browser using WebAssembly. Your file never touches a server, which means it is both faster (no upload wait) and more private (no one can see your data).",
       },
     ],
   },
@@ -72,7 +72,7 @@ const postContent = {
       {
         title: "Converting Without Uploads",
         content:
-          "Use DocFix&apos;s WebP ⇄ PNG Converter to switch formats instantly in your browser — no server, no waiting, no privacy risk.",
+          "Use Docstools&apos; WebP ⇄ PNG Converter to switch formats instantly in your browser — no server, no waiting, no privacy risk.",
       },
     ],
   },
@@ -104,7 +104,7 @@ const postContent = {
       {
         title: "Step 1: Remove the Background",
         content:
-          "Upload your JPG to a background removal tool (like DocFix&apos;s Image Resizer) to isolate the subject. The background will be replaced with transparency.",
+          "Upload your JPG to a background removal tool (like Docstools&apos; Image Resizer) to isolate the subject. The background will be replaced with transparency.",
       },
       {
         title: "Step 2: Convert to PNG",

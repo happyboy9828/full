@@ -1,16 +1,16 @@
-﻿import ContentPage from "../../components/ContentPage/ContentPage";
+import ContentPage from "../../components/ContentPage/ContentPage";
 
 export const metadata = {
   title: "Terms of Service",
   description:
-    "Terms and conditions for using DocFix. By using our browser-only file tools you agree to these terms.",
+    "Terms and conditions for using Docstools. By using our browser-only file tools you agree to these terms.",
 };
 
 export default function TermsPage() {
   return (
     <ContentPage
       title="Terms of Service"
-      description="The rules and guidelines for using DocFix."
+      description="The rules and guidelines for using Docstools."
       eyebrow="Terms"
     >
       <div className="prose">
@@ -20,15 +20,15 @@ export default function TermsPage() {
 
         <h2>1. Acceptance of Terms</h2>
         <p>
-          By accessing or using DocFix ("Service"), you agree to these Terms of Service. If you do not agree, please discontinue use of the Service.
+          By accessing or using Docstools ("Service"), you agree to these Terms of Service. If you do not agree, please discontinue use of the Service.
         </p>
         <p>
-          DocFix ("we", "us", or "our") refers to the operator of the DocFix website and its associated tools.
+          Docstools ("we", "us", or "our") refers to the operator of the Docstools website and its associated tools.
         </p>
 
         <h2>2. Eligibility and Permitted Use</h2>
         <p>
-          You may use DocFix for lawful personal or commercial purposes, subject to these Terms and applicable laws.
+          You may use Docstools for lawful personal or commercial purposes, subject to these Terms and applicable laws.
         </p>
         <p>
           You agree not to:
@@ -44,15 +44,15 @@ export default function TermsPage() {
 
         <h2>3. License</h2>
         <p>
-          Subject to your compliance with these Terms, we grant you a limited, non-exclusive, non-transferable, and revocable license to access and use DocFix for personal and commercial purposes.
+          Subject to your compliance with these Terms, we grant you a limited, non-exclusive, non-transferable, and revocable license to access and use Docstools for personal and commercial purposes.
         </p>
         <p>
-          This license does not transfer ownership of DocFix's software, branding, website content, or other intellectual property to you.
+          This license does not transfer ownership of Docstools' software, branding, website content, or other intellectual property to you.
         </p>
 
         <h2>4. Daily Download Limits and Fair Use</h2>
         <p>
-          DocFix may impose a daily download limit of <strong>10 downloads per user per day</strong> to help maintain fair access and service availability.
+          Docstools may impose a daily download limit of <strong>10 downloads per user per day</strong> to help maintain fair access and service availability.
         </p>
         <p>
           Where this limit is enabled:
@@ -73,7 +73,7 @@ export default function TermsPage() {
 
         <h2>5. File Processing and Your Responsibilities</h2>
         <p>
-          DocFix provides tools for processing files and documents. Depending on the specific tool, processing may occur locally in your browser or through a server or third-party service.
+          Docstools provides tools for processing files and documents. Depending on the specific tool, processing may occur locally in your browser or through a server or third-party service.
         </p>
         <p>
           You are responsible for ensuring that you have the legal right to use the files you process and that your use complies with applicable laws.
@@ -82,15 +82,15 @@ export default function TermsPage() {
           You should retain a backup of important files before processing them. You are also responsible for reviewing downloaded results to ensure they meet your needs before relying on them.
         </p>
         <p>
-          For tools that process files entirely in your browser, the files are not uploaded to DocFix servers for processing. Other tools may handle files differently, as described in the relevant tool information and our Privacy Policy.
+          For tools that process files entirely in your browser, the files are not uploaded to Docstools servers for processing. Other tools may handle files differently, as described in the relevant tool information and our Privacy Policy.
         </p>
         <p>
-          Do not use DocFix to process or distribute content unlawfully or to infringe intellectual property, privacy, or other rights.
+          Do not use Docstools to process or distribute content unlawfully or to infringe intellectual property, privacy, or other rights.
         </p>
 
         <h2>6. Accuracy and Service Disclaimer</h2>
         <p>
-          DocFix is provided on an "as is" and "as available" basis, to the fullest extent permitted by law.
+          Docstools is provided on an "as is" and "as available" basis, to the fullest extent permitted by law.
         </p>
         <p>
           We do not guarantee that the Service will always be available, uninterrupted, secure, or error-free, or that every issue will be corrected.
@@ -104,13 +104,13 @@ export default function TermsPage() {
 
         <h2>7. Limitation of Liability</h2>
         <p>
-          To the fullest extent permitted by applicable law, DocFix and its operators will not be liable for indirect, incidental, special, consequential, or punitive damages, or for loss of profits, revenue, business opportunities, or data arising from your use of or inability to use the Service.
+          To the fullest extent permitted by applicable law, Docstools and its operators will not be liable for indirect, incidental, special, consequential, or punitive damages, or for loss of profits, revenue, business opportunities, or data arising from your use of or inability to use the Service.
         </p>
         <p>
           Nothing in these Terms excludes or limits liability that cannot lawfully be excluded or limited.
         </p>
         <p>
-          To the fullest extent permitted by law, any remaining liability will be limited to the amount you paid, if any, to use DocFix during the 12 months preceding the event giving rise to the claim.
+          To the fullest extent permitted by law, any remaining liability will be limited to the amount you paid, if any, to use Docstools during the 12 months preceding the event giving rise to the claim.
         </p>
         <p>
           Some jurisdictions do not permit certain liability limitations. In those jurisdictions, our liability will be limited only to the extent legally permitted.
@@ -126,18 +126,18 @@ export default function TermsPage() {
 
         <h2>9. Intellectual Property</h2>
         <p>
-          DocFix's website, branding, design, software, original content, and associated materials are protected by applicable intellectual property laws.
+          Docstools' website, branding, design, software, original content, and associated materials are protected by applicable intellectual property laws.
         </p>
         <p>
-          Except where expressly permitted, you may not reproduce, distribute, modify, or commercially exploit DocFix's proprietary materials without prior authorization.
+          Except where expressly permitted, you may not reproduce, distribute, modify, or commercially exploit Docstools' proprietary materials without prior authorization.
         </p>
         <p>
-          You retain any rights you hold in files you process. Using DocFix does not transfer ownership of your files to us.
+          You retain any rights you hold in files you process. Using Docstools does not transfer ownership of your files to us.
         </p>
 
         <h2>10. Third-Party Services and Links</h2>
         <p>
-          DocFix may use or link to third-party websites, libraries, or services. These services may be subject to separate terms and privacy policies.
+          Docstools may use or link to third-party websites, libraries, or services. These services may be subject to separate terms and privacy policies.
         </p>
         <p>
           We do not control independent third-party services and are not responsible for their content, availability, or practices, except where applicable law provides otherwise.
@@ -145,7 +145,7 @@ export default function TermsPage() {
 
         <h2>11. Suspension and Service Changes</h2>
         <p>
-          We may modify, suspend, or discontinue all or part of DocFix, temporarily or permanently, for operational, technical, security, or business reasons.
+          We may modify, suspend, or discontinue all or part of Docstools, temporarily or permanently, for operational, technical, security, or business reasons.
         </p>
         <p>
           We may restrict access when we reasonably believe that a user has violated these Terms, abused the Service, or created a risk to its security or availability.
@@ -156,7 +156,7 @@ export default function TermsPage() {
 
         <h2>12. Governing Law and Disputes</h2>
         <p>
-          These Terms are subject to the laws of the jurisdiction applicable to the operator of DocFix, without regard to conflict-of-law principles, except where mandatory local law provides otherwise.
+          These Terms are subject to the laws of the jurisdiction applicable to the operator of Docstools, without regard to conflict-of-law principles, except where mandatory local law provides otherwise.
         </p>
         <p>
           Disputes will be handled by the courts or other dispute-resolution bodies with appropriate jurisdiction under applicable law.
@@ -167,7 +167,7 @@ export default function TermsPage() {
 
         <h2>13. Changes to These Terms</h2>
         <p>
-          We may update these Terms to reflect changes to DocFix, its features, usage limits, or legal requirements.
+          We may update these Terms to reflect changes to Docstools, its features, usage limits, or legal requirements.
         </p>
         <p>
           The updated version will be published on this page with a revised "Last updated" date. Where required by law, we will provide notice or obtain consent for material changes.
@@ -181,13 +181,13 @@ export default function TermsPage() {
           If you have questions about these Terms, please contact us:
         </p>
         <p>
-          <strong>Email:</strong> <a href="mailto:hello@docfix.app">hello@docfix.app</a>
+          <strong>Email:</strong> <a href="mailto:hello@docstools.app">hello@docstools.app</a>
         </p>
         <p>
           <strong>Contact page:</strong> <a href="/contact">/contact</a>
         </p>
         <p>
-          Thank you for using DocFix.
+          Thank you for using Docstools.
         </p>
       </div>
     </ContentPage>

@@ -1,7 +1,7 @@
 # Plan: Fix 404s for root-level marketing/legal pages
 
 ## Goal
-Eliminate the `?_rsc` 404s on `docfix-frontend.vercel.app` for `/about`, `/blog`, `/contact`, `/docs`, `/faq`, `/terms`, `/privacy` by providing root-level `app/<route>/page.js` pages.
+Eliminate the `?_rsc` 404s on `docstools-frontend.vercel.app` for `/about`, `/blog`, `/contact`, `/docs`, `/faq`, `/terms`, `/privacy` by providing root-level `app/<route>/page.js` pages.
 
 ## Root cause
 The page **content** already exists at `app/legal-support/<route>/page.js`, but every consumer addresses these routes at **root level**:

@@ -7,7 +7,7 @@ const router = Router();
 router.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "DocFix backend running",
+    message: "Docstools backend running",
   });
 });
 

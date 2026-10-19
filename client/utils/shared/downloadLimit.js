@@ -1,5 +1,5 @@
 /* Download limit tracker — a per-browser, UTC-midnight calendar-day counter.
-   Because DocFix is a zero-backend, browser-only app, "per user" maps to
+   Because Docstools is a zero-backend, browser-only app, "per user" maps to
    "per browser". The counter lives in localStorage and resets automatically
    at 00:00 UTC when the calendar day changes.
 
@@ -12,10 +12,10 @@
       resetDownloadLimit()       → force a reset (testing / manual)
   */
 
-const STORAGE_KEY = "docfix_dl_limit";
+const STORAGE_KEY = "docstools_dl_limit";
 export const DAILY_LIMIT = 10;
 
-const EVENT = "docfix:downloadLimitChange";
+const EVENT = "docstools:downloadLimitChange";
 
 /* ---------- storage helpers ---------- */
 

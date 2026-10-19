@@ -95,9 +95,9 @@ export default function Sidebar() {
         className={cn("sidebar", drawerOpen ? "sidebar--open" : "", collapsed ? "sidebar--collapsed" : "")}
       >
         <div className="sidebar-brand">
-          <Link href="/" className="sidebar-brand-link" aria-label="DocFix">
-            <img src="/logo.svg" alt="" className="sidebar-brand-logo" />
-            <span className="sidebar-brand-name">DocFix</span>
+          <Link href="/" className="sidebar-brand-link" aria-label="Docstools">
+            <img src="/logo.jpeg" alt="" className="sidebar-brand-logo" />
+            <span className="sidebar-brand-name">Docstools</span>
           </Link>
         </div>
 

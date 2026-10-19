@@ -76,7 +76,7 @@ Last updated: October 12, 2026 | Current: Phase 30 — Mobile Carousel Arrow Navig
 - [x] Fixed `backend/index.js` — server now starts listening immediately on `process.env.PORT || config.port` (Vercel-compatible) and connects to MongoDB in the background instead of blocking startup
 - [x] Created `backend/vercel.json` — `@vercel/node` build targeting `index.js` with catch-all route
 - [x] Verified full data flow end-to-end against live MongoDB Atlas:
-  - `GET /` ? 200 `{"success":true,"message":"DocFix backend running"}`
+  - `GET /` ? 200 `{"success":true,"message":"Docstools backend running"}`
   - `GET /health` ? 200 `{"success":true,"status":"ok","database":"connected"}`
   - `GET /api/analytics/health` ? 200 `{"success":true,"status":"ok","database":"connected","service":"analytics"}`
   - `POST /api/analytics/pageview` ? 200 (event persisted)
@@ -105,7 +105,7 @@ Last updated: October 12, 2026 | Current: Phase 30 — Mobile Carousel Arrow Navig
 - The server is exported as the default export so `@vercel/node` can use it as a request handler.
 - Added `backend/vercel.json` to tell Vercel how to build and route the serverless function.
 
-**Task:** "frontend is on https://docfix-frontend.vercel.app and backend on testing-api-backend.vercel.app connect both to store data in database"
+**Task:** "frontend is on https://docstools-frontend.vercel.app and backend on testing-api-backend.vercel.app connect both to store data in database"
 
 **Completion Criteria:** Frontend and backend both connect to MongoDB Atlas and store/retrieve data. — VERIFIED (backend serves all ingestion + report endpoints against live Atlas; client `.env` points at the backend; auth cookie flow works end-to-end).
 
@@ -130,7 +130,7 @@ Completion Criteria: Backend recovers from DB connection failures without manual
 **Completed:**
 - [x] Modified `backend/index.js` to start the HTTP server immediately without waiting for MongoDB
 - [x] `connectDBWithRetry()` now runs as a background promise (non-blocking)
-- [x] Welcome message on `GET /` is always served (`"DocFix backend running"`)
+- [x] Welcome message on `GET /` is always served (`"Docstools backend running"`)
 - [x] `GET /health` reports live database state (`connected`/`connecting`/`disconnected`)
 
 **Task:** "make sure the backend display welcome msg on / router and try to connect to db if not connected try again but show welcome msg"

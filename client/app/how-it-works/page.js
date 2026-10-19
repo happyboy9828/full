@@ -1,22 +1,22 @@
-﻿import ContentPage from "../../components/ContentPage/ContentPage";
+import ContentPage from "../../components/ContentPage/ContentPage";
 
 export const metadata = {
   title: "How It Works — 100% Browser-Based Processing",
   description:
-    "DocFix runs entirely in your browser using WebAssembly (WASM). No uploads, no servers, no data leaves your device.",
+    "Docstools runs entirely in your browser using WebAssembly (WASM). No uploads, no servers, no data leaves your device.",
 };
 
 export default function HowItWorksPage() {
   return (
     <ContentPage
       title="How It Works"
-      description="Everything you process stays on your device. Here's the technical flow behind DocFix."
+      description="Everything you process stays on your device. Here's the technical flow behind Docstools."
       eyebrow="Technology"
     >
       <div className="prose">
-        <h2>The DocFix Processing Flow</h2>
+        <h2>The Docstools Processing Flow</h2>
         <p>
-          Unlike traditional online file tools, DocFix never sends your files to a server. Here is
+          Unlike traditional online file tools, Docstools never sends your files to a server. Here is
           exactly what happens when you use any tool:
         </p>
 
@@ -44,7 +44,7 @@ export default function HowItWorksPage() {
         <h2>Why WebAssembly (WASM)?</h2>
         <p>
           WebAssembly (WASM) is a low-level binary format that runs in the browser at near-native
-          speed. DocFix uses WASM to perform computationally intensive tasks — such as image
+          speed. Docstools uses WASM to perform computationally intensive tasks — such as image
           encoding, PDF manipulation, and data compression — directly on your device without any
           server round-trips. Because WASM runs in a sandboxed environment inside your browser, it
           cannot access your file system or any server without your explicit permission.
@@ -53,7 +53,7 @@ export default function HowItWorksPage() {
         <h2>Architecture Diagram</h2>
         <pre className="tool-code">
 {`┌─────────────┐   ┌──────────────────────┐
-│  Your Device  │   │  The DocFix Website  │
+│  Your Device  │   │  The Docstools Website  │
 │  (Browser)    │   │  (No Backend)        │
 │               │   │                      │
 │  ┌─────────┐  │   │  ┌───────────────┐   │
@@ -73,7 +73,7 @@ export default function HowItWorksPage() {
         <h2>Benefits of Browser-Based Processing</h2>
         <ul>
           <li>
-            <strong>Privacy:</strong> Your files never leave your device. Not even DocFix can see
+            <strong>Privacy:</strong> Your files never leave your device. Not even Docstools can see
             them.
           </li>
           <li>
