@@ -17,11 +17,23 @@
   z-index: 100;
 }
 
+.navbar-logo-mark {
+  display: block;
+  height: 36px;
+  width: 36px;
+  object-fit: contain;
+}
+
 /* Logo */
 .navbar-logo a {
   font-size: 1.5rem;
   font-weight: bold;
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 32px;
+  width: auto;
   color: inherit;
 }
 
@@ -329,6 +341,11 @@
 
 .drawer-header .navbar-logo a {
   font-size: 1.3rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 32px;
+  width: auto;
 }
 
 /* Drawer Scrollable Body Container */

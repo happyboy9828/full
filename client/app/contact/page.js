@@ -27,8 +27,8 @@ export default function ContactPage() {
           <h3>Email Support</h3>
           <p>
             For general questions, technical support, suggestions, or other inquiries, contact us at{" "}
-            <a href="mailto:hello@docstools.app" className="contact-email">
-              hello@docstools.app
+            <a href="mailto:darkdevils702@gmail.com" className="contact-email">
+              darkdevils702@gmail.com
             </a>.
           </p>
         </div>
@@ -77,8 +77,8 @@ export default function ContactPage() {
             <strong>The Docstools Team</strong>
           </p>
           <p className="contact-signoff-email">
-            <a href="mailto:hello@docstools.app" className="contact-email">
-              hello@docstools.app
+            <a href="mailto:darkdevils702@gmail.com" className="contact-email">
+              darkdevils702@gmail.com
             </a>
           </p>
         </div>

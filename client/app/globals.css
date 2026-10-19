@@ -199,8 +199,8 @@ body {
 .tool-footer-logo:hover { opacity: 0.85; }
 .tool-footer-logo-mark {
   display: block;
-  height: 30px;
-  width: auto;
+  height: 150px;
+  width: 200px;
 }
 .tool-footer-tag {
   margin: 0;

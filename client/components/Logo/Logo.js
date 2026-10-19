@@ -4,7 +4,6 @@ export default function Logo({ className, alt = "Docstools" }) {
       src="/logo.jpeg"
       alt={alt}
       className={className}
-      style={{ height: "100%", width: "auto", objectFit: "contain" }}
     />
   );
 }

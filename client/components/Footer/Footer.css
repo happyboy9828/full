@@ -1,0 +1,11 @@
+/* Footer.css — footer-specific styles */
+.tool-footer-logo {
+  --footer-logo-size: 40px;
+}
+
+.tool-footer-logo-mark {
+  display: block;
+  height:150px;
+  width: 200px;
+  object-fit: contain;
+}

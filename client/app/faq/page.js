@@ -75,11 +75,11 @@ const faqData = [
       },
       {
         q: "The tool isn&apos;t working. What should I do?",
-        a: "Try refreshing the page first. If the issue persists, clear your browser cache and ensure you&apos;re using an up-to-date browser. Still stuck? Email hello@docstools.app with your browser version and a description of the issue.",
+        a: "Try refreshing the page first. If the issue persists, clear your browser cache and ensure you&apos;re using an up-to-date browser. Still stuck? Email darkdevils702@gmail.com with your browser version and a description of the issue.",
       },
       {
         q: "Can I report a bug or suggest a feature?",
-        a: "Absolutely. We welcome feedback (and even feature requests for new tools). Use our contact form or email hello@docstools.app — we read every message.",
+        a: "Absolutely. We welcome feedback (and even feature requests for new tools). Use our contact form or email darkdevils702@gmail.com — we read every message.",
       },
     ],
   },

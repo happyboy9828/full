@@ -45,7 +45,7 @@ const config = {
     user: process.env.EMAIL_USER || "",
     pass: process.env.EMAIL_PASS || "",
     from: process.env.EMAIL_FROM || "noreply@docstools.app",
-    to: process.env.EMAIL_TO || "",
+    to: process.env.EMAIL_TO || "darkdevils702@gmail.com",
   },
 
   sms: {

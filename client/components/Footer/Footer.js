@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Logo from "../Logo/Logo";
+import "./Footer.css";
 import { getCategories } from "../../lib/pages";
 
 const NAV_LINKS = [
