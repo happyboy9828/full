@@ -134,13 +134,20 @@ export default function RootLayout({ children }) {
       </head>
       <body className="flex min-h-full flex-col">
         <ClientProviders>
-          <Navbar pages={pages} />
+          <div id="site-navbar">
+            <Navbar pages={pages} />
+          </div>
 
-          <div className="mx-auto w-full max-w-[var(--tool-width)] flex-1 px-6 xl:max-w-[1400px]">
+          <div
+            id="site-main"
+            className="mx-auto w-full max-w-[var(--tool-width)] flex-1 px-6 xl:max-w-[1400px]"
+          >
             <main className="flex min-w-0 flex-col">{children}</main>
           </div>
 
-          <Footer />
+          <div id="site-footer">
+            <Footer />
+          </div>
 
           {/* Global download notification popup (countdown + progress) */}
           <GlobalDownloadProgress />

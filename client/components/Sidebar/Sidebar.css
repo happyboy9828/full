@@ -18,8 +18,6 @@
   --sidebar-bg-hover: #143054;
   --sidebar-active-bg: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
   --sidebar-active-text: #FFFFFF;
-  --sidebar-badge-bg: #1E3A5F;
-  --sidebar-badge-text: #93C5FD;
 
   --sidebar-transition: 220ms ease;
 }
@@ -284,19 +282,7 @@
   flex-shrink: 1;
 }
 
-.sidebar-item-badge {
-  margin-left: auto;
-  padding: 2px 8px;
-  border-radius: 999px;
-  background: var(--sidebar-badge-bg);
-  color: var(--sidebar-badge-text);
-  font-size: 11px;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.sidebar--collapsed .sidebar-item-label,
-.sidebar--collapsed .sidebar-item-badge {
+.sidebar--collapsed .sidebar-item-label {
   display: none;
 }
 .sidebar--collapsed .sidebar-item {

@@ -29,9 +29,23 @@ const config = {
     maxAge: ONE_DAY,
   },
 
+  // --- Admin authentication -------------------------------------------------
+  // Legacy single-operator account (password-only login, superadmin role).
   adminPassword: process.env.ADMIN_PASSWORD || "kingdom",
   adminPasswordHash: process.env.ADMIN_PASSWORD_HASH || "",
+  // Absolute session lifetime (hard cap).
   adminSessionTtlMs: Number(process.env.ADMIN_SESSION_TTL_DAYS || 7) * ONE_DAY,
+  // Idle timeout — the session expiry slides forward while the user is active.
+  adminSessionIdleMs: Number(process.env.ADMIN_SESSION_IDLE_HOURS || 24) * 60 * 60 * 1000,
+  // Brute-force protection.
+  adminMaxLoginAttempts: Number(process.env.ADMIN_MAX_LOGIN_ATTEMPTS || 5),
+  adminLockoutMs: Number(process.env.ADMIN_LOCKOUT_MINUTES || 15) * 60 * 1000,
+  // Seed credentials for the bootstrap super admin.
+  adminBootstrapEmail: process.env.ADMIN_BOOTSTRAP_EMAIL || "admin@docstools.app",
+  adminBootstrapName: process.env.ADMIN_BOOTSTRAP_NAME || "Super Administrator",
+  adminBootstrapPassword: process.env.ADMIN_BOOTSTRAP_PASSWORD || "",
+  // Audit trail retention (days).
+  adminActivityRetentionDays: Number(process.env.ADMIN_ACTIVITY_RETENTION_DAYS || 90),
 
   trackRateLimit: Number(process.env.TRACK_RATE_LIMIT) || 100,
   trackRateWindowMs: Number(process.env.TRACK_RATE_WINDOW_MS) || 60_000,

@@ -17,10 +17,8 @@ const DashboardClient = dynamic(() => import("./DashboardClient"), {
 
 export default function DashboardPage() {
   return (
-    <div className="dashboard-page">
-      <Suspense fallback={<div className="dashboard-loading"><div className="loading-spinner"></div></div>}>
-        <DashboardClient />
-      </Suspense>
-    </div>
+    <Suspense fallback={<div className="dashboard-loading"><div className="loading-spinner"></div></div>}>
+      <DashboardClient />
+    </Suspense>
   );
 }

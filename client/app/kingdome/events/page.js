@@ -1,10 +1,9 @@
-"use client";
+﻿"use client";
 
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
-import { MousePointerClick } from "lucide-react";
 
-const EventsClient = dynamic(() => import("@/components/ComingSoon/ComingSoonClient"), {
+const EventsModule = dynamic(() => import("@/components/AdminReports/EventsModule"), {
   ssr: false,
   loading: () => (
     <div className="dashboard-shell">
@@ -18,10 +17,8 @@ const EventsClient = dynamic(() => import("@/components/ComingSoon/ComingSoonCli
 
 export default function EventsPage() {
   return (
-    <div className="dashboard-page">
-      <Suspense fallback={<div className="dashboard-loading"><div className="loading-spinner"></div></div>}>
-        <EventsClient featureName="Events" Icon={MousePointerClick} />
-      </Suspense>
-    </div>
+    <Suspense fallback={<div className="dashboard-loading"><div className="loading-spinner"></div></div>}>
+      <EventsModule />
+    </Suspense>
   );
 }

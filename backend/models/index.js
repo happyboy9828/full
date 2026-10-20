@@ -4,5 +4,7 @@ export { default as Event } from "./Event.js";
 export { default as AdminSession } from "./AdminSession.js";
 export { default as Admin } from "./Admin.js";
 export { default as AdminOtp } from "./AdminOtp.js";
+export { default as AdminActivity } from "./AdminActivity.js";
+export { default as AppUser } from "./AppUser.js";
 export { default as DailyStats } from "./DailyStats.js";
 export { default as Feedback } from "./Feedback.js";

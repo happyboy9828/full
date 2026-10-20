@@ -1,43 +1,35 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import {
-  LayoutDashboard,
-  FileText,
-  ChartNoAxesCombined,
-  MonitorSmartphone,
-  Users,
-  MousePointerClick,
-  Settings,
   Menu,
   X,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
 
+import { useAuth } from "@/components/AuthProvider/AuthProvider";
+import { navItemsForPermissions } from "@/lib/adminNav";
+
 import "./Sidebar.css";
 
 const cn = (...classes) => classes.filter(Boolean).join("");
 
-// Navigation items in the required order. All destinations exist as routes:
-// Dashboard is the live analytics page; the rest are "Coming soon" pages.
-const NAV_ITEMS = [
-  { name: "Dashboard", href: "/kingdome/dashboard", icon: LayoutDashboard },
-  { name: "Pages", href: "/kingdome/pages", icon: FileText },
-  { name: "Traffic Sources", href: "/kingdome/traffic-sources", icon: ChartNoAxesCombined },
-  { name: "Devices", href: "/kingdome/devices", icon: MonitorSmartphone },
-  { name: "Live Visitors", href: "/kingdome/live-visitors", icon: Users },
-  { name: "Events", href: "/kingdome/events", icon: MousePointerClick },
-  { name: "Settings", href: "/kingdome/settings", icon: Settings },
-];
-
-export default function Sidebar() {
+export default function Sidebar({ items, sections }) {
   const pathname = usePathname();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+
+  // RBAC-aware navigation: hide entries the signed-in admin cannot use.
+  const { permissions } = useAuth();
+  const resolvedSections = useMemo(() => {
+    if (sections) return sections;
+    if (items) return [{ label: "Navigation", items }];
+    return navItemsForPermissions(permissions);
+  }, [sections, items, permissions]);
 
   // Never leave the sidebar collapsed on desktop breakpoints.
   useEffect(() => {
@@ -55,7 +47,7 @@ export default function Sidebar() {
       // Exact match or nested route (e.g. /kingdome/dashboard/reports).
       return pathname === href || pathname.startsWith(`${href}/`);
     },
-    [pathname],
+    [pathname]
   );
 
   const openDrawer = () => setDrawerOpen(true);
@@ -104,37 +96,35 @@ export default function Sidebar() {
         <div className="sidebar-divider" aria-hidden="true" />
 
         <nav className="sidebar-nav" aria-label="Dashboard navigation">
-          <span className="sidebar-section-label">Navigation</span>
-          <ul className="sidebar-list">
-            {NAV_ITEMS.map((item) => {
-              const active = isActive(item.href);
-              const comingSoon = item.href !== "/kingdome/dashboard";
-              const Icon = item.icon;
-              return (
-                <li key={item.name} className="sidebar-list-item">
-                  <Link
-                    href={item.href}
-                    className={cn("sidebar-item", active && "sidebar-item--active")}
-                    aria-current={active ? "page" : undefined}
-                    title={collapsed ? item.name : undefined}
-                    onClick={closeDrawer}
-                  >
-                    <div className="sidebar-item-icon" aria-hidden="true">
-                      <Icon size={20} strokeWidth={2} />
-                    </div>
-                    {!collapsed && (
-                      <>
-                        <span className="sidebar-item-label">{item.name}</span>
-                        {comingSoon && (
-                          <span className="sidebar-item-badge">Coming soon</span>
+          {resolvedSections.map((section) => (
+            <div key={section.label} className="sidebar-section">
+              <span className="sidebar-section-label">{section.label}</span>
+              <ul className="sidebar-list">
+                {section.items.map((item) => {
+                  const active = isActive(item.href);
+                  const Icon = item.icon;
+                  return (
+                    <li key={item.name} className="sidebar-list-item">
+                      <Link
+                        href={item.href}
+                        className={cn("sidebar-item", active && "sidebar-item--active")}
+                        aria-current={active ? "page" : undefined}
+                        title={collapsed ? item.name : undefined}
+                        onClick={closeDrawer}
+                      >
+                        <div className="sidebar-item-icon" aria-hidden="true">
+                          <Icon size={20} strokeWidth={2} />
+                        </div>
+                        {!collapsed && (
+                          <span className="sidebar-item-label">{item.name}</span>
                         )}
-                      </>
-                    )}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
         </nav>
 
         {/* Tablet: collapse/expand toggle for icon-only navigation. */}

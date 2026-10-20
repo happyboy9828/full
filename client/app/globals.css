@@ -1773,6 +1773,22 @@ details[open] .faq-q::after {
 }
 
 /* ---------- Dashboard (Kingdome) ---------- */
+
+/* The admin area (/kingdome/*) renders its own full-bleed shell: hide the
+   marketing navbar/footer and let the admin content use the whole viewport.
+   The marker element comes from app/kingdome/layout.js, so this is pure CSS
+   and applies on the very first paint. */
+body:has(#admin-route-marker) #site-navbar,
+body:has(#admin-route-marker) #site-footer {
+  display: none;
+}
+
+body:has(#admin-route-marker) #site-main {
+  max-width: none;
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .dashboard-page {
   padding: var(--tool-pad-top) var(--tool-pad-x) var(--tool-pad-bottom);
   min-height: 100vh;
@@ -2543,6 +2559,56 @@ details[open] .faq-q::after {
   color: #dc2626;
   font-size: 13px;
   text-align: center;
+}
+
+.login-notice {
+  padding: 12px 16px;
+  background: color-mix(in srgb, #22c55e 15%, transparent);
+  border: 1px solid color-mix(in srgb, #22c55e 30%, transparent);
+  border-radius: var(--tool-radius-sm);
+  color: #15803d;
+  font-size: 13px;
+  text-align: center;
+}
+
+.login-loading {
+  color: var(--tool-muted);
+  font-size: 14px;
+}
+
+/* Icon-prefixed inputs (email + password) */
+.login-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.login-input-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--tool-muted);
+  pointer-events: none;
+}
+
+.form-input--email {
+  padding: 14px 16px 14px 40px;
+}
+
+.form-input--password {
+  padding: 14px 48px 14px 40px;
+}
+
+.login-back-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: var(--tool-accent-text);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-back-link:hover {
+  text-decoration: underline;
 }
 
 .form-group {

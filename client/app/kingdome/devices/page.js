@@ -1,10 +1,9 @@
-"use client";
+﻿"use client";
 
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
-import { MonitorSmartphone } from "lucide-react";
 
-const DevicesClient = dynamic(() => import("@/components/ComingSoon/ComingSoonClient"), {
+const DevicesModule = dynamic(() => import("@/components/AdminReports/DevicesModule"), {
   ssr: false,
   loading: () => (
     <div className="dashboard-shell">
@@ -18,10 +17,8 @@ const DevicesClient = dynamic(() => import("@/components/ComingSoon/ComingSoonCl
 
 export default function DevicesPage() {
   return (
-    <div className="dashboard-page">
-      <Suspense fallback={<div className="dashboard-loading"><div className="loading-spinner"></div></div>}>
-        <DevicesClient featureName="Devices" Icon={MonitorSmartphone} />
-      </Suspense>
-    </div>
+    <Suspense fallback={<div className="dashboard-loading"><div className="loading-spinner"></div></div>}>
+      <DevicesModule />
+    </Suspense>
   );
 }

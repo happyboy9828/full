@@ -1,6 +1,70 @@
 # Status.md
 
-Last updated: 2026-10-19
+Last updated: 2026-10-20
+
+## Analytics Modules Implementation — Pages, Traffic Sources, Devices, Live Visitors, Events (COMPLETE)
+
+Five of the thirteen `/kingdome/*` routes were "Coming soon" placeholders even though the backend already exposed every report they needed. All five are now live, real modules driven by the existing `/api/analytics/reports/*` endpoints.
+
+### Files Created
+| File | Purpose |
+|------|---------|
+| `client/lib/reportParams.js` | Date-window helpers, `buildReportParams()`, `describeRange()` |
+| `client/lib/useReportQuery.js` | Report fetch hook with optional polling and a `updatedAt` stamp |
+| `client/lib/csv.js` | CSV builder + download helper (UTF-8 BOM) |
+| `client/components/AdminReports/AdminReports.css` | Shared styles for the analytics modules |
+| `client/components/AdminReports/ReportToolbar.js` | Date inputs, 7/30/90-day presets, domain filter |
+| `client/components/AdminReports/ReportStatGrid.js` | Four-metric headline strip |
+| `client/components/AdminReports/BarList.js` | Ranked distribution bars |
+| `client/components/AdminReports/ReportStates.js` | Loading / error+retry / empty / last-updated |
+| `client/components/AdminReports/PagesModule.js` | Pages report |
+| `client/components/AdminReports/TrafficSourcesModule.js` | Traffic sources report |
+| `client/components/AdminReports/DevicesModule.js` | Devices report |
+| `client/components/AdminReports/LiveVisitorsModule.js` | Live visitors report |
+| `client/components/AdminReports/EventsModule.js` | Events report |
+
+### Files Modified
+| File | Change |
+|------|--------|
+| `client/lib/adminApi.js` | Added `reportsApi` — overview, pages, sources, devices, live, events, time-series, recent-visitors, returning-visitors |
+| `client/lib/adminNav.js` | Removed the `placeholder: true` flags from the five analytics entries |
+| `client/components/Sidebar/Sidebar.js` | Removed the "Coming soon" badge, the dead `NAV_ITEMS` export and the now-unused icon imports |
+| `client/components/Sidebar/Sidebar.css` | Removed the `--sidebar-badge-*` tokens and `.sidebar-item-badge` rule |
+| `client/app/kingdome/{pages,traffic-sources,devices,live-visitors,events}/page.js` | Load the new modules instead of the placeholder |
+| `backend/controllers/reportsController.js` | `sources` aggregation no longer drops sessions without a referrer — they are reported as `direct` |
+| `ADMIN_SPEC.md` | Module table, new analytics-module section, directory tree |
+
+### Files Removed
+| File | Reason |
+|------|--------|
+| `client/components/ComingSoon/ComingSoonClient.js` + `.css` | Dead code once all five placeholders were replaced |
+
+### Module behaviour
+| Module | Content |
+|--------|---------|
+| Pages | Ranked table of every page with a pageview — path, title, views, visitors, share, average time. Search on path/title, four sort keys, 25 rows per page |
+| Traffic Sources | Ranked table plus distribution bars. Sessions with no referrer and no UTM source are reported as `direct` |
+| Devices | Device-type split (bars + table with per-type icons), browser split, operating-system table |
+| Live Visitors | Sessions active in the last five minutes and the most recent events, polled every 15 s with an auto-refresh toggle. No date filter — the backend always uses a rolling five-minute window |
+| Events | Count of every tracked event type and custom event name with share bars, an event-type filter and a top-ten distribution |
+
+Every module shares one filter bar (from/to date, 7/30/90-day presets, domain), one stat strip, one bar list and one set of states, so they behave identically to the rest of the admin area. All tables export their filtered rows as CSV.
+
+### Notes
+- **Date window fix.** The backend parses `startDate`/`endDate` with `new Date(value)`, so a bare `YYYY-MM-DD` was read as midnight UTC and the final day of the range was silently dropped. `reportParams.js` now sends the start of the first day and the end of the last day, so the selected range is inclusive.
+- **Direct traffic fix.** The `sources` aggregation filtered on `$or: [{referrerDomain…}, {utmSource…}]`, excluding every session that had neither — direct traffic disappeared and the percentages did not sum to 100%. The restriction was removed; those sessions now bucket as `direct`.
+- **Polling behaviour.** A failed poll keeps the last good data on screen and only surfaces the error, so the live panel never blanks out mid-refresh.
+- The `analytics.view` permission gates all five modules on the client (navigation + shell) and the server re-checks the session on every request.
+
+### Verification
+- `npm test` (backend): **22 passed, 0 failed**
+- `npm run build` (client): **compiled successfully** — 68/68 static routes, all 13 `/kingdome/*` routes prerendered
+- ESLint on every new and modified file: **0 errors, 0 warnings** (the only remaining finding in a touched file is the pre-existing `<img>` warning in `Sidebar.js`, present at HEAD)
+- Live smoke test against MongoDB Atlas — all five endpoints 200 with real data: `pages` 30 rows, `sources` `direct=2 (100%)`, `devices` 1 type / 1 browser / 1 OS, `live` 0 active (no visitors at that moment), `events` `pageview=219, navigation=44, heartbeat=4, click=3`
+- Next.js rewrite proxy verified on port 3000 — all five reports 200 with the session cookie attached; unauthenticated request → 401
+- All five routes return HTTP 200 with the module markup
+
+---
 
 ## Brand Rename — DocFix → Docstools (COMPLETE)
 
@@ -975,12 +1039,12 @@ Standardized all 6 MS Office tool CSS files for consistent layout, boxing, and s
 - ESLint: 0 errors on all modified files
 - `next build`: Compiled successfully, 48/48 static pages prerendered (including all 6 `/msoffice-tool/*` routes)
 
-## Phase 1 â€” Project Inspection (COMPLETE)
+## Phase 1 — Project Inspection (COMPLETE)
 
 ### Project Overview
-- **Name**: Docstools â€” browser-only image/document tools
+- **Name**: Docstools — browser-only image/document tools
 - **Stack**: Next.js 16.3.8 (App Router) + React 19.2.8 + Tailwind CSS v4 (client) | Express 5 + Mongoose 9 + MongoDB Atlas (backend)
-- **Root layout**: `client/app/layout.js` â€” shared Navbar, Footer, ad units (Multitag, DownloadProgressPopup), Geist fonts, theme system (light/dark/system)
+- **Root layout**: `client/app/layout.js` — shared Navbar, Footer, ad units (Multitag, DownloadProgressPopup), Geist fonts, theme system (light/dark/system)
 
 ### Routing Model
 - Filesystem-based Next.js App Router under `client/app/`
@@ -1104,16 +1168,16 @@ function MyTool() {
 ## Phase 1 Implementation Checklist
 
 ### Files to ADD (new)
-1. `client/app/analytics/page.js` â€” replace stub with proper ContentPage-based dashboard
-2. `client/components/AnalyticsDashboard/AnalyticsDashboard.js` â€” real dashboard component
-3. `backend/models/Analytics.js` â€” Mongoose schema for analytics events
-4. `backend/routes/analytics.js` â€” Express routes for tracking + querying
-5. `client/lib/analytics.js` â€” client-side tracking helper (send events to backend)
+1. `client/app/analytics/page.js` — replace stub with proper ContentPage-based dashboard
+2. `client/components/AnalyticsDashboard/AnalyticsDashboard.js` — real dashboard component
+3. `backend/models/Analytics.js` — Mongoose schema for analytics events
+4. `backend/routes/analytics.js` — Express routes for tracking + querying
+5. `client/lib/analytics.js` — client-side tracking helper (send events to backend)
 
 ### Files to MODIFY (no working-feature changes)
-1. `client/lib/pages.js` â€” add `/analytics` to PAGE_META so it appears in nav/footer/sitemap
-2. `backend/index.js` â€” mount analytics routes
-3. `client/utils/shared/download.js` â€” uncomment OR remove broken imports (separate fix)
+1. `client/lib/pages.js` — add `/analytics` to PAGE_META so it appears in nav/footer/sitemap
+2. `backend/index.js` — mount analytics routes
+3. `client/utils/shared/download.js` — uncomment OR remove broken imports (separate fix)
 
 ### Files NOT to touch
 - All 29 tool pages
@@ -1544,5 +1608,142 @@ Redesigned the navigation sidebar of the existing `/kingdome/dashboard` analytic
 - `next build`: passes (exit code 0) — all 8 kingdome routes prerendered (dashboard + 6 coming soon + login)
 - ESLint: 0 errors on new/modified Sidebar/ComingSoon files (remaining project-wide errors are pre-existing in unrelated files)
 - Note: `/analytics` does not exist in the current frontend (removed in Phase 37); the dashboard route remains `/kingdome/dashboard`
+## Administrative Login & Dashboard System (COMPLETE)
 
+Built a fully functional administrative login and dashboard system in the `/kingdome` area: email + password authentication with scrypt hashing and server-side sessions, a permission-based RBAC layer enforced on every request, an audit trail, and a responsive admin shell (fixed sidebar + sticky top header with a profile menu) hosting live data-management modules.
 
+Full specification: [`ADMIN_SPEC.md`](./ADMIN_SPEC.md).
+
+### Architecture
+
+```
+Browser → Next.js rewrite (/api/auth/*, /api/admin/*) → Express → MongoDB
+```
+
+- **Opaque server-side sessions** (32 random bytes in an httpOnly cookie) instead of JWT — revocable instantly, role changes take effect without waiting for token expiry.
+- **scrypt** password hashing (`salt:keyHex`, N=16384/r=8/p=1) — Node standard library, no native build step.
+- **Permissions are the enforcement unit**; roles are named bundles of permissions. The server is the only authority — the client matrix is UX (hiding nav items), never a security boundary.
+
+### RBAC matrix
+
+| Role | Level | Permissions |
+|------|-------|-------------|
+| `superadmin` | 40 | all ten |
+| `admin` | 30 | `dashboard.view`, `analytics.view`, `activity.view`, `users.view`, `users.manage`, `system.view`, `settings.view` |
+| `analyst` | 20 | `dashboard.view`, `analytics.view`, `activity.view` |
+| `viewer` | 10 | `dashboard.view` |
+
+Permission catalogue: `dashboard.view`, `analytics.view`, `users.view`, `users.manage`, `activity.view`, `system.view`, `settings.view`, `settings.manage`, `admins.manage`, `sessions.manage`.
+
+### Files Created (backend)
+
+| File | Purpose |
+|------|---------|
+| `backend/config/roles.js` | RBAC matrix — roles, levels, permission catalogue, `hasPermission`, `roleAtLeast`, `publicAdmin` (strips the password hash) |
+| `backend/middleware/rbac.js` | `requirePermission(perm)` / `requireRole(...roles)` guards |
+| `backend/models/AdminActivity.js` | Append-only audit trail (actor, action, target, status, meta, hashed IP/user agent) |
+| `backend/models/AppUser.js` | Application users — the population rendered by the Users table |
+| `backend/utils/audit.js` | `logActivity()` writer — never throws, so an audit failure cannot break a request |
+| `backend/controllers/adminUsersController.js` | App-user CRUD + administrator-account CRUD |
+| `backend/controllers/activityController.js` | Audit-trail reader with search/filter/facets/pagination |
+| `backend/controllers/systemController.js` | Runtime, memory, database and collection statistics |
+| `backend/routes/admin.js` | `/api/admin/*` — session check + permission check on every route |
+| `backend/scripts/seed-admin.js` | Bootstrap super admin + optional demo admins/users (`npm run seed`, `npm run seed:demo`) |
+| `backend/test/admin-auth.test.js` | Offline test suite — 22 assertions over hashing, policy and the RBAC matrix |
+
+### Files Created (client)
+
+| File | Purpose |
+|------|---------|
+| `client/lib/adminApi.js` | Admin + auth API client (`credentials: "include"`, `ApiError` with status helpers) |
+| `client/lib/permissions.js` | Permission constants mirroring `backend/config/roles.js` |
+| `client/lib/adminNav.js` | Navigation map — each entry declares the permission required to see it |
+| `client/lib/useAdminQuery.js` | Collection fetch hook (params → request, loading/error state, refetch) |
+| `client/lib/format.js` | Number / byte / duration / date / relative-time formatting |
+| `client/components/AdminShell/AdminShell.js` + `.css` | Shell layout, session gate, permission gate, shared admin primitives (panels, tables, badges, forms, modal, pagination) |
+| `client/components/AdminHeader/AdminHeader.js` | Sticky top bar — title, search, notifications, profile menu (identity, role badge, sign out) |
+| `client/app/kingdome/layout.js` | Emits the admin marker element used by the pure-CSS chrome rule |
+| `client/app/kingdome/page.js` | Redirects `/kingdome` → `/kingdome/dashboard` |
+| `client/app/kingdome/users/page.js` | User table — search, status/role filters, pagination, create/edit modal, suspend/delete |
+| `client/app/kingdome/admins/page.js` | Administrator accounts — role change, enable/disable, password reset, delete |
+| `client/app/kingdome/activity/page.js` | Audit trail — search, action facet, success/failure filter, pagination |
+| `client/app/kingdome/system/page.js` | System statistics — runtime, memory, database, collection counters, top actions |
+| `ADMIN_SPEC.md` | Full technical specification (architecture, schema, API reference, directory structure, security checklist) |
+
+### Files Modified
+
+| File | Change |
+|------|--------|
+| `backend/models/Admin.js` | Added `name`, `role`, `failedLoginAttempts`, `lockedUntil`, `lastLoginAt`, `lastLoginIpHash`, `passwordUpdatedAt`; `recoveryPhone` made optional; pre-save hook falls back to the email for legacy documents; removed the duplicate email index |
+| `backend/models/AdminSession.js` | Added `email`, `name`, `role`, `absoluteExpiresAt` (hard session cap), `userAgent` |
+| `backend/controllers/authController.js` | Rewritten: email + password login, legacy operator login fallback, account lockout, timing-equalised unknown-account path, `/me` with permissions, change password, profile update, session list/revoke |
+| `backend/middleware/auth.js` | `requireAdmin` now resolves the account, loads the role, populates `req.admin` with the permission set and slides the session expiry (idle timeout capped by the absolute lifetime) |
+| `backend/routes/auth.js` | Added `/password`, `/profile`, `/sessions`, `/sessions/:id`; logout is now optional-auth so it always clears the cookie; login limiter counts failures only |
+| `backend/routes/index.js` | Mounted `/api/admin` |
+| `backend/utils/password.js` | `verifyPassword` hardened against malformed hashes; added `dummyVerify()` (timing equalisation) and `passwordPolicyError()` |
+| `backend/middleware/rateLimit.js` | Added the `countOnlyFailures` option — successful requests release the slot |
+| `backend/config/env.js` | Added session idle/TTL, lockout, bootstrap-account and activity-retention settings |
+| `backend/package.json` | Added `seed`, `seed:demo` and a working `test` script |
+| `client/components/AuthProvider/AuthProvider.js` | Rewritten — exposes `user`, `role`, `roleLabel`, `permissions`, `hasPermission()`; `login(email, password)`; `/api/auth/me` verification |
+| `client/components/Sidebar/Sidebar.js` | Sectioned, permission-filtered navigation; the required permission is declared per nav entry |
+| `client/components/ComingSoon/ComingSoonClient.js` | Renders inside `AdminShell` so placeholder modules share the admin chrome |
+| `client/components/ComingSoon/ComingSoon.css` | Recoloured with the shared theme tokens (was hard-coded dark navy) |
+| `client/app/kingdome/login/page.js` | Rewritten — email + password, show/hide toggle, generic invalid-credential message, rate-limit and lockout messaging, safe relative `redirect` handling |
+| `client/app/kingdome/dashboard/DashboardClient.js` | Uses `AdminShell`; date range, domain filter and refresh moved into the header actions slot; all metrics/charts/tables preserved |
+| `client/app/kingdome/settings/page.js` | Replaced the placeholder with profile, password change and active-session management |
+| `client/app/kingdome/{pages,traffic-sources,devices,live-visitors,events}/page.js` | Now render through `AdminShell` with the `analytics.view` permission gate |
+| `client/app/layout.js` | Wrapped `Navbar` / `Footer` in `#site-navbar` / `#site-footer` and the content in `#site-main` so the admin area can go full-bleed |
+| `client/app/globals.css` | `body:has(#admin-route-marker)` rule hides the site chrome on admin routes; new login form styles (icon-prefixed inputs, notice, back link) |
+| `client/middleware.js` | `NextResponse` imported from `next/server`; documented as a fast-path cookie check only |
+| `client/next.config.mjs` | Added the `/api/admin/:path*` rewrite to the backend |
+| `client/lib/analyticsApi.js` | Removed the `console.log` debug statement |
+
+### API surface
+
+| Method | Path | Permission |
+|--------|------|-----------|
+| POST | `/api/auth/login` | public (rate limited) |
+| POST | `/api/auth/logout` | optional |
+| GET | `/api/auth/me` | session |
+| POST | `/api/auth/password` | session |
+| PATCH | `/api/auth/profile` | session |
+| GET / DELETE | `/api/auth/sessions[/:id]` | session |
+| GET | `/api/admin/users` | `users.view` |
+| POST / PATCH / DELETE | `/api/admin/users[/:id]` | `users.manage` |
+| GET | `/api/admin/admins` | `admins.manage` |
+| POST / PATCH / DELETE | `/api/admin/admins[/:id]` | `admins.manage` |
+| GET | `/api/admin/activity` | `activity.view` |
+| GET | `/api/admin/system` | `system.view` |
+
+### Design
+
+- **Layout**: fixed 240px sidebar (dark navy `#081426`) + sticky top header + scrollable content area. The admin area is full-bleed — the marketing navbar/footer are hidden by a pure-CSS `body:has(#admin-route-marker)` rule, so there is no chrome flash and no client script mutating React-managed attributes.
+- **Responsive**: `<768px` sidebar becomes an off-canvas drawer with a floating hamburger; `768–1023px` collapses to a 72px icon rail; `≥1024px` is fixed and always expanded. The header collapses search and the profile text on mobile.
+- **Profile menu**: initials avatar, display name, role badge, `Profile & security`, `Sign out`; closes on outside click and `Escape`.
+- **Badges**: role and status colours are token-driven so they follow the light/dark palette.
+
+### Security
+
+- Generic `Invalid email or password` for both unknown accounts and wrong passwords; a dummy scrypt verification runs on the unknown-account path so response timing does not leak account existence.
+- Two brute-force layers: per-IP rate limit (20 **failures** / 15 min — successes release the slot) and a persisted per-account lockout (5 failures → 15 min).
+- Session cookie: `httpOnly`, `sameSite=lax`, `secure` in production. The API is always reached through the Next.js rewrite, so the cookie is first-party — no CORS preflight and no `SameSite` cross-site problem.
+- Sessions slide forward on activity but never past `absoluteExpiresAt` (24 h idle / 7-day hard cap).
+- Guard rails: only a superadmin may edit administrator accounts; the last active superadmin cannot be demoted, disabled or deleted; nobody can delete their own account; a password reset or deactivation revokes that account's sessions immediately.
+- `publicAdmin()` never serialises the password hash or the lockout counters.
+- The audit trail is append-only and stores IP/user agent as SHA-256 hashes.
+
+### Verification
+
+- `npm test` (backend): **22 passed, 0 failed** — password hashing round trip, malformed-hash handling, timing-equalisation path, policy rules, every role's permission set, unknown-role handling, role ordering, `publicAdmin` redaction.
+- `npm run build` (client): **compiled successfully**, 68 static routes generated, all 13 `/kingdome/*` routes present.
+- ESLint on every changed and newly added client file: **3 errors / 2 warnings** — byte-for-byte the same as the HEAD baseline for those same 15 files (all pre-existing `react-hooks/set-state-in-effect` / `react-hooks/purity` / `<img>` findings). **Every new file contributes zero errors.**
+- Live smoke test against the Atlas cluster (`curl` + cookie jars): login for all four roles returns the correct permission set; invalid password and unknown email both return the generic 401; the RBAC matrix behaves exactly as specified (superadmin 200 on all four admin endpoints; `admin` 403 on `/api/admin/admins`; `analyst` 200 only on activity; `viewer` 403 on all four); user create → 201, update → 200, delete → 200; session list, wrong-current-password → 401, profile update → 200; unauthenticated requests → 401; logout → 200 and the following `/me` → 401.
+- Client proxy verified through the Next rewrite: `POST /api/auth/login` and `GET /api/admin/users` on port 3000 both reach the backend with the session cookie attached.
+- `app/kingdome/layout.js` marker confirmed present on admin pages and absent on the public home page; the public navbar/footer are unaffected.
+
+### Known gaps
+
+1. The rate limiter is in-process — not shared between instances and lost on restart. Move it to Redis before scaling out.
+2. `ADMIN_ACTIVITY_RETENTION_DAYS` is configured but no scheduled purge job enforces it yet.
+3. No explicit CSRF token — mitigated today by `SameSite=Lax` and the JSON-only content type; add a double-submit token before enabling cross-site embeds.
+4. No MFA for `superadmin` — TOTP/WebAuthn is the natural next step.

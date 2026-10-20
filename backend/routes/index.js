@@ -5,11 +5,13 @@ import reportsRoutes from "./reports.js";
 import dailyStatsRoutes from "./dailyStats.js";
 import feedbackRoutes from "./feedback.js";
 import recoveryRoutes from "./recovery.js";
+import adminRoutes from "./admin.js";
 
 export function mountRoutes(app) {
   app.use("/", healthRoutes);
   app.use("/api/auth", authRoutes);
   app.use("/api/auth", recoveryRoutes);
+  app.use("/api/admin", adminRoutes);
   app.use("/api/analytics", analyticsRoutes);
   app.use("/api/analytics/reports", reportsRoutes);
   app.use("/api/analytics/daily-stats", dailyStatsRoutes);
@@ -23,3 +25,4 @@ export { default as reportsRoutes } from "./reports.js";
 export { default as dailyStatsRoutes } from "./dailyStats.js";
 export { default as feedbackRoutes } from "./feedback.js";
 export { default as recoveryRoutes } from "./recovery.js";
+export { default as adminRoutes } from "./admin.js";

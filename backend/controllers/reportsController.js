@@ -100,7 +100,6 @@ export async function sources(req, res) {
         $match: {
           ...dm,
           startedAt: { $gte: start, $lte: end },
-          $or: [{ referrerDomain: { $exists: true, $ne: null } }, { utmSource: { $exists: true, $ne: null } }],
         },
       },
       {

@@ -1,10 +1,10 @@
 Phase Plan
 
-Last updated: October 19, 2026 | Current: Phase 38 — Brand Rename: DocFix — Docstools (COMPLETE)
+Last updated: October 20, 2026 | Current: Phase 42 â€” Analytics Modules Implementation (COMPLETE)
 
-**Additional task completed:** Image Resizer — made crop stage flexible with screen size (replaced fixed 60vh height with responsive width/maxHeight + aspect-ratio; added responsive CSS breakpoints; dimension fields go single-column on ?768px).
+**Additional task completed:** Image Resizer â€” made crop stage flexible with screen size (replaced fixed 60vh height with responsive width/maxHeight + aspect-ratio; added responsive CSS breakpoints; dimension fields go single-column on ?768px).
 
-## Phase 38: Brand Rename — DocFix to Docstools (COMPLETE)
+## Phase 38: Brand Rename â€” DocFix to Docstools (COMPLETE)
 
 **Completed:**
 - [x] Renamed the brand from "DocFix" to "Docstools" across the entire codebase (41 files)
@@ -23,30 +23,30 @@ Last updated: October 19, 2026 | Current: Phase 38 — Brand Rename: DocFix — Docs
 
 **Task:** "update the name completly docfix to docstools"
 
-**Completion Criteria:** Zero `docfix` references remain in any source, config, or documentation file; brand, domains, emails, storage keys and package name all read "Docstools". — VERIFIED via repo-wide search + `next build`.
+**Completion Criteria:** Zero `docfix` references remain in any source, config, or documentation file; brand, domains, emails, storage keys and package name all read "Docstools". â€” VERIFIED via repo-wide search + `next build`.
 
 **External follow-ups (outside the repo):** rename the Vercel project to `docstools-frontend`; point `docstools.app` DNS at the deployment; create the `*@docstools.app` mailboxes; update the Twitter/X handle to `@docstools`; refresh the binary `og-image.png` / `favicon.ico` artwork.
 
 ---
-## Phase 37: Monetag Ad Integration — Global Script Tag (COMPLETE)
+## Phase 37: Monetag Ad Integration â€” Global Script Tag (COMPLETE)
 
 **Completed:**
-- [x] Inspected Next.js project structure — confirmed App Router (`app/layout.js`)
-- [x] Identified existing ad components: `Multitag` (manages `InPagePush` + `VignetteBanner`), `DownloadProgressPopup` — these are custom house ad components with hardcoded "PixelForge Pro" content
-- [x] Verified Monetag script format: basic website tag (`https://5gvci.com/act/files/tag.min.js?z=12026779`) that auto-injects ads (In-Page Push, Vignette, Popunder, etc.) — does NOT support container targeting
+- [x] Inspected Next.js project structure â€” confirmed App Router (`app/layout.js`)
+- [x] Identified existing ad components: `Multitag` (manages `InPagePush` + `VignetteBanner`), `DownloadProgressPopup` â€” these are custom house ad components with hardcoded "PixelForge Pro" content
+- [x] Verified Monetag script format: basic website tag (`https://5gvci.com/act/files/tag.min.js?z=12026779`) that auto-injects ads (In-Page Push, Vignette, Popunder, etc.) â€” does NOT support container targeting
 - [x] Integrated exact Monetag script in `client/app/layout.js` `<head>` using Next.js `<Script>` component with `strategy="lazyOnload"`
 - [x] Preserved exact URL, zone ID (12026779), and required attributes (`data-cfasync="false"`, `async`)
 - [x] Existing custom ad components remain unchanged (separate promotional units)
 
 **Task:** "Integrate the exact Monetag script provided by Monetag so ads can display on my website"
 
-**Completion Criteria:** Monetag script loads once globally in `<head>`, auto-injects ads per zone configuration, no duplicate loads on navigation. — VERIFIED via `next build` and served HTML inspection.
+**Completion Criteria:** Monetag script loads once globally in `<head>`, auto-injects ads per zone configuration, no duplicate loads on navigation. â€” VERIFIED via `next build` and served HTML inspection.
 
 ---
 
-**Current Phase: Phase 36 — Production Domain Update (COMPLETE)**
+**Current Phase: Phase 36 â€” Production Domain Update (COMPLETE)**
 
-## Phase 36: Production Domain Update — localhost:3000 ? docstools-frontend.vercel.app (COMPLETE)
+## Phase 36: Production Domain Update â€” localhost:3000 ? docstools-frontend.vercel.app (COMPLETE)
 
 **Completed:**
 - [x] Replaced `localhost:3000` with `https://docstools-frontend.vercel.app` in `backend/config/env.js` (default CORS origin)
@@ -56,7 +56,7 @@ Last updated: October 19, 2026 | Current: Phase 38 — Brand Rename: DocFix — Docs
 
 **Task:** "update all localhost:3000 to docstools-frontend.vercel.app because it is my website domain"
 
-**Completion Criteria:** All `localhost:3000` references in source/config/doc files point to the production domain `https://docstools-frontend.vercel.app`. — VERIFIED via grep.
+**Completion Criteria:** All `localhost:3000` references in source/config/doc files point to the production domain `https://docstools-frontend.vercel.app`. â€” VERIFIED via grep.
 
 ---
 
@@ -66,38 +66,38 @@ Last updated: October 19, 2026 | Current: Phase 38 — Brand Rename: DocFix — Docs
 - [x] Added new tokens: `--tool-secondary`, `--tool-secondary-hover`, `--tool-on-secondary`, `--tool-surface-3`, `--tool-muted-2`
 - [x] Updated hard-coded `#FF6B6B` ? `#FDA769` in `DownloadProgressPopup.css` (ad box + countdown gradient) and `contact.css` fallback
 - [x] `--nav-limit-text` ? `#B45309` (light) / `#FFB86B` (dark)
-- [x] `npm run build`: Compiled successfully — 56/56 static pages prerendered
+- [x] `npm run build`: Compiled successfully â€” 56/56 static pages prerendered
 
 **Task:** "update light and dark theme colours" with the warm green/amber light palette (#ABC270 #FEC868 #FDA769 #473C33) and slate dark palette (#0D1F23 #132E35 #2D4A53 #69818D #AFB3B7 #5A636A)
 
-**Key constraint:** Yellow `#FEC868` has low contrast on white — used only as a fill (`--tool-secondary`) with dark-brown text (`--tool-on-secondary: #473C33`, 7:1), never as a text colour.
+**Key constraint:** Yellow `#FEC868` has low contrast on white â€” used only as a fill (`--tool-secondary`) with dark-brown text (`--tool-on-secondary: #473C33`, 7:1), never as a text colour.
 
-**Completion Criteria:** All theme blocks use the new palettes; components reading shared tokens adapt automatically; build passes. — VERIFIED (56/56 pages, no old palette colours remain).
+**Completion Criteria:** All theme blocks use the new palettes; components reading shared tokens adapt automatically; build passes. â€” VERIFIED (56/56 pages, no old palette colours remain).
 
 ---
 
-**Current Phase: Phase 34 — Build Error Fix: Invalid UTF-8 Source Files (COMPLETE)**
+**Current Phase: Phase 34 â€” Build Error Fix: Invalid UTF-8 Source Files (COMPLETE)**
 
-## Phase 34: Build Error Fix — Invalid UTF-8 Source Files (COMPLETE)
+## Phase 34: Build Error Fix â€” Invalid UTF-8 Source Files (COMPLETE)
 
 **Completed:**
 - [x] Diagnosed Turbopack error "failed to convert rope into string / invalid utf-8 sequence" on `./app/cookie-policy/page.js`
 - [x] Converted `client/app/cookie-policy/page.js` from CP1252 ? UTF-8 (two `0x97` em-dash bytes)
 - [x] Found and converted 12 UTF-16 LE (FF FE BOM) tool entry files ? UTF-8: 6 under `utils/pdf-tools/*/index.js` and 6 under `utils/writing-tool/*/index.js`
 - [x] Verified strict UTF-8 validity across all client source files (0 invalid)
-- [x] `npm run build`: Compiled successfully — 56/56 static pages prerendered
+- [x] `npm run build`: Compiled successfully â€” 56/56 static pages prerendered
 
 **Problem:** Turbopack parses source files as UTF-8; the cookie-policy page had CP1252 em-dashes and 12 tool `index.js` files were saved as UTF-16 LE, causing the build to fail while reading/parsing them.
 
 **Fix:** Re-encoded all 13 files to UTF-8 without BOM.
 
-**Task:** "Build Error: Reading source code for parsing failed … invalid utf-8 sequence of 1 bytes from index 215"
+**Task:** "Build Error: Reading source code for parsing failed â€¦ invalid utf-8 sequence of 1 bytes from index 215"
 
-**Completion Criteria:** `next build` compiles cleanly with no source-parse errors. — VERIFIED (56/56 static pages).
+**Completion Criteria:** `next build` compiles cleanly with no source-parse errors. â€” VERIFIED (56/56 static pages).
 
 ---
 
-**Current Phase: Phase 33 — Disclaimer Page Update (COMPLETE)**
+**Current Phase: Phase 33 â€” Disclaimer Page Update (COMPLETE)**
 
 ## Phase 33: Disclaimer Page Update (COMPLETE)
 
@@ -106,15 +106,15 @@ Last updated: October 19, 2026 | Current: Phase 38 — Brand Rename: DocFix — Docs
 - [x] Updated `metadata.description` and page description: "Important information about Docstools tools, processing accuracy, and limitations."
 - [x] Contact links: `mailto:hello@docstools.app` + `/contact`
 - [x] ESLint: 0 errors on `app/disclaimer/page.js`
-- [x] `next build`: Compiled successfully — 56/56 static pages prerendered
+- [x] `next build`: Compiled successfully â€” 56/56 static pages prerendered
 
-**Task:** "update disclamber with # Disclaimer …" (full disclaimer content with Last updated: October 12, 2026)
+**Task:** "update disclamber with # Disclaimer â€¦" (full disclaimer content with Last updated: October 12, 2026)
 
 **Completion Criteria:** The Disclaimer page at `/disclaimer` reflects the full 10-section disclaimer with valid JSX and clean builds.
 
 ---
 
-**Current Phase: Phase 32 — About Page Content Refresh (COMPLETE)**
+**Current Phase: Phase 32 â€” About Page Content Refresh (COMPLETE)**
 
 ## Phase 32: About Page Content Refresh (COMPLETE)
 
@@ -123,7 +123,7 @@ Last updated: October 19, 2026 | Current: Phase 38 — Brand Rename: DocFix — Docs
 - [x] Updated `metadata.description` for SEO
 - [x] Escaped all apostrophes (`&apos;`) for ESLint compliance
 - [x] ESLint: 0 errors on `app/about/page.js`
-- [x] `next build`: Compiled successfully — 56/56 static pages prerendered
+- [x] `next build`: Compiled successfully â€” 56/56 static pages prerendered
 
 **Task:** "update /about page with # About Docstools"
 
@@ -131,14 +131,14 @@ Last updated: October 19, 2026 | Current: Phase 38 — Brand Rename: DocFix — Docs
 
 ---
 
-**Current Phase: Phase 31 — Legal & Compliance + SEO Foundation + Route Flattening (COMPLETE)**
+**Current Phase: Phase 31 â€” Legal & Compliance + SEO Foundation + Route Flattening (COMPLETE)**
 
 ## Phase 31: Legal & Compliance + SEO Foundation + Route Flattening (COMPLETE)
 
 **Completed:**
-- [x] Updated `client/app/layout.js` metadata: title default "Docstools — Free Private File Tools", richer SEO description, `metadataBase`, canonical alternates, OpenGraph (site name, locale, 1200×630 image), Twitter card
+- [x] Updated `client/app/layout.js` metadata: title default "Docstools â€” Free Private File Tools", richer SEO description, `metadataBase`, canonical alternates, OpenGraph (site name, locale, 1200Ã—630 image), Twitter card
 - [x] Rewrote Privacy Policy (`app/privacy/page.js`): Zero Data Collection, Browser-Based Processing (WASM), No Cookies, No Server Storage, GDPR/CCPA rights
-- [x] Expanded Terms of Service (`app/terms/page.js`): 12 sections — usage limits, liability for file processing, indemnification, intellectual property
+- [x] Expanded Terms of Service (`app/terms/page.js`): 12 sections â€” usage limits, liability for file processing, indemnification, intellectual property
 - [x] Enhanced About page (`app/about/page.js`): mission statement about 100% privacy, "Why Browser-Based?" stack (WASM/Canvas/Web Workers), "Who We Are" + team; fixed `</strong>strong>` typo
 - [x] Fixed Contact page (`app/contact/page.js`): typos ("youlike" ? "you like", "Were open" ? "We are open"); email contact block above form
 - [x] Expanded FAQ (`app/faq/page.js`): 5 ? 14 questions across 4 accordion sections (Privacy, How It Works, Usage, Troubleshooting)
@@ -164,11 +164,11 @@ Last updated: October 19, 2026 | Current: Phase 38 — Brand Rename: DocFix — Docs
 
 **Task:** "Want me to generate the content / code for the 6 critical pages (Privacy, Terms, About, Contact, FAQ, All Tools) in Next.js format for your repo? update them properly"
 
-**Completion Criteria:** All Phase 1 pages (Privacy, Terms, About, Contact, FAQ, All Tools) have proper SEO-optimized, legally compliant content; sitemap and robots.txt are crawlable; footer links are complete; routes are clean top-level paths. — VERIFIED via `next build` (56/56 pages) and ESLint (0 new errors).
+**Completion Criteria:** All Phase 1 pages (Privacy, Terms, About, Contact, FAQ, All Tools) have proper SEO-optimized, legally compliant content; sitemap and robots.txt are crawlable; footer links are complete; routes are clean top-level paths. â€” VERIFIED via `next build` (56/56 pages) and ESLint (0 new errors).
 
 ---
 
-**Current Phase: Phase 30 — Mobile Carousel Arrow Navigation**
+**Current Phase: Phase 30 â€” Mobile Carousel Arrow Navigation**
 
 ---
 
@@ -176,19 +176,19 @@ Last updated: October 19, 2026 | Current: Phase 38 — Brand Rename: DocFix — Docs
 
 **Completed:**
 - [x] Removed `display: none` from `.carousel-btn` in the `@media (max-width: 768px)` block so the left/right arrows render on mobile
-- [x] Repositioned arrows for small screens: `.carousel-btn-prev { left: 10px }` / `.carousel-btn-next { right: 10px }` — the desktop's `-24px` offsets would sit half-off the viewport since the page wrapper only has `px-6` (24px) padding
+- [x] Repositioned arrows for small screens: `.carousel-btn-prev { left: 10px }` / `.carousel-btn-next { right: 10px }` â€” the desktop's `-24px` offsets would sit half-off the viewport since the page wrapper only has `px-6` (24px) padding
 - [x] Strengthened the mobile arrow shadow (`0 6px 20px` at 28% foreground) so the buttons stay readable overlaid on the card surface
 - [x] Arrows call the same `goToPrev`/`goToNext` handlers, so tapping them swaps the card and stops auto-rotation (consistent with swipe and dot indicators)
 - [x] ESLint: 0 errors on `ToolsCarousel.js`
 - [x] `next build`: passes (46/46 static pages prerendered)
 
-**Problem:** After Phase 29, mobile users could only swap cards via swipe or the dot indicators — the prev/next arrows were still hidden on small screens.
+**Problem:** After Phase 29, mobile users could only swap cards via swipe or the dot indicators â€” the prev/next arrows were still hidden on small screens.
 
 **Fix:** Arrows are now visible on mobile, inset 10px from the card's left/right edges (48px touch targets, above the card at `z-index: 10`).
 
 **Task:** "add left right navigation on home screen also"
 
-**Completion Criteria:** Left/right arrows visible and working on the homepage mobile view. — VERIFIED via ESLint (0 errors) and `next build` (46/46 pages); arrows render at =768px with in-set positioning.
+**Completion Criteria:** Left/right arrows visible and working on the homepage mobile view. â€” VERIFIED via ESLint (0 errors) and `next build` (46/46 pages); arrows render at =768px with in-set positioning.
 
 ---
 
@@ -197,9 +197,9 @@ Last updated: October 19, 2026 | Current: Phase 38 — Brand Rename: DocFix — Docs
 **Completed:**
 - [x] Diagnosed the mobile "Explore the Full Toolkit" section: the `@media (max-width: 768px)` block in `client/app/components/ToolsCarousel.js` set `.category-card { position: relative; opacity: 1; visibility: visible; transform: none }` and `.category-track { min-height: auto }`, which disabled the absolute-position/fade mechanism and stacked every card into a vertical list
 - [x] Removed the mobile stacking overrides so the one-card-at-a-time carousel (absolute cards + fade/scale transition) works at every breakpoint
-- [x] Added a `ResizeObserver` effect that sizes the carousel track to the active card's `scrollHeight` — mobile 1-column tool lists are taller than the 420px desktop track, and the height now animates smoothly between cards
+- [x] Added a `ResizeObserver` effect that sizes the carousel track to the active card's `scrollHeight` â€” mobile 1-column tool lists are taller than the 420px desktop track, and the height now animates smoothly between cards
 - [x] Added horizontal touch swipe (=48px, horizontal-dominant) to swap cards; vertical page scrolling inside the card is unaffected
-- [x] Auto-rotation (3s) now stops permanently after the first manual interaction (arrow, dot, or swipe) — touch devices cannot hover-pause, so rotation would otherwise swap cards mid-read
+- [x] Auto-rotation (3s) now stops permanently after the first manual interaction (arrow, dot, or swipe) â€” touch devices cannot hover-pause, so rotation would otherwise swap cards mid-read
 - [x] Fixed latent bug: every card rendered the *active* category's tool links (`currentCategory.tools`); each card now renders its own `category.tools`
 - [x] Removed the now-unused `currentCategory` variable
 - [x] `prefers-reduced-motion` now also disables the track height transition
@@ -212,7 +212,7 @@ Last updated: October 19, 2026 | Current: Phase 38 — Brand Rename: DocFix — Docs
 
 **Task:** "Explore the Full Toolkit adjust the mobile view of this section on homepage i see all card one after in a list like i want to display only one card on main the swap to second, only one at a time dont other at same time"
 
-**Completion Criteria:** On mobile the section shows exactly one card at a time with swipe/dot navigation. — VERIFIED via ESLint (0 errors) and `next build` (46/46 pages); the stacking overrides are removed and the carousel mechanics now apply at all breakpoints.
+**Completion Criteria:** On mobile the section shows exactly one card at a time with swipe/dot navigation. â€” VERIFIED via ESLint (0 errors) and `next build` (46/46 pages); the stacking overrides are removed and the carousel mechanics now apply at all breakpoints.
 
 ---
 
@@ -221,10 +221,10 @@ Last updated: October 19, 2026 | Current: Phase 38 — Brand Rename: DocFix — Docs
 **Completed:**
 - [x] Diagnosed root cause of `testing-api-backend.vercel.app` hanging (HTTP 000, 30s+ timeout): the default export was `startServer` which calls `app.listen()` and returns a server object, but `@vercel/node` invokes the default export as a request handler `(req, res) => ...`. A server object is not callable, so Vercel's function never responded.
 - [x] Rewrote `backend/index.js` to export a proper `handler(req, res)` function that lazily builds the Express app once and forwards every request to it. DB connection is kicked off in the background on first invocation.
-- [x] Kept `startServer()` for local dev / `npm start` — boots when `node index.js` is run directly.
+- [x] Kept `startServer()` for local dev / `npm start` â€” boots when `node index.js` is run directly.
 - [x] Verified 24/24 endpoints pass against live MongoDB Atlas (health, ingestion, sessions, auth, all 11 reports, daily-stats, session-replay, 404, logout).
 
-**Problem:** After deploying the backend to Vercel, opening `https://testing-api-backend.vercel.app` in a new tab only showed "loading" forever — no welcome message, no response.
+**Problem:** After deploying the backend to Vercel, opening `https://testing-api-backend.vercel.app` in a new tab only showed "loading" forever â€” no welcome message, no response.
 
 **Root Cause:** `@vercel/node` imports the default export and calls it as a request handler `(req, res) => {...}`. The previous `index.js` exported `startServer`, which calls `app.listen()` and returns a `http.Server` instance. A server object is not a function, so Vercel's runtime never got a callable handler and the request hung until the platform's timeout killed it.
 
@@ -232,15 +232,15 @@ Last updated: October 19, 2026 | Current: Phase 38 — Brand Rename: DocFix — Docs
 
 **Task:** "i deploy backend on vercel but when i click on testing-api-backend.vercel.app to open it in new tab only loading show don't see welcome msg check it and solve issues"
 
-**Completion Criteria:** `https://testing-api-backend.vercel.app` returns the welcome message and all API endpoints respond. — VERIFIED locally with the new handler pattern; redeploy required on Vercel.
+**Completion Criteria:** `https://testing-api-backend.vercel.app` returns the welcome message and all API endpoints respond. â€” VERIFIED locally with the new handler pattern; redeploy required on Vercel.
 
 ---
 
 ## Phase 27: Non-Blocking DB Connection with Welcome Message (COMPLETE)
 
 **Completed:**
-- [x] Fixed `backend/index.js` — server now starts listening immediately on `process.env.PORT || config.port` (Vercel-compatible) and connects to MongoDB in the background instead of blocking startup
-- [x] Created `backend/vercel.json` — `@vercel/node` build targeting `index.js` with catch-all route
+- [x] Fixed `backend/index.js` â€” server now starts listening immediately on `process.env.PORT || config.port` (Vercel-compatible) and connects to MongoDB in the background instead of blocking startup
+- [x] Created `backend/vercel.json` â€” `@vercel/node` build targeting `index.js` with catch-all route
 - [x] Verified full data flow end-to-end against live MongoDB Atlas:
   - `GET /` ? 200 `{"success":true,"message":"Docstools backend running"}`
   - `GET /health` ? 200 `{"success":true,"status":"ok","database":"connected"}`
@@ -259,10 +259,10 @@ Last updated: October 19, 2026 | Current: Phase 38 — Brand Rename: DocFix — Docs
   - `POST /api/auth/logout` ? 200 revokes session
   - Unauthenticated report requests ? 401 `{"success":false,"error":"Authentication required"}`
   - Unknown route ? 404 JSON
-- [x] Fixed `client/.env` and `client/.env.example` — `NEXT_PUBLIC_TRACKING_API` now correctly set to `http://localhost:5000/api/analytics` (dev) with production comment for `https://testing-api-backend.vercel.app/api/analytics`
+- [x] Fixed `client/.env` and `client/.env.example` â€” `NEXT_PUBLIC_TRACKING_API` now correctly set to `http://localhost:5000/api/analytics` (dev) with production comment for `https://testing-api-backend.vercel.app/api/analytics`
 
 **Problem:** The backend was timing out on Vercel (HTTP 000, 30s+ hang). Root causes:
-1. `backend/index.js` called `startServer()` but the previous agent changed it to only export the function without calling it — the server never started.
+1. `backend/index.js` called `startServer()` but the previous agent changed it to only export the function without calling it â€” the server never started.
 2. The original `index.js` awaited `connectDBWithRetry()` (which loops forever on failure) before `app.listen()`, so Vercel's cold-start timeout was hit before the server ever responded.
 
 **Fix:**
@@ -273,21 +273,21 @@ Last updated: October 19, 2026 | Current: Phase 38 — Brand Rename: DocFix — Docs
 
 **Task:** "frontend is on https://docstools-frontend.vercel.app and backend on testing-api-backend.vercel.app connect both to store data in database"
 
-**Completion Criteria:** Frontend and backend both connect to MongoDB Atlas and store/retrieve data. — VERIFIED (backend serves all ingestion + report endpoints against live Atlas; client `.env` points at the backend; auth cookie flow works end-to-end).
+**Completion Criteria:** Frontend and backend both connect to MongoDB Atlas and store/retrieve data. â€” VERIFIED (backend serves all ingestion + report endpoints against live Atlas; client `.env` points at the backend; auth cookie flow works end-to-end).
 
 ---
 
 ## Phase 26: MongoDB Connection Retry (COMPLETE)
 
 **Completed:**
-- [x] Added `connectDBWithRetry()` to `backend/db/db.js` — retries `connectDB()` every `DB_RETRY_DELAY_MS` (default 5s) until connected
+- [x] Added `connectDBWithRetry()` to `backend/db/db.js` â€” retries `connectDB()` every `DB_RETRY_DELAY_MS` (default 5s) until connected
 - [x] Added `dbRetryDelayMs` to `backend/config/env.js`
 - [x] `backend/index.js` now awaits `connectDBWithRetry()` before `app.listen(config.port)`
 - [x] Verified live against MongoDB Atlas: 2 failed attempts (ETIMEDOUT) ? auto-retry ? connected ? server running on port 5000 ? `GET /health` reports `"database":"connected"`
 
-**Task:** "if mongo db is not connected try it again" — the backend no longer exits when the first DB connection attempt fails; it retries until the database is reachable.
+**Task:** "if mongo db is not connected try it again" â€” the backend no longer exits when the first DB connection attempt fails; it retries until the database is reachable.
 
-Completion Criteria: Backend recovers from DB connection failures without manual restart. — VERIFIED (connected on the 3rd automatic attempt)
+Completion Criteria: Backend recovers from DB connection failures without manual restart. â€” VERIFIED (connected on the 3rd automatic attempt)
 
 ---
 
@@ -307,31 +307,31 @@ Completion Criteria: Backend recovers from DB connection failures without manual
 - MongoDB connection retries in background every 5s until successful
 - Server never exits due to DB connection failure
 
-Completion Criteria: Backend serves welcome message on `/` immediately while retrying DB connection in background. — VERIFIED (syntax checks pass, server starts without DB)
+Completion Criteria: Backend serves welcome message on `/` immediately while retrying DB connection in background. â€” VERIFIED (syntax checks pass, server starts without DB)
 
 ---
 
-## Phase 25: Backend Rebuilt — DB Connect + Port 5000 (COMPLETE)
+## Phase 25: Backend Rebuilt â€” DB Connect + Port 5000 (COMPLETE)
 
 **Completed:**
 - [x] Installed `mongoose`, `dotenv`, `cors` in `backend/` (express was already present)
-- [x] Created `backend/config/env.js` — dotenv + config (`PORT` default 5000, `MONGO_URI` default `mongodb://localhost:27017/analytics`)
-- [x] Wrote `backend/db/db.js` — Mongoose `connectDB()`, connection event handlers, `dbState()`
-- [x] Wrote `backend/app.js` — Express 5 factory (CORS, JSON 256kb, `GET /`, `GET /health`, 404/error handlers)
-- [x] Wrote `backend/index.js` — bootstrap: connect DB ? listen on port 5000, fatal exit if DB unreachable
+- [x] Created `backend/config/env.js` â€” dotenv + config (`PORT` default 5000, `MONGO_URI` default `mongodb://localhost:27017/analytics`)
+- [x] Wrote `backend/db/db.js` â€” Mongoose `connectDB()`, connection event handlers, `dbState()`
+- [x] Wrote `backend/app.js` â€” Express 5 factory (CORS, JSON 256kb, `GET /`, `GET /health`, 404/error handlers)
+- [x] Wrote `backend/index.js` â€” bootstrap: connect DB ? listen on port 5000, fatal exit if DB unreachable
 - [x] Wrote `backend/.env` with `PORT=5000` and `MONGO_URI`
 - [x] Restored `start`/`dev` scripts in `backend/package.json`
 - [x] Verified: syntax checks pass; port 5000 serves `/`, `/health`, 404; `npm start` loads env and attempts DB connection with clean failure when unreachable
 
 **Task:** Update the backend so it connects to the database and runs on port 5000.
 
-**Note:** No local MongoDB in this environment — set `MONGO_URI` in `backend/.env` (e.g. the Atlas connection string) for the DB-connected happy path.
+**Note:** No local MongoDB in this environment â€” set `MONGO_URI` in `backend/.env` (e.g. the Atlas connection string) for the DB-connected happy path.
 
-Completion Criteria: Backend connects to MongoDB and serves on port 5000. — VERIFIED (server listens on 5000; DB connection wired, fail-fast when URI unreachable)
+Completion Criteria: Backend connects to MongoDB and serves on port 5000. â€” VERIFIED (server listens on 5000; DB connection wired, fail-fast when URI unreachable)
 
 ---
 
-## Phase 24: Missing pdf-lib CDN Script — Fix `window.PDFLib is undefined` (COMPLETE)
+## Phase 24: Missing pdf-lib CDN Script â€” Fix `window.PDFLib is undefined` (COMPLETE)
 
 **Completed:**
 - [x] Diagnosed root cause: `client/app/layout.js` never injected the `pdf-lib` CDN script, so `window.PDFLib` was always `undefined` at tool runtime
@@ -341,7 +341,7 @@ Completion Criteria: Backend connects to MongoDB and serves on port 5000. — VERI
 
 **Problem:** All PDF-generation tools (Split PDF, Rotate PDF, JPG to PDF, Merge PDF, Compress PDF) destructure `window.PDFLib` at runtime and crashed with `Cannot destructure property 'PDFDocument' of 'window.PDFLib' as it is undefined`. The tools' internal `waitForLib('PDFLib')` polling masked the real cause by waiting 10 s then showing a generic "failed to load" alert.
 
-**Fix:** Single missing `<Script>` tag. The CDN UMD wrapper already assigns `window.PDFLib`, and every tool already reads that global name — no tool code changes were needed.
+**Fix:** Single missing `<Script>` tag. The CDN UMD wrapper already assigns `window.PDFLib`, and every tool already reads that global name â€” no tool code changes were needed.
 
 Completion Criteria: PDF-generation tools can read `window.PDFLib.PDFDocument` at runtime.
 
@@ -364,19 +364,19 @@ Completion Criteria: The "Core Tool Suites" section no longer exists on the home
 
 ---
 
-## Phase 22: Download Notification Popup — Global Wiring (COMPLETE)
+## Phase 22: Download Notification Popup â€” Global Wiring (COMPLETE)
 
 **Completed:**
 - [x] Fixed `triggerDownloadProgress()` in `DownloadProgressTrigger.js` to forward options to the mounted popup instance (previously it ignored the registry and downloaded instantly)
 - [x] Fixed `useDownloadProgress()` in `DownloadProgressPopup.js` to carry per-download options (`title`, `description`, `countdownMs`, `durationMs`) into the popup instead of discarding them
-- [x] Created `client/components/ads/DownloadProgressPopup/GlobalDownloadProgress.js` — global popup host component
+- [x] Created `client/components/ads/DownloadProgressPopup/GlobalDownloadProgress.js` â€” global popup host component
 - [x] Mounted `<GlobalDownloadProgress />` in `client/app/layout.js` site-wide
 - [x] Routed 9 remaining direct-download tools through the popup: Watermark, ImageResizer, ImgCompresser, FavIcon, JPGtoPDF, CSSMinifier, PasswordGenerator, QRCodeScanner, Paragraph Writer
 - [x] Fixed pre-existing crash in QRCodeScanner (`downloadBlob` was called but never imported)
 - [x] Removed unused `downloadBlob` imports across the routed tools
 - [x] Updated Status.md
 
-**Problem:** The `DownloadProgressPopup` component and its `triggerDownloadProgress` registry existed, but the popup was never mounted and the trigger never forwarded to it — so clicking any download button started the download instantly with no notification popup.
+**Problem:** The `DownloadProgressPopup` component and its `triggerDownloadProgress` registry existed, but the popup was never mounted and the trigger never forwarded to it â€” so clicking any download button started the download instantly with no notification popup.
 
 **Fix:** Wired the registry end-to-end and mounted the popup globally in the root layout. Every download button now shows the notification popup (3s countdown + animated progress bar) and starts the actual download from `onDownloadStart` when the countdown completes.
 
@@ -384,11 +384,11 @@ Completion Criteria: Every download button on every tool shows the notification 
 
 ---
 
-## Phase 21: Tools Page — Full Animation & Icon Enhancement (COMPLETE)
+## Phase 21: Tools Page â€” Full Animation & Icon Enhancement (COMPLETE)
 
 **Completed:**
-- [x] Created `client/app/tools/ToolsClient.js` — client component with all animations (staggered entrance, icon hover, mouse-tracking glow, skeleton loading)
-- [x] Created `client/app/tools/page.js` — server component that fetches categories and passes to ToolsClient
+- [x] Created `client/app/tools/ToolsClient.js` â€” client component with all animations (staggered entrance, icon hover, mouse-tracking glow, skeleton loading)
+- [x] Created `client/app/tools/page.js` â€” server component that fetches categories and passes to ToolsClient
 - [x] Updated `.category-grid` and `.category-card` in `client/app/globals.css` with enhanced animations (lift, shadow, color shifts, underlines, float animation)
 - [x] Added `prefers-reduced-motion` support to disable all animations
 - [x] Verified `next build` passes (46 static pages)
@@ -419,13 +419,13 @@ Completion Criteria: Tools page at `/tools` is fully animated with icon interact
 
 ---
 
-## Phase 20: WebP ? PNG Converter — Two-Way Conversion (COMPLETE)
+## Phase 20: WebP ? PNG Converter â€” Two-Way Conversion (COMPLETE)
 
 **Completed:**
-- [x] Created `client/utils/image-tools/WebpPngConverter/tool.js` — two-way conversion logic (imperative, no React hooks)
-- [x] Created `client/utils/image-tools/WebpPngConverter/tool.css` — tool-specific styles (`wpc-` prefix) using shared CSS variables
-- [x] Created `client/utils/image-tools/WebpPngConverter/index.js` — entry point with CSS import
-- [x] Created `client/app/img/WebpPngConverter/page.js` — Next.js App Router page
+- [x] Created `client/utils/image-tools/WebpPngConverter/tool.js` â€” two-way conversion logic (imperative, no React hooks)
+- [x] Created `client/utils/image-tools/WebpPngConverter/tool.css` â€” tool-specific styles (`wpc-` prefix) using shared CSS variables
+- [x] Created `client/utils/image-tools/WebpPngConverter/index.js` â€” entry point with CSS import
+- [x] Created `client/app/img/WebpPngConverter/page.js` â€” Next.js App Router page
 - [x] Added `initWebpPngConverter` export to `client/utils/tools.js`
 - [x] Replaced `/img/WebpToPng` metadata + route with `/img/WebpPngConverter` in `client/lib/category-data.js`
 - [x] Updated `client/app/sitemap.xml/route.js` TOOL_META
@@ -451,7 +451,7 @@ Completion Criteria: Unified WebP?PNG converter accessible at `/img/WebpPngConve
 
 ---
 
-## Phase 19: JPG ? PNG Converter — Consolidation (COMPLETE)
+## Phase 19: JPG ? PNG Converter â€” Consolidation (COMPLETE)
 
 **Completed:**
 - [x] Deleted `client/utils/img/JpgToPng/` directory (JpgToPng.js, JpgToPng.css)
@@ -473,7 +473,7 @@ Completion Criteria: Only `/img/JpgPngConverter` remains for JPG?PNG conversion;
 
 ---
 
-## Phase 18: MS Office Tools — Complete Removal (COMPLETE)
+## Phase 18: MS Office Tools â€” Complete Removal (COMPLETE)
 
 **Completed:**
 - [x] Deleted `client/utils/msoffice-tool/` directory (6 tool folders: WordnPDF, TXTnWord, ExcelnPDF, PPTnPDF, HTMLnDOC, CSVnPDF)
@@ -493,13 +493,13 @@ Completion Criteria: No MS Office tool code, routes, or CDN references remain in
 
 ---
 
-## Phase 17: JPG ? PNG Converter — Two-Way Image Format Converter (COMPLETE)
+## Phase 17: JPG ? PNG Converter â€” Two-Way Image Format Converter (COMPLETE)
 
 **Completed:**
-- [x] Created `client/utils/image-tools/JpgPngConverter/tool.js` — main tool logic (imperative, no React hooks)
-- [x] Created `client/utils/image-tools/JpgPngConverter/tool.css` — styling using shared CSS variables
-- [x] Created `client/utils/image-tools/JpgPngConverter/index.js` — entry point with CSS import
-- [x] Created `client/app/img/JpgPngConverter/page.js` — Next.js App Router page
+- [x] Created `client/utils/image-tools/JpgPngConverter/tool.js` â€” main tool logic (imperative, no React hooks)
+- [x] Created `client/utils/image-tools/JpgPngConverter/tool.css` â€” styling using shared CSS variables
+- [x] Created `client/utils/image-tools/JpgPngConverter/index.js` â€” entry point with CSS import
+- [x] Created `client/app/img/JpgPngConverter/page.js` â€” Next.js App Router page
 - [x] Added export to `client/utils/tools.js`
 - [x] Added tool metadata and route to `client/lib/category-data.js` (Image Tools category)
 - [x] Verified `next build` passes (55 static pages including new `/img/JpgPngConverter`)
@@ -521,7 +521,7 @@ Completion Criteria: Unified JPG?PNG converter accessible at `/img/JpgPngConvert
 
 ---
 
-## Phase 16: Watermark Tool — Visual 9-Point Alignment Grid (COMPLETE)
+## Phase 16: Watermark Tool â€” Visual 9-Point Alignment Grid (COMPLETE)
 
 **Completed:**
 - [x] Added `AlignmentGrid` component to `client/utils/img/Watermark/Watermark.js`
@@ -539,7 +539,7 @@ Completion Criteria: Watermark tool shows a visual 9-point alignment grid.
 
 ---
 
-## Phase 15: JPG to PNG — Typo Fix (COMPLETE)
+## Phase 15: JPG to PNG â€” Typo Fix (COMPLETE)
 
 **Completed:**
 - [x] Fixed `addEventEventListener` ? `addEventListener` in `client/utils/img/JpgToPng/JpgToPng.js:450`
@@ -554,7 +554,7 @@ Completion Criteria: JPG to PNG page mounts without runtime errors.
 
 ---
 
-## Phase 14: Image Tools & Dev Tools — Invalid Hook Call Fix (COMPLETE)
+## Phase 14: Image Tools & Dev Tools â€” Invalid Hook Call Fix (COMPLETE)
 
 **Completed:**
 - [x] Fixed `mountJpgToPng` (`utils/img/JpgToPng/JpgToPng.js`)
@@ -564,7 +564,7 @@ Completion Criteria: JPG to PNG page mounts without runtime errors.
 - [x] Fixed `createHTMLMinifier` (`utils/dev-tools/HTMLMinifier/HTMLMinifier.js`)
 - [x] ESLint: 0 errors on all 5 modified files
 
-**Problem:** Same bug pattern as Phase 13 — each imperative tool function called `const { trigger } = useDownloadProgress();` inside a plain JS function invoked from a `useEffect` in its `page.js`, running the hook outside any React component tree and throwing "Invalid hook call".
+**Problem:** Same bug pattern as Phase 13 â€” each imperative tool function called `const { trigger } = useDownloadProgress();` inside a plain JS function invoked from a `useEffect` in its `page.js`, running the hook outside any React component tree and throwing "Invalid hook call".
 
 **Fix:** Switched each file to the non-hook `triggerDownloadProgress` registry import from `DownloadProgressTrigger`, removed the hook line, and renamed every `trigger({...})` call site to `triggerDownloadProgress({...})`. Matches the pattern used by every other imperative tool in the codebase.
 
@@ -572,7 +572,7 @@ Completion Criteria: All image and dev-tool pages render without React hook erro
 
 ---
 
-## Phase 13: Image to Base64 — Invalid Hook Call Fix (COMPLETE)
+## Phase 13: Image to Base64 â€” Invalid Hook Call Fix (COMPLETE)
 
 **Completed:**
 - [x] Replaced `useDownloadProgress` import with `triggerDownloadProgress` from `DownloadProgressTrigger`
@@ -588,7 +588,7 @@ Completion Criteria: Build passes and Image to Base64 page renders without React
 
 ---
 
-## Phase 12: QR Code Scanner — Invalid Hook Call Fix (COMPLETE)
+## Phase 12: QR Code Scanner â€” Invalid Hook Call Fix (COMPLETE)
 
 **Completed:**
 - [x] Removed `useDownloadProgress()` hook call from `createQRScanner` (imperative function, not a component)
@@ -652,25 +652,25 @@ Plan collections, validation, indexes, access permissions, database credentials,
 
 **Completed:**
 - [x] MongoDB Atlas connected (3-shard replica set, SSL, Mongoose 9.11.1)
-- [x] Site model — sites collection with domain, settings, timestamps
-- [x] Session model — sessions with visitor/session tracking, device info, UTM params, indexes
-- [x] Event model — events with eventType, sessionId, visitorId, element data, custom events, indexes
-- [x] AdminSession model — adminSessions with TTL index on expiresAt (Phase 6)
-- [x] DailyStats model — dailyStats for precomputed aggregates (Phase 8)
+- [x] Site model â€” sites collection with domain, settings, timestamps
+- [x] Session model â€” sessions with visitor/session tracking, device info, UTM params, indexes
+- [x] Event model â€” events with eventType, sessionId, visitorId, element data, custom events, indexes
+- [x] AdminSession model â€” adminSessions with TTL index on expiresAt (Phase 6)
+- [x] DailyStats model â€” dailyStats for precomputed aggregates (Phase 8)
 - [x] All indexes and validation per DESIGN.md (no duplicate index warnings)
 - [x] Backend index.js connects on startup with all models loaded
 
 Suggested Collections:
 
-events — Page views and other tracked actions.
+events â€” Page views and other tracked actions.
 
-sessions — Visit metadata and activity timestamps.
+sessions â€” Visit metadata and activity timestamps.
 
-sites — Site configuration and tracking settings.
+sites â€” Site configuration and tracking settings.
 
-adminSessions — Dashboard authentication sessions, if using server-side sessions.
+adminSessions â€” Dashboard authentication sessions, if using server-side sessions.
 
-dailyStats — Optional precomputed summaries.
+dailyStats â€” Optional precomputed summaries.
 
 Completion Criteria: The backend can connect to the database safely.
 
@@ -697,7 +697,7 @@ Analytics Reporting: Calculate statistics and return reports to authenticated ad
 
 System Extras: Health checks, rate limits, request-size limits, and structured logging.
 
-Completion Criteria: Test events can be saved and queried successfully. — VERIFIED (events saved to MongoDB, all 7 report endpoints return correct aggregated data)
+Completion Criteria: Test events can be saved and queried successfully. â€” VERIFIED (events saved to MongoDB, all 7 report endpoints return correct aggregated data)
 
 Phase 5: Build the Tracking Client (COMPLETE)
 
@@ -725,7 +725,7 @@ Respect consent settings and avoid capturing sensitive data.
 - [x] Verified `next build` passes (48 static pages generated successfully)
 - [x] Fixed pre-existing build break in `client/utils/shared/download.js` (downloadBlob export restored)
 
-Completion Criteria: Browsing the site produces accurate records in MongoDB without noticeably slowing the website. — VERIFIED (build passes, tracking integrated)
+Completion Criteria: Browsing the site produces accurate records in MongoDB without noticeably slowing the website. â€” VERIFIED (build passes, tracking integrated)
 
 Phase 6: Protect /analytics (COMPLETE)
 
@@ -745,7 +745,7 @@ Since your public website has no login or registration, add authentication speci
 - [x] Verified `next build` passes (48 static pages)
 - [x] Verified backend tests: 37/37 passing (auth flow, all 7 reports, rate limit, 404)
 
-Completion Criteria: Only an authenticated administrator can see reports. — VERIFIED
+Completion Criteria: Only an authenticated administrator can see reports. â€” VERIFIED
 
 Phase 7: Build the Dashboard UI (COMPLETE)
 
@@ -772,25 +772,25 @@ Use actual backend data rather than hardcoded demo statistics.
 - [x] Verified backend tests: 37/37 passing
 
 **Files created:**
-- `client/lib/analyticsApi.js` — API client for auth + report fetches with `credentials: "include"`
-- `client/lib/useReport.js` — `useReport` data-fetching hook with loading/error/data state + `useIntervalReport` for auto-refresh
-- `client/components/AnalyticsDashboard/AnalyticsDashboard.js` — dashboard shell (auth, nav tabs, date picker, view switching)
-- `client/components/AnalyticsDashboard/DateRangePicker.js` — presets + custom date range
-- `client/components/AnalyticsDashboard/views/OverviewView.js` — stat cards + time-series chart
-- `client/components/AnalyticsDashboard/views/SourcesView.js` — traffic sources table
-- `client/components/AnalyticsDashboard/views/PagesView.js` — top pages table with pagination
-- `client/components/AnalyticsDashboard/views/DevicesView.js` — device/browser/OS breakdown
-- `client/components/AnalyticsDashboard/views/EventsView.js` — event type + custom event breakdown
-- `client/components/AnalyticsDashboard/views/LiveView.js` — active visitors/sessions + recent events
-- `client/components/AnalyticsDashboard/ui/DataTable.js` — paginated table component
-- `client/components/AnalyticsDashboard/ui/StatCard.js` — metric stat card
-- `client/components/AnalyticsDashboard/ui/TimeSeriesChart.js` — SVG bar+line chart
-- `client/components/AnalyticsDashboard/ui/LoadingState.js` — loading spinner
-- `client/components/AnalyticsDashboard/ui/ErrorState.js` — error display with retry
-- `client/components/AnalyticsDashboard/ui/EmptyState.js` — empty result display
-- `client/components/AnalyticsDashboard/ui/CsvExportButton.js` — CSV download per report
+- `client/lib/analyticsApi.js` â€” API client for auth + report fetches with `credentials: "include"`
+- `client/lib/useReport.js` â€” `useReport` data-fetching hook with loading/error/data state + `useIntervalReport` for auto-refresh
+- `client/components/AnalyticsDashboard/AnalyticsDashboard.js` â€” dashboard shell (auth, nav tabs, date picker, view switching)
+- `client/components/AnalyticsDashboard/DateRangePicker.js` â€” presets + custom date range
+- `client/components/AnalyticsDashboard/views/OverviewView.js` â€” stat cards + time-series chart
+- `client/components/AnalyticsDashboard/views/SourcesView.js` â€” traffic sources table
+- `client/components/AnalyticsDashboard/views/PagesView.js` â€” top pages table with pagination
+- `client/components/AnalyticsDashboard/views/DevicesView.js` â€” device/browser/OS breakdown
+- `client/components/AnalyticsDashboard/views/EventsView.js` â€” event type + custom event breakdown
+- `client/components/AnalyticsDashboard/views/LiveView.js` â€” active visitors/sessions + recent events
+- `client/components/AnalyticsDashboard/ui/DataTable.js` â€” paginated table component
+- `client/components/AnalyticsDashboard/ui/StatCard.js` â€” metric stat card
+- `client/components/AnalyticsDashboard/ui/TimeSeriesChart.js` â€” SVG bar+line chart
+- `client/components/AnalyticsDashboard/ui/LoadingState.js` â€” loading spinner
+- `client/components/AnalyticsDashboard/ui/ErrorState.js` â€” error display with retry
+- `client/components/AnalyticsDashboard/ui/EmptyState.js` â€” empty result display
+- `client/components/AnalyticsDashboard/ui/CsvExportButton.js` â€” CSV download per report
 
-Completion Criteria: All core reports display correctly and respond to filters. — VERIFIED
+Completion Criteria: All core reports display correctly and respond to filters. â€” VERIFIED
 
 Phase 8: Add Live Activity and Optimize (COMPLETE)
 
@@ -799,10 +799,10 @@ Add periodic session heartbeats, inactivity detection, recent-visitor reports, e
 Completion Criteria: Recent activity updates reliably and reports remain responsive as data grows.
 
 **Completed:**
-- [x] Server-side session inactivity detection — `POST /api/analytics/sessions/mark-stale-inactive` endpoint marks stale sessions as inactive based on `lastActivityAt` (configurable timeout, default 30 min)
-- [x] Recent visitors report — `GET /api/analytics/reports/recent-visitors` returns unique visitors with last visit time, visit count, device/browser/OS, referrer, UTM source (supports date range, domain filter, limit up to 200)
-- [x] DailyStats precomputation — `POST /api/analytics/daily-stats/compute` aggregates daily stats per domain (page views, unique visitors, sessions, bounce rate, avg duration, top pages, referrers, devices, countries); `GET /api/analytics/daily-stats` retrieves precomputed stats
-- [x] Database index optimization — Added compound indexes on Session (`domain+lastActivityAt`, `visitorId+startedAt`) and Event (`domain+eventType+timestamp`) for faster recent-visitor and time-series queries
+- [x] Server-side session inactivity detection â€” `POST /api/analytics/sessions/mark-stale-inactive` endpoint marks stale sessions as inactive based on `lastActivityAt` (configurable timeout, default 30 min)
+- [x] Recent visitors report â€” `GET /api/analytics/reports/recent-visitors` returns unique visitors with last visit time, visit count, device/browser/OS, referrer, UTM source (supports date range, domain filter, limit up to 200)
+- [x] DailyStats precomputation â€” `POST /api/analytics/daily-stats/compute` aggregates daily stats per domain (page views, unique visitors, sessions, bounce rate, avg duration, top pages, referrers, devices, countries); `GET /api/analytics/daily-stats` retrieves precomputed stats
+- [x] Database index optimization â€” Added compound indexes on Session (`domain+lastActivityAt`, `visitorId+startedAt`) and Event (`domain+eventType+timestamp`) for faster recent-visitor and time-series queries
 - [x] Verified `next build` passes (54 static pages)
 - [x] Verified backend code syntax (no errors)
 
@@ -834,11 +834,11 @@ Introduce funnels, returning-visitor reports, retention, heatmaps, and session r
 For recordings, mask sensitive fields, avoid capturing passwords or private form content, and implement appropriate consent and retention controls.
 
 **Completed:**
-- [x] Funnel report — `GET /api/analytics/reports/funnel` with configurable steps (2-10 paths), conversion rates, drop-off analysis
-- [x] Returning visitors report — `GET /api/analytics/reports/returning-visitors` shows visitors with 2+ visits, visit counts, first/last visit dates
-- [x] Retention report — `GET /api/analytics/reports/retention` cohort-based retention matrix (daily/weekly granularity, configurable periods)
-- [x] Heatmap report — `GET /api/analytics/reports/heatmap` click distribution per page path, element-level click counts and percentages
-- [x] Session replay — `GET /api/analytics/reports/session-replay` full event timeline for a session with PII redaction (passwords, tokens, emails, etc.)
+- [x] Funnel report â€” `GET /api/analytics/reports/funnel` with configurable steps (2-10 paths), conversion rates, drop-off analysis
+- [x] Returning visitors report â€” `GET /api/analytics/reports/returning-visitors` shows visitors with 2+ visits, visit counts, first/last visit dates
+- [x] Retention report â€” `GET /api/analytics/reports/retention` cohort-based retention matrix (daily/weekly granularity, configurable periods)
+- [x] Heatmap report â€” `GET /api/analytics/reports/heatmap` click distribution per page path, element-level click counts and percentages
+- [x] Session replay â€” `GET /api/analytics/reports/session-replay` full event timeline for a session with PII redaction (passwords, tokens, emails, etc.)
 - [x] Database index optimization verified for new query patterns
 - [x] Frontend dashboard views: FunnelsView, RetentionView, HeatmapView, SessionReplayView, ReturningVisitorsView
 - [x] Updated AnalyticsDashboard navigation with 5 new tabs
@@ -846,7 +846,7 @@ For recordings, mask sensitive fields, avoid capturing passwords or private form
 - [x] Verified `next build` passes (54 static pages)
 - [x] Verified backend syntax (no errors)
 
-Completion Criteria: Advanced reports work without compromising privacy or site performance. — VERIFIED
+Completion Criteria: Advanced reports work without compromising privacy or site performance. â€” VERIFIED
 
 Phase 10: Test, Deploy, and Maintain
 
@@ -860,7 +860,7 @@ Completion Criteria: The production system works reliably from visitor activity 
 
 ---
 
-## Phase 11: Colour Scheme 3 — Light / Dark / System (COMPLETE)
+## Phase 11: Colour Scheme 3 â€” Light / Dark / System (COMPLETE)
 
 Replaced the previous colour palette with colour scheme 3 and swapped the
 third theme option from "Neon" to "System" (follows OS preference).
@@ -919,7 +919,7 @@ third theme option from "Neon" to "System" (follows OS preference).
 
 **Task:** "update all the pages with current status properly like in faq i see it's  100 % free no limits but actullay it have limits make sure all pages have correct and proper data"
 
-**Completion Criteria:** All pages reflect correct data about limits. — VERIFIED via `next build` and ESLint.
+**Completion Criteria:** All pages reflect correct data about limits. â€” VERIFIED via `next build` and ESLint.
 ## Phase 37: Remove Analytics and Pricing Pages from Frontend (COMPLETE)
 
 **Completed:**
@@ -933,16 +933,16 @@ third theme option from "Neon" to "System" (follows OS preference).
 
 **Task:** "remove /analityics and /price plan but keep in mind do nothing with backend i just want to remove it from frontend"
 
-**Completion Criteria:** Analytics and pricing pages removed from frontend; `next build` passes; ESLint: 0 errors. — VERIFIED.
+**Completion Criteria:** Analytics and pricing pages removed from frontend; `next build` passes; ESLint: 0 errors. â€” VERIFIED.
 
 ## Phase 38: Kingdome Traffic Dashboard + Admin Password (COMPLETE)
 
 **Completed:**
-- [x] Created `/kingdome/dashboard` — full professional traffic management dashboard at `client/app/kingdome/dashboard/page.js`
+- [x] Created `/kingdome/dashboard` â€” full professional traffic management dashboard at `client/app/kingdome/dashboard/page.js`
 - [x] Created `DashboardClient.js` component with 6 key metrics cards, time-series traffic chart (SVG, day/hour granularity), top pages table, traffic sources bar chart, devices breakdown, and live visitors section with real-time active visitor count and recent events feed
-- [x] Created `/kingdome/login` — secure admin login page with password toggle, remember redirect, and loading state at `client/app/kingdome/login/page.js`
+- [x] Created `/kingdome/login` â€” secure admin login page with password toggle, remember redirect, and loading state at `client/app/kingdome/login/page.js`
 - [x] Created `AuthProvider` context at `client/components/AuthProvider/AuthProvider.js` for authentication state management
-- [x] Created `client/middleware.js` — route protection middleware that redirects unauthenticated users to login and redirects authenticated users away from login
+- [x] Created `client/middleware.js` â€” route protection middleware that redirects unauthenticated users to login and redirects authenticated users away from login
 - [x] Added dashboard-specific CSS styles to `client/app/globals.css` using shared design tokens (metrics cards, chart sections, source bars, device rows, live indicators, login card)
 - [x] Updated admin default password from `admin123` to `kingdom` in `backend/config/env.js` (`ADMIN_PASSWORD` default)
 - [x] Updated `backend/.env` `ADMIN_PASSWORD` to `kingdom`
@@ -954,19 +954,19 @@ third theme option from "Neon" to "System" (follows OS preference).
 
 **Completion Criteria:** Dashboard accessible at `/kingdome/dashboard` after login with default password `kingdom`; traffic metrics, charts, tables, and live data all rendering from real backend API; route protected by middleware; build passes cleanly.
 
-## Phase 39: Admin Password Recovery — SMS-based OTP (COMPLETE)
+## Phase 39: Admin Password Recovery â€” SMS-based OTP (COMPLETE)
 
 **Completed:**
 - [x] Added SMS/OTP config to `backend/config/env.js` (`sms.provider`, `sms.twilio.*`, `otp.*`, recovery rate-limit knobs)
-- [x] Created `backend/utils/sms.js` — pluggable SMS sender (`mock` provider logs OTP to server logs for local dev; `twilio` calls the Twilio REST API)
-- [x] Created `backend/utils/password.js` — shared scrypt password hashing/verification helpers (matches `authController.js` params)
-- [x] Created `backend/models/Admin.js` — admin account record with `email`, `passwordHash`, `recoveryPhone` (E.164), `isActive`
-- [x] Created `backend/models/AdminOtp.js` — OTP records with `otpHash`, `expiresAt` (TTL index), `attempts`/`maxAttempts`, `verifiedAt`/`consumedAt`, auto-expire via TTL index
+- [x] Created `backend/utils/sms.js` â€” pluggable SMS sender (`mock` provider logs OTP to server logs for local dev; `twilio` calls the Twilio REST API)
+- [x] Created `backend/utils/password.js` â€” shared scrypt password hashing/verification helpers (matches `authController.js` params)
+- [x] Created `backend/models/Admin.js` â€” admin account record with `email`, `passwordHash`, `recoveryPhone` (E.164), `isActive`
+- [x] Created `backend/models/AdminOtp.js` â€” OTP records with `otpHash`, `expiresAt` (TTL index), `attempts`/`maxAttempts`, `verifiedAt`/`consumedAt`, auto-expire via TTL index
 - [x] Exported `Admin` and `AdminOtp` from `backend/models/index.js`
 - [x] Created `backend/controllers/otpController.js`:
-  - `requestPasswordRecovery` — looks up admin by email, retrieves registered recovery phone, generates a 6-digit OTP, stores a hashed OTP with TTL, invalidates prior unredeemed OTPs, sends OTP via SMS, returns a generic success message (no user enumeration)
-  - `verifyOtpAndResetPassword` — validates OTP against the stored hash, enforces expiry and max-attempt limits, marks OTP verified/consumed (single-use), rotates the password hash, revokes all existing admin sessions
-- [x] Created `backend/routes/recovery.js` — `POST /api/auth/password-recovery/request` and `POST /api/auth/password-recovery/verify`, both rate-limited per IP; mounted under `/api/auth` in `backend/routes/index.js`
+  - `requestPasswordRecovery` â€” looks up admin by email, retrieves registered recovery phone, generates a 6-digit OTP, stores a hashed OTP with TTL, invalidates prior unredeemed OTPs, sends OTP via SMS, returns a generic success message (no user enumeration)
+  - `verifyOtpAndResetPassword` â€” validates OTP against the stored hash, enforces expiry and max-attempt limits, marks OTP verified/consumed (single-use), rotates the password hash, revokes all existing admin sessions
+- [x] Created `backend/routes/recovery.js` â€” `POST /api/auth/password-recovery/request` and `POST /api/auth/password-recovery/verify`, both rate-limited per IP; mounted under `/api/auth` in `backend/routes/index.js`
 - [x] Added SMS/OTP env vars (with mocked defaults) to `backend/.env`
 - [x] Verified `node --check` passes on all backend source files
 
@@ -978,30 +978,30 @@ third theme option from "Neon" to "System" (follows OS preference).
 5. Client calls `POST /api/auth/password-recovery/verify` with `{ email, otp, newPassword }`.
 6. Backend verifies the OTP (timing-safe hash compare), checks expiry and attempt limits, then rotates the password hash and revokes all active admin sessions.
 
-**Task:** "Develop a backend workflow for an admin password recovery system that utilizes SMS-based OTP verification — retrieve the administrator's registered recovery phone number from the database, generate and send a one-time password (OTP) to that number, and provide a secure mechanism to verify the OTP before allowing the user to update their password."
+**Task:** "Develop a backend workflow for an admin password recovery system that utilizes SMS-based OTP verification â€” retrieve the administrator's registered recovery phone number from the database, generate and send a one-time password (OTP) to that number, and provide a secure mechanism to verify the OTP before allowing the user to update their password."
 
 **Completion Criteria:** Request ? send OTP ? verify ? reset password flow implemented end-to-end with rate limiting, TTL expiry, single-use OTPs, no user enumeration, and session revocation on reset. Backend syntax verified.
 
 ## Phase 40: Kingdome Dashboard Sidebar + Coming Soon Pages (COMPLETE)
 
 **Completed:**
-- [x] Redesigned `client/components/Sidebar/Sidebar.js` — deep navy (`#081426`) premium sidebar with brand header (`/logo.svg` + "Docstools"), navigation, active/hover states, responsive collapse + mobile drawer
-- [x] Created `client/components/Sidebar/Sidebar.css` — sidebar styles with blue-gray border, 240px desktop width, 220ms transitions, focus-visible rings
-- [x] Created `client/components/ComingSoon/ComingSoonClient.js` — shared "Coming soon" page client component (Sidebar + feature card)
-- [x] Created `client/components/ComingSoon/ComingSoon.css` — coming soon page styles
+- [x] Redesigned `client/components/Sidebar/Sidebar.js` â€” deep navy (`#081426`) premium sidebar with brand header (`/logo.svg` + "Docstools"), navigation, active/hover states, responsive collapse + mobile drawer
+- [x] Created `client/components/Sidebar/Sidebar.css` â€” sidebar styles with blue-gray border, 240px desktop width, 220ms transitions, focus-visible rings
+- [x] Created `client/components/ComingSoon/ComingSoonClient.js` â€” shared "Coming soon" page client component (Sidebar + feature card)
+- [x] Created `client/components/ComingSoon/ComingSoon.css` â€” coming soon page styles
 - [x] Created page.js routes for all 6 navigation items: `/kingdome/pages`, `/kingdome/traffic-sources`, `/kingdome/devices`, `/kingdome/live-visitors`, `/kingdome/events`, `/kingdome/settings`
 - [x] Installed `lucide-react` (no icon library was previously installed)
-- [x] Modified `client/app/kingdome/dashboard/DashboardClient.js` — wrapped shell in `.dashboard-layout` with `<Sidebar />` + `.dashboard-main`; single `shellContent` return; all existing functionality preserved
-- [x] Sidebar NAV_ITEMS use actual hrefs (not null placeholders) — Dashboard routes to live dashboard; all others route to their Coming soon page
+- [x] Modified `client/app/kingdome/dashboard/DashboardClient.js` â€” wrapped shell in `.dashboard-layout` with `<Sidebar />` + `.dashboard-main`; single `shellContent` return; all existing functionality preserved
+- [x] Sidebar NAV_ITEMS use actual hrefs (not null placeholders) â€” Dashboard routes to live dashboard; all others route to their Coming soon page
 - [x] "Coming soon" badge shown on all non-Dashboard nav items
-- [x] Active state driven by `usePathname()` — exact or nested-route match, blue/indigo gradient active background, no hardcoded active item
+- [x] Active state driven by `usePathname()` â€” exact or nested-route match, blue/indigo gradient active background, no hardcoded active item
 - [x] Responsive: desktop fixed 240px sidebar; tablet collapsible icon-only; mobile slide-in drawer with hamburger, backdrop, Escape-to-close, auto-close on selection
 
 **Problem:** The `/kingdome/dashboard` analytics dashboard had navigation items for Pages, Traffic Sources, Devices, Live Visitors, Events, and Settings that pointed to no actual routes (disabled "Coming soon" placeholders). The user requested these be turned into real "Coming soon" pages.
 
 **Fix:** Created a shared `ComingSoonClient` component and 6 page.js routes, one per navigation item, each rendering the Sidebar + a "Coming soon" feature card. Updated the Sidebar to link to these routes instead of using disabled placeholders.
 
-**Task:** "update ui and add these comming soon pages Navigation — Dashboard, Pages Coming soon, Traffic Sources Coming soon, Devices Coming soon, Live Visitors Coming soon, Events Coming soon, Settings Coming soon"
+**Task:** "update ui and add these comming soon pages Navigation â€” Dashboard, Pages Coming soon, Traffic Sources Coming soon, Devices Coming soon, Live Visitors Coming soon, Events Coming soon, Settings Coming soon"
 
 **Completion Criteria:** Sidebar renders on `/kingdome/dashboard` with all 7 nav items linking to real routes; clicking any non-Dashboard item navigates to its Coming soon page; `next build` passes (all 8 kingdome routes prerendered); ESLint clean on new/modified files.
 
@@ -1009,13 +1009,13 @@ third theme option from "Neon" to "System" (follows OS preference).
 ## Phase 40: Kingdome Dashboard Sidebar Redesign (COMPLETE)
 
 **Completed:**
-- [x] Created `client/components/Sidebar/Sidebar.js` — reusable sidebar component (brand header, 7 navigation items, active/hover states, responsive collapse + mobile drawer)
-- [x] Created `client/components/Sidebar/Sidebar.css` — deep navy (`#081426`) theme, blue-gray border, 240px desktop width, 220ms transitions, focus-visible styles
+- [x] Created `client/components/Sidebar/Sidebar.js` â€” reusable sidebar component (brand header, 7 navigation items, active/hover states, responsive collapse + mobile drawer)
+- [x] Created `client/components/Sidebar/Sidebar.css` â€” deep navy (`#081426`) theme, blue-gray border, 240px desktop width, 220ms transitions, focus-visible styles
 - [x] Installed `lucide-react` (no icon library was previously installed) and added to `client/package.json` / `package-lock.json`
-- [x] Modified `client/app/kingdome/dashboard/DashboardClient.js` — wrapped shell in `.dashboard-layout` with `<Sidebar />` + `.dashboard-main`; single `shellContent` return so the sidebar renders on all dashboard states; all existing metrics, charts, tables, auth, date-range picker, domain filter, and refresh logic preserved unchanged
+- [x] Modified `client/app/kingdome/dashboard/DashboardClient.js` â€” wrapped shell in `.dashboard-layout` with `<Sidebar />` + `.dashboard-main`; single `shellContent` return so the sidebar renders on all dashboard states; all existing metrics, charts, tables, auth, date-range picker, domain filter, and refresh logic preserved unchanged
 - [x] Navigation items in required order with Lucide icons at 20px: Dashboard (`LayoutDashboard` ? `/kingdome/dashboard`), Pages (`FileText`), Traffic Sources (`ChartNoAxesCombined`), Devices (`MonitorSmartphone`), Live Visitors (`Users`), Events (`MousePointerClick`), Settings (`Settings`)
 - [x] Active state driven by `usePathname()` (exact or nested-route match); blue/indigo gradient active background, muted blue-gray inactive text, hover brightening, `aria-current="page"`, focus-visible rings
-- [x] Pages, Traffic Sources, Devices, Live Visitors, Events, Settings have no frontend routes — rendered as clearly marked disabled "Coming soon" placeholders (no fake routes invented)
+- [x] Pages, Traffic Sources, Devices, Live Visitors, Events, Settings have no frontend routes â€” rendered as clearly marked disabled "Coming soon" placeholders (no fake routes invented)
 - [x] Responsive behavior: desktop fixed 240px sidebar (main content `margin-left`, no overlap); tablet collapsible icon-only sidebar with tooltips and collapse/expand toggle; mobile slide-in drawer with hamburger, accessible backdrop, Escape-to-close, auto-close on selection, no horizontal overflow
 - [x] Brand header preserves existing identity: `/logo.svg` + "Docstools", subtle divider below
 
@@ -1023,7 +1023,80 @@ third theme option from "Neon" to "System" (follows OS preference).
 
 **Fix:** Extracted a reusable `Sidebar` component and integrated it into `DashboardClient.js`, keeping every existing dashboard feature intact.
 
-**Task:** "Redesign My Existing Analytics Dashboard Sidebar" — premium dark sidebar for the existing analytics dashboard.
+**Task:** "Redesign My Existing Analytics Dashboard Sidebar" â€” premium dark sidebar for the existing analytics dashboard.
 
 **Completion Criteria:** Sidebar renders on `/kingdome/dashboard` with deep navy theme, correct icon set and item order, active state tracking the actual route, working tablet collapse and mobile drawer, `next build` passes, ESLint clean on new/modified files.
+---
+
+## Phase 41: Administrative Login & Dashboard System (COMPLETE)
+
+**Completed:**
+- [x] Added `backend/config/roles.js` â€” RBAC matrix: 4 roles (`superadmin` / `admin` / `analyst` / `viewer`), 10 permissions, `hasPermission`, `roleAtLeast`, `publicAdmin` (never serialises the password hash)
+- [x] Added `backend/middleware/rbac.js` â€” `requirePermission(perm)` and `requireRole(...roles)` guards; every `/api/admin/*` route declares the permission it needs
+- [x] Rewrote `backend/controllers/authController.js` â€” email + password login, legacy operator-password fallback, account lockout (5 attempts â†’ 15 min), timing-equalised unknown-account path, `/me` returning identity + effective permissions, change password, profile update, session list/revoke
+- [x] Rewrote `backend/middleware/auth.js` â€” `requireAdmin` resolves the account and role, populates `req.admin` with the permission set, and slides the session expiry (24 h idle) without passing the absolute 7-day cap
+- [x] Extended `backend/models/Admin.js` (`name`, `role`, lockout + last-login fields, pre-save name fallback for legacy documents) and `backend/models/AdminSession.js` (`email`, `name`, `role`, `absoluteExpiresAt`, `userAgent`)
+- [x] Added `backend/models/AdminActivity.js` (append-only audit trail) and `backend/models/AppUser.js` (application users)
+- [x] Added `backend/utils/audit.js` â€” `logActivity()` records every mutation and every auth attempt; IP and user agent stored as SHA-256 hashes; a write failure never breaks the request
+- [x] Added `backend/controllers/adminUsersController.js` (app-user CRUD + administrator-account CRUD with superadmin-only guards and a last-superadmin check), `backend/controllers/activityController.js` (audit reader with search/filter/facets), `backend/controllers/systemController.js` (runtime, memory, database and collection statistics)
+- [x] Added `backend/routes/admin.js` and mounted it at `/api/admin` from `backend/routes/index.js`
+- [x] Hardened `backend/utils/password.js` â€” malformed-hash safety, `dummyVerify()` for timing equalisation, `passwordPolicyError()` (â‰¥ 8 chars, â‰¥ 1 letter, â‰¥ 1 number)
+- [x] Added the `countOnlyFailures` option to `backend/middleware/rateLimit.js` so successful logins release the IP budget
+- [x] Added `backend/scripts/seed-admin.js` (`npm run seed`, `npm run seed:demo`) and `backend/test/admin-auth.test.js` (22 offline assertions)
+- [x] Added `client/lib/adminApi.js` (cookie-authenticated API client + `ApiError`), `client/lib/permissions.js`, `client/lib/adminNav.js` (permission per nav entry), `client/lib/useAdminQuery.js`, `client/lib/format.js`
+- [x] Added `client/components/AdminShell/` â€” shell layout, session gate, permission gate, and the shared admin CSS primitives (panels, tables, badges, forms, modal, pagination, responsive rules)
+- [x] Added `client/components/AdminHeader/` â€” sticky top bar with title, search, notifications and the profile menu (identity, role badge, sign out)
+- [x] Rewrote `client/components/AuthProvider/AuthProvider.js` â€” exposes `user`, `role`, `roleLabel`, `permissions` and `hasPermission()`; `login(email, password)`
+- [x] Made `client/components/Sidebar/Sidebar.js` sectioned and permission-filtered
+- [x] Rewrote `client/app/kingdome/login/page.js` â€” email + password, show/hide toggle, generic invalid-credential message, rate-limit/lockout messaging, safe relative `redirect` handling
+- [x] Added `client/app/kingdome/users/` (user table), `admins/` (administrator accounts), `activity/` (audit trail), `system/` (statistics); rewrote `settings/` (profile, password, sessions); added `client/app/kingdome/layout.js` and `page.js`
+- [x] Wrapped the dashboard and the placeholder modules in `AdminShell`; moved the dashboard's date range, domain filter and refresh into the header actions slot
+- [x] Made the admin area full-bleed with a pure-CSS `body:has(#admin-route-marker)` rule (no flash, no client script touching React-managed attributes)
+- [x] Added the `/api/admin/:path*` rewrite to `client/next.config.mjs`; `NextResponse` now imported from `next/server` in `client/middleware.js`
+- [x] Wrote `ADMIN_SPEC.md` â€” architecture, decisions, authentication flow, RBAC matrix, dashboard layout, module reference, database schema, API reference, directory structure, configuration, seeding, security checklist and known gaps
+- [x] `npm test` (backend): 22 passed, 0 failed
+- [x] `next build` (client): compiled successfully â€” 68 static routes, all 13 `/kingdome/*` routes prerendered
+- [x] ESLint on every changed and new client file: 3 errors / 2 warnings â€” identical to the HEAD baseline for the same 15 files (all pre-existing); every new file contributes zero errors
+- [x] Live smoke test against the Atlas cluster: login for all four roles, generic 401 for bad credentials, full RBAC matrix (200/403 per role), user CRUD, session list, password-change rejection, profile update, unauthenticated 401, logout invalidation
+- [x] Verified the Next.js rewrite proxies `/api/auth/*` and `/api/admin/*` to the backend with the session cookie attached
+
+**Problem:** The project had a password-only admin login (single shared env password, no accounts, no roles) and a dashboard that was a single analytics page with no user management, no audit trail and no profile management.
+
+**Fix:** Built a complete administrative system â€” account-based authentication with scrypt hashing and revocable server-side sessions, a permission-based RBAC layer enforced on every request, an append-only audit trail, and a responsive admin shell hosting live user, administrator, activity-log, system-statistics and profile modules.
+
+**Task:** "Develop a comprehensive technical specification and implementation guide for a fully functional administrative login and dashboard system."
+
+**Completion Criteria:** Email + password sign-in with hashed credentials, session management and handled invalid-credential errors; RBAC restricting the dashboard to authorised roles; a responsive sidebar + top-header + content dashboard layout; working user table, activity log and system statistics modules; a written specification covering architecture, schema, directory structure and boilerplate. â€” VERIFIED by the backend test suite, the production build, the ESLint comparison and a live end-to-end smoke test against the real database.
+
+---
+
+## Phase 42: Analytics Modules Implementation (COMPLETE)
+
+**Completed:**
+- [x] Diagnosed the gap: 5 of the 13 `/kingdome/*` routes (Pages, Traffic Sources, Devices, Live Visitors, Events) rendered a "Coming soon" placeholder, while the backend already exposed all 13 `/api/analytics/reports/*` endpoints
+- [x] Added `reportsApi` to `client/lib/adminApi.js` (overview, pages, sources, devices, live, events, time-series, recent-visitors, returning-visitors)
+- [x] Added `client/lib/reportParams.js` â€” date-window helpers that widen `YYYY-MM-DD` to the start of the first day and the end of the last day so the selected range is inclusive (the backend otherwise reads the end date as midnight and silently drops the final day), plus `buildReportParams()` and `describeRange()`
+- [x] Added `client/lib/useReportQuery.js` â€” report fetch hook with optional polling and a `updatedAt` stamp; a failed poll keeps the last good data on screen instead of blanking the panel
+- [x] Added `client/lib/csv.js` â€” CSV builder + download helper (UTF-8 BOM so Excel reads the file correctly)
+- [x] Added `client/components/AdminReports/` â€” shared presentation layer: `ReportToolbar` (date inputs, 7/30/90-day presets, domain filter), `ReportStatGrid`, `BarList`, `ReportStates` (loading / error+retry / empty / last-updated) and `AdminReports.css`
+- [x] Added `client/components/AdminReports/PagesModule.js` â€” ranked page table with path/title search, four sort keys, share bars, 25-row pagination and CSV export
+- [x] Added `client/components/AdminReports/TrafficSourcesModule.js` â€” ranked source table + distribution bars, `direct` traffic broken out
+- [x] Added `client/components/AdminReports/DevicesModule.js` â€” device-type split (bars + table with per-type icons), browser split and operating-system table
+- [x] Added `client/components/AdminReports/LiveVisitorsModule.js` â€” active visitors/sessions, a live event feed with relative timestamps, 15-second polling and an auto-refresh toggle; no date filter because the backend always uses a rolling five-minute window
+- [x] Added `client/components/AdminReports/EventsModule.js` â€” event-type counts with share bars, an event-type filter and a top-ten distribution
+- [x] Rewrote the 5 route files (`app/kingdome/{pages,traffic-sources,devices,live-visitors,events}/page.js`) to load the new modules
+- [x] Removed the `placeholder: true` flags from `client/lib/adminNav.js` and the "Coming soon" badge from `client/components/Sidebar/Sidebar.js`; dropped the now-dead `NAV_ITEMS` export and the `--sidebar-badge-*` tokens
+- [x] Deleted the dead `client/components/ComingSoon/` component and stylesheet
+- [x] Backend fix â€” `backend/controllers/reportsController.js`: the `sources` aggregation filtered out every session without a referrer or UTM source, so direct traffic was silently dropped and the percentages did not sum to 100%. The `$or` restriction was removed so those sessions bucket as `direct`
+- [x] Updated `ADMIN_SPEC.md` â€” module table, the new analytics-module section, the directory tree and the removed `ComingSoon/` entry
+
+**Problem:** Five navigation entries in the admin sidebar led to "Coming soon" placeholder pages, even though every report they needed already existed on the backend (`/api/analytics/reports/{pages,sources,devices,live,events}`). The admin area could only show traffic on the dashboard tab.
+
+**Fix:** Implemented all five modules against the existing endpoints, sharing one filter bar, one stat-strip component, one bar-list component and one states component, so they behave identically to the rest of the admin area. Each module filters by date window and domain, refreshes on demand, and exports its rows as CSV.
+
+**Task:** "Implement the remaining Kingdome dashboard modules â€” Pages, Traffic Sources, Devices, Live Visitors and Events â€” against the existing backend report endpoints."
+
+**Completion Criteria:** All five routes render live data from the backend, honour the `analytics.view` permission, filter by date window and domain, and export CSV; the sidebar no longer shows a "Coming soon" badge. â€” VERIFIED by a live smoke test against MongoDB Atlas (all five endpoints 200 with real data), the Next.js rewrite proxy (200 with the session cookie, 401 without), the production build (68/68 static routes, all 13 `/kingdome/*` routes prerendered) and ESLint (0 errors / 0 warnings on every new and modified file).
+
+---
 

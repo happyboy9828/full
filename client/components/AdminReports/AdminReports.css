@@ -1,0 +1,288 @@
+/* AdminReports.css — shared presentation for the analytics modules
+   (Pages, Traffic Sources, Devices, Live Visitors, Events).
+
+   Colours are expressed with the shared theme tokens so every panel follows
+   the light/dark palette automatically. */
+
+/* ---------- layout ---------- */
+.report-split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.report-split--wide-first {
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+}
+
+@media (max-width: 1023px) {
+  .report-split,
+  .report-split--wide-first {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---------- stat strip ---------- */
+.report-stat-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.report-stat {
+  padding: 16px 20px;
+  background: var(--tool-surface);
+  border: 1px solid var(--tool-border);
+  border-radius: var(--tool-radius);
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+}
+
+.report-stat:hover {
+  border-color: var(--tool-accent);
+  box-shadow: var(--tool-shadow);
+  transform: translateY(-2px);
+}
+
+.report-stat-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--tool-muted);
+  margin-bottom: 6px;
+}
+
+.report-stat-value {
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--tool-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.report-stat-meta {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--tool-muted);
+}
+
+/* ---------- bar list ---------- */
+.report-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.report-bar-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.report-bar-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--tool-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.report-bar-meta {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--tool-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.report-bar-track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--tool-surface-2);
+  border: 1px solid var(--tool-border);
+  overflow: hidden;
+}
+
+.report-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--tool-accent);
+  transition: width 0.3s ease;
+}
+
+.report-bar-fill--secondary {
+  background: var(--tool-secondary);
+}
+
+.report-bar-fill--highlight {
+  background: var(--tool-highlight);
+}
+
+/* ---------- inline share bar (table cells) ---------- */
+.report-share {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+}
+
+.report-share-track {
+  flex: 1;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--tool-surface-2);
+  border: 1px solid var(--tool-border);
+  overflow: hidden;
+}
+
+.report-share-fill {
+  height: 100%;
+  background: var(--tool-accent);
+}
+
+.report-share-value {
+  font-size: 12px;
+  color: var(--tool-muted);
+  font-variant-numeric: tabular-nums;
+  min-width: 44px;
+  text-align: right;
+}
+
+/* ---------- live feed ---------- */
+.report-live-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--tool-highlight);
+  margin-right: 8px;
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--tool-highlight) 60%, transparent);
+  animation: report-pulse 2s infinite;
+}
+
+@keyframes report-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--tool-highlight) 60%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--tool-highlight) 0%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--tool-highlight) 0%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .report-live-dot {
+    animation: none;
+  }
+  .report-bar-fill {
+    transition: none;
+  }
+}
+
+.report-feed-path {
+  font-family: var(--tool-mono), monospace;
+  font-size: 12px;
+  color: var(--tool-text);
+}
+
+.report-event-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  background: var(--tool-tint);
+  color: var(--tool-muted);
+  border: 1px solid var(--tool-border);
+}
+
+.report-event-badge--pageview {
+  background: color-mix(in srgb, var(--tool-accent) 18%, transparent);
+  color: var(--tool-accent-text);
+  border-color: transparent;
+}
+
+.report-event-badge--click {
+  background: color-mix(in srgb, var(--tool-secondary) 22%, transparent);
+  color: var(--tool-text);
+  border-color: transparent;
+}
+
+.report-event-badge--custom {
+  background: color-mix(in srgb, var(--tool-highlight) 20%, transparent);
+  color: var(--tool-text);
+  border-color: transparent;
+}
+
+.report-updated {
+  font-size: 12px;
+  color: var(--tool-muted);
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  /* The header row is tight on phones — the stamp is the first thing to go. */
+  .report-updated {
+    display: none;
+  }
+}
+
+/* ---------- misc ---------- */
+.report-segment {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.report-segment .admin-button[aria-pressed="true"] {
+  border-color: var(--tool-accent);
+  color: var(--tool-accent-text);
+}
+
+.report-toolbar-spacer {
+  flex: 1;
+}
+
+.report-panel-note {
+  font-size: 12px;
+  color: var(--tool-muted);
+  padding: 0 24px 16px;
+}
+
+.report-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: var(--tool-surface-2);
+  border: 1px solid var(--tool-border);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--tool-muted);
+}
+
+.report-rank--top {
+  background: var(--tool-accent);
+  border-color: transparent;
+  color: var(--tool-on-accent);
+}
+
+.report-device-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--tool-radius-sm);
+  background: var(--tool-surface-2);
+  border: 1px solid var(--tool-border);
+  color: var(--tool-muted);
+  flex-shrink: 0;
+}

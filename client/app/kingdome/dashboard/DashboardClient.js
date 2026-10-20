@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { useAuth } from "@/components/AuthProvider/AuthProvider";
-import Sidebar from "@/components/Sidebar/Sidebar";
+import { useAuth, PERMISSIONS } from "@/components/AuthProvider/AuthProvider";
+import AdminShell from "@/components/AdminShell/AdminShell";
 
 const REPORT_BASE = "/api/analytics/reports";
 
@@ -271,16 +271,16 @@ export default function DashboardClient() {
 
   if (!authenticated) {
     shellContent = (
-      <div className="dashboard-shell">
-        <div className="auth-required">
-          <h2>🔒 Admin Access Required</h2>
+      <div className="admin-panel">
+        <div className="admin-empty">
+          <h2>Admin access required</h2>
           <p>Please log in to view the traffic management dashboard.</p>
         </div>
       </div>
     );
   } else if (loading && !overview) {
     shellContent = (
-      <div className="dashboard-shell">
+      <div className="admin-panel">
         <div className="dashboard-loading">
           <div className="loading-spinner"></div>
           <p>Loading dashboard...</p>
@@ -289,11 +289,11 @@ export default function DashboardClient() {
     );
   } else if (error) {
     shellContent = (
-      <div className="dashboard-shell">
+      <div className="admin-panel">
         <div className="dashboard-error">
           <h3>Failed to load dashboard</h3>
           <p>{error}</p>
-          <button className="btn btn-primary" onClick={handleRefresh}>Retry</button>
+          <button className="admin-button admin-button--sm" onClick={handleRefresh}>Retry</button>
         </div>
       </div>
     );
@@ -343,114 +343,114 @@ export default function DashboardClient() {
       }
     ];
     shellContent = (
-      <div className="dashboard-shell">
-        <header className="dashboard-header">
-          <div className="header-left">
-            <h1 className="dashboard-title">Traffic Dashboard</h1>
-            <p className="dashboard-subtitle">Real-time traffic management & analytics</p>
+      <div className="dashboard-grid">
+        <section className="metrics-section" aria-label="Key metrics">
+          {metrics.map((metric, i) => (
+            <MetricCard key={i} {...metric} />
+          ))}
+        </section>
+
+        <section className="chart-section main-chart" aria-label="Traffic over time">
+          <div className="section-header">
+            <h2>Traffic Overview</h2>
+            <select
+              className="granularity-select"
+              defaultValue="day"
+              onChange={(e) => fetchReport("time-series", { ...params, granularity: e.target.value })
+                .then(setTimeSeries)
+                .catch(console.error)}
+            >
+              <option value="day">Daily</option>
+              <option value="hour">Hourly</option>
+            </select>
           </div>
-          <div className="header-right">
-            <div className="date-range-picker">
-              <label>
-                <span>From</span>
-                <input 
-                  type="date" 
-                  value={dateRange.startDate}
-                  onChange={(e) => setDateRange({...dateRange, startDate: e.target.value})}
-                  max={dateRange.endDate}
-                />
-              </label>
-              <label>
-                <span>To</span>
-                <input 
-                  type="date" 
-                  value={dateRange.endDate}
-                  onChange={(e) => setDateRange({...dateRange, endDate: e.target.value})}
-                  min={dateRange.startDate}
-                  max={new Date().toISOString().split("T")[0]}
-                />
-              </label>
-            </div>
-            <div className="domain-filter">
-              <label>
-                <span>Domain</span>
-                <input 
-                  type="text" 
-                  placeholder="All domains"
-                  value={domain}
-                  onChange={(e) => setDomain(e.target.value)}
-                />
-              </label>
-            </div>
-            <button className="btn btn-secondary" onClick={handleRefresh}>
-              <span>↻</span> Refresh
-            </button>
+          <div className="time-series-chart">
+            <TimeSeriesChart data={timeSeries} />
           </div>
-        </header>
+        </section>
 
-        <div className="dashboard-grid">
-          <section className="metrics-section" aria-label="Key metrics">
-            {metrics.map((metric, i) => (
-              <MetricCard key={i} {...metric} />
-            ))}
-          </section>
+        <section className="chart-section top-pages" aria-label="Top pages">
+          <div className="section-header">
+            <h2>Top Pages</h2>
+          </div>
+          <TopPagesTable pages={topPages} />
+        </section>
 
-          <section className="chart-section main-chart" aria-label="Traffic over time">
-            <div className="section-header">
-              <h2>Traffic Overview</h2>
-              <select 
-                className="granularity-select"
-                defaultValue="day"
-                onChange={(e) => fetchReport("time-series", { ...params, granularity: e.target.value })
-                  .then(setTimeSeries)
-                  .catch(console.error)}
-              >
-                <option value="day">Daily</option>
-                <option value="hour">Hourly</option>
-              </select>
-            </div>
-            <div className="time-series-chart">
-              <TimeSeriesChart data={timeSeries} />
-            </div>
-          </section>
+        <section className="chart-section sources" aria-label="Traffic sources">
+          <div className="section-header">
+            <h2>Traffic Sources</h2>
+          </div>
+          <SourcesChart sources={sources} />
+        </section>
 
-          <section className="chart-section top-pages" aria-label="Top pages">
-            <div className="section-header">
-              <h2>Top Pages</h2>
-            </div>
-            <TopPagesTable pages={topPages} />
-          </section>
+        <section className="chart-section devices" aria-label="Devices">
+          <div className="section-header">
+            <h2>Devices</h2>
+          </div>
+          <DevicesChart devices={devices} />
+        </section>
 
-          <section className="chart-section sources" aria-label="Traffic sources">
-            <div className="section-header">
-              <h2>Traffic Sources</h2>
-            </div>
-            <SourcesChart sources={sources} />
-          </section>
-
-          <section className="chart-section devices" aria-label="Devices">
-            <div className="section-header">
-              <h2>Devices</h2>
-            </div>
-            <DevicesChart devices={devices} />
-          </section>
-
-          <section className="chart-section live" aria-label="Live visitors">
-            <div className="section-header">
-              <h2>Live Visitors</h2>
-            </div>
-            <LiveVisitors liveData={liveData} />
-          </section>
-        </div>
+        <section className="chart-section live" aria-label="Live visitors">
+          <div className="section-header">
+            <h2>Live Visitors</h2>
+          </div>
+          <LiveVisitors liveData={liveData} />
+        </section>
       </div>
     );
   }
 
   return (
-    <div className="dashboard-layout">
-      <Sidebar />
-      <main className="dashboard-main">{shellContent}</main>
-    </div>
+    <AdminShell
+      title="Traffic Dashboard"
+      subtitle="Real-time traffic management & analytics"
+      requirePermission={PERMISSIONS.DASHBOARD_VIEW}
+      actions={
+        <>
+          <div className="date-range-picker">
+            <label>
+              <span>From</span>
+              <input
+                type="date"
+                value={dateRange.startDate}
+                onChange={(e) => setDateRange({...dateRange, startDate: e.target.value})}
+                max={dateRange.endDate}
+              />
+            </label>
+            <label>
+              <span>To</span>
+              <input
+                type="date"
+                value={dateRange.endDate}
+                onChange={(e) => setDateRange({...dateRange, endDate: e.target.value})}
+                min={dateRange.startDate}
+                max={new Date().toISOString().split("T")[0]}
+              />
+            </label>
+          </div>
+          <div className="domain-filter">
+            <label>
+              <span>Domain</span>
+              <input
+                type="text"
+                placeholder="All domains"
+                value={domain}
+                onChange={(e) => setDomain(e.target.value)}
+              />
+            </label>
+          </div>
+          <button
+            type="button"
+            className="admin-button admin-button--ghost admin-button--sm"
+            onClick={handleRefresh}
+          >
+            Refresh
+          </button>
+        </>
+      }
+    >
+      {shellContent}
+    </AdminShell>
   );
 }
 
